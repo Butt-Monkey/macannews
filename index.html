@@ -1,0 +1,2559 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>87 · Macan News — Макан Ньюс | Новости 87</title>
+<meta name="description" content="87 · Macan News (Макан Ньюс) — официальный сайт новостного канала 87. Он же Macan 87, News 87, Новости 87. Мы не проверяем факты — мы их назначаем."/>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico"/><link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png"/><link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png"/><link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png"/><link rel="manifest" href="site.webmanifest"/>
+<meta property="og:title" content="87 · Macan News — Макан Ньюс"/>
+<meta property="og:description" content="Официальный сайт новостного канала 87 (Macan News / Макан Ньюс). Мы не проверяем факты — мы их назначаем."/>
+<meta property="og:type" content="website"/>
+<meta name="theme-color" content="#ece1cd"/>
+<script>(function(){function ap(){try{var t=localStorage.getItem('mn-theme');if(t&&t!=='light'&&t!=='dark'){t='light';try{localStorage.setItem('mn-theme','light');}catch(e2){}}if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}}ap();document.addEventListener('DOMContentLoaded',ap);window.addEventListener('load',ap);
+/* читалка игровых цветов из текущей темы (snake/pong подстраиваются под тему) */
+window.MNhex2rgb=function(h){h=(h||'').trim().replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];var n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255];};
+window.MNgc=function(name,fallback){try{var v=getComputedStyle(document.documentElement).getPropertyValue('--game-'+name).trim();return v||fallback;}catch(e){return fallback;}};
+})();</script>
+<link rel="preload" href="assets/fonts/schibsted-800.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ═══ self-hosted шрифты: латиница — Bodoni/Schibsted, кириллица: Playfair только на плитках, остальное — системный шрифт ═══ */
+@font-face{font-family:'Bodoni Moda';font-style:italic;font-weight:400;font-display:swap;src:url(assets/fonts/bodoni-400i.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Bodoni Moda';font-style:italic;font-weight:500;font-display:swap;src:url(assets/fonts/bodoni-500i.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Bodoni Moda';font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/bodoni-400.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Bodoni Moda';font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/bodoni-500.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Bodoni Moda';font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/bodoni-600.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/schibsted-400.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/schibsted-500.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/schibsted-600.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/schibsted-700.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-800.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/playfair-400.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/playfair-500.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/playfair-600.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+
+:root{
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-spring:cubic-bezier(.3,1.4,.5,1); /* лёгкий overshoot — «физика» отклика */
+  --maxw:1340px;
+  --pad:clamp(22px,5vw,90px);
+  --ticker-h:40px;
+  --safe-top:env(safe-area-inset-top,0px);
+  /* ── типографическая шкала (единственный источник размеров текста) ──
+     Исключение: внутренние экраны игровых автоматов (sn-title/sn-cross) —
+     они масштабируются относительно доски, а не страницы. */
+  --t-display:clamp(72px,15vw,200px); /* гигантские цифры: footer-87, №1 рейтинга */
+  --t-title:clamp(46px,12vw,150px);   /* заголовок раздела (page-title) */
+  --t-h1:clamp(34px,7vw,86px);        /* крупные подзаголовки, мобильное меню */
+  --t-h2:clamp(28px,5.5vw,62px);      /* hero-name, join, имя №1 */
+  --t-h3:clamp(26px,4.2vw,48px);      /* имена карточек, плитки разделов */
+  --t-h4:clamp(22px,3.4vw,38px);      /* цифры рейтинга, цены */
+  --t-h5:clamp(17px,2.6vw,28px);      /* имена в строках, заголовки карточек игр */
+  --t-lead:clamp(15px,2.2vw,20px);    /* лид-абзацы, слоган, инлайн-тикер */
+  --t-body:15px; --t-small:13px; --t-caption:11px;
+  --lh-num:.8; --lh-tight:.95; --lh-head:1.05; --lh-body:1.6;
+  --ls-tight:-.04em; --ls-caps:.18em; --ls-eyebrow:.3em;
+  /* ── модульная сетка отступов (макро-ритм; микро-отступы <28px — фиксированные) ── */
+  --sp-xs:clamp(14px,1.8vw,24px);   /* внутри карточек, строки списков */
+  --sp-s:clamp(20px,2.6vw,36px);    /* между элементами блока */
+  --sp-m:clamp(32px,4.4vw,56px);    /* заголовок → контент */
+  --sp-l:clamp(44px,6.5vw,88px);    /* крупные внутрисекционные */
+  --sp-xl:clamp(64px,10vw,132px);   /* между секциями */
+  --sp-2xl:clamp(96px,13vw,180px);  /* поля футера */
+  --sp-top:calc(clamp(120px,16vh,200px) + var(--safe-top)); /* верх страницы: зазор под fixed-шапку + чёлка iPhone */
+  /* стопы золота для SVG-логотипа */
+  --g1:#6f5310; --g2:#c9a227; --g3:#f4e7a4;
+  --gold-line:linear-gradient(90deg,transparent,#c9a227 16%,#f4e09a 50%,#c9a227 84%,transparent);
+  --gold-solid:#b8901f;
+  --gold-glow:rgba(201,162,39,.32);
+  /* симметричный золотой градиент для перелива: цвет на 0% и 100% ОДИНАКОВ,
+     поэтому сдвиг на один тайл зацикливается без шва (истинно бесшовно) */
+  --gold-shimmer:linear-gradient(105deg,#7a5c12 0%,#a07c18 12%,#cda636 26%,#f0dc8f 40%,#fff7df 50%,#f0dc8f 60%,#cda636 74%,#a07c18 88%,#7a5c12 100%);
+}
+/* Палитра «Emerald & Champagne»: светлая = тёплое шампанское + изумруд,
+   тёмная = глубокий изумрудный лес. Золото — герой-акцент в обеих. */
+:root[data-theme="light"]{
+  --bg:#ece1cd; --bg-soft:#f2eadb; --bg-deep:#dccbac; --card:#f7f0e2; --card-2:#efe4d0;
+  --ink:#16271d; --ink-soft:rgba(22,39,29,.64); --ink-faint:rgba(22,39,29,.32);
+  --line:rgba(22,39,29,.14); --card-edge:rgba(22,39,29,.10);
+  --rose:#2f8160; --nav-bg:rgba(242,234,219,.72);
+  --gold-text:linear-gradient(105deg,#6b4f0f 0%,#9c7a18 17%,#d8b64a 39%,#f5e6ad 50%,#cda636 60%,#937214 82%,#5f4a0e 100%);
+  --g1:#6b4f0f; --g2:#bf971f; --g3:#f1d97c;
+  --gold-solid:#9a7a1e; --gold-glow:rgba(193,151,31,.30);
+  --shadow:0 52px 96px -50px rgba(20,40,28,.52),0 14px 34px -24px rgba(20,40,28,.4);
+  --iri1:#dccba3; --iri2:#e7cf7c; --iri3:#9cc4a8; --iri4:#cdb98f; --iri-op:.52;
+  --game-head:#f3dd87; --game-tail:#8a6a1e; --game-food:#f6e6b0; --game-glow:246,224,150;
+  --game-p1:#5b8de0; --game-p2:#e2554f; --game-win:#e7cf7c; --game-flash:246,224,150;
+  --flash-you:91,141,224; --flash-ai:226,85,79;
+}
+:root[data-theme="dark"]{
+  --bg:#0a1610; --bg-soft:#0f2017; --bg-deep:#173026; --card:#102019; --card-2:#15271e;
+  --ink:#f1ecdc; --ink-soft:rgba(241,236,220,.64); --ink-faint:rgba(241,236,220,.30);
+  --line:rgba(241,236,220,.12); --card-edge:rgba(241,236,220,.10);
+  --rose:#63cb9b; --nav-bg:rgba(10,22,16,.64);
+  --gold-text:linear-gradient(105deg,#a9821b 0%,#e6c356 24%,#f7ecc0 42%,#fff7df 50%,#e2bd4a 60%,#c9a227 82%,#9c7a1a 100%);
+  --g1:#9c7a1a; --g2:#d8b23e; --g3:#f7e8a8;
+  --gold-solid:#cda23a; --gold-glow:rgba(205,162,58,.34);
+  --shadow:0 54px 104px -54px rgba(0,0,0,.9),0 16px 40px -28px rgba(0,0,0,.6);
+  --iri1:#5fc99a; --iri2:#d3aa39; --iri3:#1f5a47; --iri4:#9ad8b8; --iri-op:.46;
+  --game-head:#f7e8a8; --game-tail:#9c7a1a; --game-food:#f6e6b0; --game-glow:246,224,150;
+  --game-p1:#63cb9b; --game-p2:#d8b23e; --game-win:#f7e8a8; --game-flash:246,224,150;
+  --flash-you:99,203,155; --flash-ai:216,178,62;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'Schibsted Grotesk',sans-serif;line-height:var(--lh-body);font-weight:400;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  font-feature-settings:"kern" 1,"liga" 1,"calt" 1;
+  transition:background .7s var(--ease),color .7s var(--ease);
+  padding-top:calc(var(--ticker-h) + var(--safe-top));
+}
+/* aurora-глубина: два статичных световых пятна под всем контентом (обе темы через переменные) */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+ background:radial-gradient(52% 42% at 12% -6%,var(--gold-glow),transparent 70%),
+            radial-gradient(46% 40% at 88% 104%,var(--bg-deep),transparent 72%);
+ opacity:.5}
+a{color:inherit;text-decoration:none}
+a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:var(--gold-solid);color:#fff}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
+.gold{background:var(--gold-text);background-size:100% auto;background-position:center;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+/* непрерывный бесшовный перелив: тайл симметричного золота (0%==100%) едет ровно
+   на один тайл — свет плавно течёт по буквам, стык невидим */
+@keyframes goldshine{to{background-position:-200% center}}
+.serif{font-family:'Bodoni Moda',serif}
+.hairline{height:1px;border:0;background:var(--gold-line);opacity:.55}
+.eyebrow{font-size:var(--t-caption);letter-spacing:var(--ls-eyebrow);text-transform:uppercase;font-weight:600;color:var(--ink-soft)}
+
+/* grain — статичная плёнка зерна (анимация и blend отключены ради производительности) */
+.grain{position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:.035;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* preloader */
+.loader{position:fixed;inset:0;z-index:10000;background:var(--bg-soft);display:grid;place-items:center;transition:transform 1s var(--ease-out);cursor:pointer;touch-action:manipulation}
+.loader.done{transform:translateY(-100%);pointer-events:none}
+.loader>div{animation:breathe 3s var(--ease) infinite}
+.loader .logo87{width:min(40vw,260px);height:auto}
+.loader-tag{font-family:'Bodoni Moda',serif;font-style:italic;letter-spacing:var(--ls-caps);text-align:center;margin-top:.5em;color:var(--ink-soft);font-size:var(--t-small);overflow:hidden;white-space:nowrap;width:0;animation:type 1.1s var(--ease) .35s forwards}
+@keyframes type{to{width:9.4em}}
+
+/* ===== ТИКЕР ===== */
+.ticker{overflow:hidden;white-space:nowrap;background:var(--bg-soft);border-block:1px solid var(--line);contain:content}
+.ticker.top{position:fixed;top:0;left:0;right:0;z-index:860;height:calc(var(--ticker-h) + var(--safe-top));padding-top:var(--safe-top);display:flex;align-items:center;border-top:0;transform:translateZ(0);will-change:transform;contain:layout paint}
+.ticker-track{display:inline-flex;align-items:center;will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
+.ticker.inline{padding:14px 0;border-block:1px solid var(--line)}
+.ticker-track span{font-family:'Schibsted Grotesk',sans-serif;font-weight:700;letter-spacing:.04em;padding-inline:26px;text-transform:uppercase;font-size:var(--t-body)}
+.ticker.inline .ticker-track span{font-size:var(--t-lead)}
+.ticker-track .st{color:var(--gold-solid)}
+
+/* ===== NAV — плавающая стеклянная капсула ===== */
+.nav{position:fixed;top:calc(var(--ticker-h) + var(--safe-top) + 10px);left:50%;transform:translateX(-50%);z-index:850;
+ width:min(calc(100% - 28px),var(--maxw));display:flex;align-items:center;justify-content:space-between;
+ padding:10px clamp(14px,2vw,26px);border-radius:100px;
+ background:var(--nav-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+ border:1px solid var(--line);
+ transition:border-color .5s,box-shadow .5s,background .7s var(--ease)}
+.nav.scrolled{border-color:var(--card-edge);box-shadow:0 18px 44px -24px rgba(0,0,0,.35),0 2px 10px -6px rgba(0,0,0,.18)}
+.nav-mark{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:26px;letter-spacing:var(--ls-tight)}
+/* сегментные пилюли: активный раздел — заполненная капсула, как таб-бар Vercel */
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{font-size:var(--t-small);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:500;position:relative;color:var(--ink-soft);white-space:nowrap;
+ padding:9px 14px;border-radius:99px;border:1px solid transparent;
+ transition:color .35s,background .35s,border-color .35s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a.active{color:var(--ink);background:var(--card);border-color:var(--card-edge)}
+.nav-tools{display:flex;align-items:center;gap:9px}
+.icon-btn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);transition:border-color .35s,transform .35s var(--ease-spring),background .35s;position:relative}
+.icon-btn:hover{border-color:var(--gold-solid);transform:translateY(-2px)}
+.icon-btn svg{width:18px;height:18px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.sun{display:none}
+:root[data-theme="dark"] .moon{display:none}
+:root[data-theme="dark"] .sun{display:block}
+.spk-off{display:none}
+.icon-btn.muted .spk-on{display:none}
+.icon-btn.muted .spk-off{display:block}
+.burger{display:none;flex-direction:column;gap:5px;width:42px;height:42px;border:1px solid var(--line);border-radius:50%;align-items:center;justify-content:center}
+.burger span{width:18px;height:1.6px;background:var(--ink);transition:.35s var(--ease)}
+.burger.open span:nth-child(1){transform:translateY(6.6px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6.6px) rotate(-45deg)}
+/* меню: панель мягко проявляется (opacity+scale — композитно, без тяжёлого слайда
+   всего экрана), пункты влетают каскадом. Это убирает «дёрганую загрузку» списка. */
+.mobile-menu{position:fixed;inset:0;z-index:900;background:var(--bg);display:flex;flex-direction:column;justify-content:center;gap:6px;padding:calc(var(--pad) + var(--safe-top)) var(--pad) var(--pad);
+ opacity:0;visibility:hidden;transform:scale(1.03);transform-origin:top center;
+ transition:opacity .32s var(--ease-out),transform .42s var(--ease-out),visibility 0s .32s}
+.mobile-menu.open{opacity:1;visibility:visible;transform:none;transition:opacity .32s var(--ease-out),transform .46s var(--ease-out),visibility 0s}
+.mobile-menu a{font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:var(--t-h1);letter-spacing:var(--ls-tight);line-height:var(--lh-head);
+ opacity:0;transform:translate3d(0,18px,0);transition:opacity .4s var(--ease-out),transform .5s var(--ease-spring)}
+.mobile-menu.open a{opacity:.92;transform:none}
+.mobile-menu.open a:nth-child(1){transition-delay:.05s}
+.mobile-menu.open a:nth-child(2){transition-delay:.10s}
+.mobile-menu.open a:nth-child(3){transition-delay:.15s}
+.mobile-menu.open a:nth-child(4){transition-delay:.20s}
+.mobile-menu.open a:nth-child(5){transition-delay:.25s}
+.mobile-menu.open a:nth-child(6){transition-delay:.30s}
+@media (prefers-reduced-motion:reduce){.mobile-menu{transition:opacity .2s}.mobile-menu a{transition:none;opacity:.92;transform:none}}
+
+/* ===== HERO (landing) ===== */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:var(--sp-top) var(--pad) var(--sp-l);overflow:hidden}
+.hero-canvas{position:absolute;inset:0;z-index:0}
+.hero::before{content:"";position:absolute;inset:-25%;z-index:-1;filter:blur(46px);opacity:.92;
+ background:radial-gradient(38% 38% at 22% 26%,var(--rose),transparent 70%),radial-gradient(42% 42% at 80% 28%,var(--gold-glow),transparent 70%),radial-gradient(50% 50% at 50% 92%,var(--bg-deep),transparent 76%)}
+.hero-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:100%}
+.hero-eyebrow{margin-bottom:var(--sp-s)}
+.hero-eyebrow .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold-solid);vertical-align:middle;margin:0 14px;animation:pulse 2.6s ease infinite}
+@keyframes pulse{50%{opacity:.3}}
+.hero .logo87{width:min(78vw,640px);height:auto;display:block;filter:drop-shadow(0 14px 40px var(--gold-glow))}
+.hero-name{font-family:'Bodoni Moda',serif;font-style:italic;font-weight:500;font-size:var(--t-h2);letter-spacing:.01em;margin-top:var(--sp-xs)}
+.hero-slogan{max-width:600px;font-family:'Bodoni Moda',serif;font-style:italic;font-size:var(--t-lead);color:var(--ink-soft);margin-top:16px;line-height:var(--lh-body)}
+.hero-cta{display:flex;align-items:center;gap:26px;margin-top:var(--sp-m);flex-wrap:wrap;justify-content:center}
+
+.btn{display:inline-flex;align-items:center;gap:12px;padding:16px 32px;border-radius:100px;font-size:var(--t-small);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:600;position:relative;overflow:hidden;border:1px solid var(--ink);color:var(--ink);will-change:transform;transition:color .45s var(--ease),transform .45s var(--ease-spring);isolation:isolate}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--ink);transform:translateY(101%);transition:transform .5s var(--ease-out)}
+.btn:hover{color:var(--bg)}
+.btn:hover::before{transform:translateY(0)}
+.btn svg{width:16px;height:16px;fill:currentColor}
+.btn.gold-btn{border-color:var(--gold-solid);box-shadow:0 14px 34px -18px var(--gold-glow),0 4px 14px -8px var(--gold-glow)}
+.btn.gold-btn::before{background:var(--gold-solid)}
+.btn.gold-btn:hover{color:#1a1410}
+/* глянцевый sweep по золотой кнопке (keyframes arcadeSheen объявлены в блоке аркады) */
+.btn.gold-btn::after{content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;transform:skewX(-20deg);
+ background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);pointer-events:none}
+.btn.gold-btn:hover::after{animation:arcadeSheen 1.1s var(--ease)}
+@media (prefers-reduced-motion:reduce){.btn.gold-btn:hover::after{animation:none}}
+.qr-card{display:flex;align-items:center;gap:16px;padding:14px;border-radius:18px;background:var(--card);border:1px solid var(--card-edge);box-shadow:var(--shadow)}
+.qr-frame{width:88px;height:88px;border-radius:10px;background:#fff;padding:7px;flex:none;position:relative}
+.qr-frame::after{content:"";position:absolute;inset:0;border-radius:10px;box-shadow:inset 0 0 0 1.5px var(--gold-solid);pointer-events:none}
+.qr-frame img{width:100%;height:100%;image-rendering:pixelated}
+.qr-meta{text-align:left}
+.qr-meta b{font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:var(--t-body);display:block}
+.qr-meta span{font-size:var(--t-caption);color:var(--ink-soft);letter-spacing:.02em}
+
+/* ===== ПЛЫВУЩИЕ ПЛАШКИ ===== */
+.plates-sec{padding:var(--sp-xl) 0 var(--sp-m)}
+.plates-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:var(--sp-m)}
+.plates-head h2{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:var(--t-h1);letter-spacing:var(--ls-tight);line-height:var(--lh-tight)}
+/* сами .plate/.plates определены ниже — «ровная флагманская сетка» */
+.plate .ptag{color:var(--gold-solid)}
+
+/* ===== ШАПКА СТРАНИЦЫ ===== */
+.page-head{padding:var(--sp-top) 0 var(--sp-m)}
+.page-head .eyebrow{color:var(--gold-solid)}
+.page-title{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:var(--t-title);letter-spacing:var(--ls-tight);line-height:var(--lh-tight);margin-top:18px}
+.page-desc{max-width:520px;color:var(--ink-soft);font-size:var(--t-body);line-height:var(--lh-body);margin-top:26px}
+.page-rule{margin-top:var(--sp-m)}
+
+/* ===== РАБОТНИКИ / ПАМЯТЬ ===== */
+.stars-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-s)}
+.star-card{position:relative;overflow:hidden;border-radius:16px;border:1px solid var(--card-edge);background:var(--card);will-change:transform;transition:transform .5s var(--ease-spring),box-shadow .6s var(--ease)}
+.media{position:relative;overflow:hidden;background:radial-gradient(120% 120% at 30% 8%,var(--bg-deep),transparent 60%),linear-gradient(155deg,var(--card-2),var(--bg-deep));filter:grayscale(.4) contrast(1.02);transition:filter .7s var(--ease),transform 1s var(--ease-out)}
+.star-card .media{aspect-ratio:4/5}
+.star-card:hover .media{filter:grayscale(0) contrast(1.05);transform:scale(1.045) translateZ(0)}
+.star-info{padding:var(--sp-xs) var(--sp-s) var(--sp-s)}
+.star-rank{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--gold-solid);font-weight:600}
+.star-name{font-family:'Bodoni Moda',serif;font-weight:500;font-size:var(--t-h4);margin-top:10px;line-height:var(--lh-head)}
+.star-years{font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:var(--t-body);letter-spacing:.1em;color:var(--ink-soft);margin-top:6px}
+.star-bio{color:var(--ink-soft);font-size:var(--t-body);line-height:var(--lh-body);margin-top:14px}
+
+/* лента работников — крупный редакторский разворот */
+.alley{display:flex;flex-direction:column;gap:var(--sp-l);margin-top:var(--sp-l)}
+.alley-row{display:grid;grid-template-columns:.92fr 1.08fr;gap:var(--sp-m);align-items:center}
+.alley-row:nth-child(even){grid-template-columns:1.08fr .92fr}
+.alley-row:nth-child(even) .alley-media{order:2}
+.alley-media{aspect-ratio:1/1;border-radius:16px;overflow:hidden;border:1px solid var(--card-edge);position:relative;background:linear-gradient(150deg,var(--card-2),var(--bg-deep));filter:grayscale(.42);transition:filter .7s var(--ease),transform 1s var(--ease-out)}
+.alley-row:hover .alley-media{filter:grayscale(0);transform:scale(1.02) translateZ(0)}
+.alley-text .role{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--gold-solid);font-weight:600}
+.alley-text h3{font-family:'Bodoni Moda',serif;font-weight:500;font-size:var(--t-h3);line-height:var(--lh-head);margin-top:14px}
+.alley-text p{color:var(--ink-soft);font-size:var(--t-body);line-height:var(--lh-body);margin-top:14px;max-width:42ch}
+
+/* CTA добавить */
+.join{margin-top:var(--sp-xl);text-align:center;border-radius:24px;padding:var(--sp-l) var(--pad);position:relative;overflow:hidden;background:var(--card);border:1px solid var(--card-edge);box-shadow:var(--shadow)}
+.join::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 90% at 50% 0%,var(--gold-glow),transparent 70%);opacity:.75}
+.join>*{position:relative}
+.join h3{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:var(--t-h2);letter-spacing:var(--ls-tight);line-height:var(--lh-head)}
+.join .price{font-family:'Bodoni Moda',serif;font-style:italic;font-size:var(--t-h4);margin-top:16px}
+.join p{color:var(--ink-soft);max-width:460px;margin:16px auto 30px;font-size:var(--t-body)}
+
+/* ===== MERCH ===== */
+
+/* ===== coming soon (анонсы) ===== */
+.soon{display:flex;flex-direction:column;align-items:center;text-align:center;padding:var(--sp-xl) 0}
+.soon .eyebrow{color:var(--gold-solid);margin-bottom:24px}
+.soon-big{font-family:'Bodoni Moda',serif;font-style:italic;font-weight:400;font-size:var(--t-title);line-height:var(--lh-tight);letter-spacing:-.02em}
+.soon-big.gold{font-style:italic}
+.soon .hairline{max-width:220px;width:60%;margin-top:var(--sp-m)}
+.soon .soon-cta{margin-top:var(--sp-m)}
+
+/* ===== FOOTER ===== */
+.footer{margin-top:var(--sp-2xl);border-top:1px solid var(--line);padding-top:var(--sp-l);padding-bottom:42px}
+.footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px}
+.footer-87{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:var(--t-display);letter-spacing:var(--ls-tight);line-height:var(--lh-num)}
+.footer-tag{font-family:'Bodoni Moda',serif;font-style:italic;color:var(--ink-soft);font-size:16px;margin-top:8px;max-width:34ch}
+.fcol h5{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-faint);margin-bottom:18px}
+.fcol a{display:block;font-size:var(--t-body);color:var(--ink-soft);padding:7px 0;transition:color .35s,padding-left .35s}
+.fcol a:hover{color:var(--ink);padding-left:8px}
+.footer-qr{display:flex;align-items:center;gap:14px;margin-top:10px}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:var(--sp-l);padding-top:28px;border-top:1px solid var(--line);flex-wrap:wrap}
+.footer-bottom small{color:var(--ink-faint);font-size:var(--t-small);letter-spacing:.03em}
+.to-top{display:inline-flex;align-items:center;gap:10px;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-soft);transition:color .35s}
+.to-top:hover{color:var(--gold-solid)}
+.to-top svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width:1024px){
+  .nav-links{display:none}.burger{display:flex}
+  .stars-grid{grid-template-columns:1fr}
+  .alley-row,.alley-row:nth-child(even){grid-template-columns:1fr}
+  .alley-row:nth-child(even) .alley-media{order:0}
+  .footer-top{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .hero-cta{flex-direction:column}
+  .qr-card{order:2}
+}
+/* совсем узкие экраны (старые Android, iPhone SE): плотнее поля, мельче гиганты */
+@media (max-width:380px){
+  :root{--pad:16px;--t-title:clamp(40px,11.5vw,64px);--t-display:clamp(60px,14vw,84px)}
+  .nav{width:calc(100% - 16px)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+
+/* ===== SPA-разделы (анимация входа — viewin2 ниже; viewin используют экраны аркады) ===== */
+.view{display:none}
+.view.active{display:block}
+@keyframes viewin{from{opacity:0}to{opacity:1}}
+
+/* ===== Появление при скролле/входе ===== */
+.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
+.js .reveal.in{opacity:1;transform:none}
+
+@keyframes breathe{0%,100%{opacity:.8;transform:scale(.99)}50%{opacity:1;transform:scale(1.01)}}
+
+/* ===== Фото: чистые края + промоушен слоя ===== */
+.media,.alley-media{background-repeat:no-repeat;background-position:center;transform:translateZ(0);backface-visibility:hidden}
+
+/* ===== Плашки «Разделы» — ровная флагманская сетка ===== */
+.plates{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--sp-xs)}
+.plate{margin:0;min-height:clamp(210px,21vw,300px);
+ display:flex;flex-direction:column;justify-content:flex-end;
+ padding:var(--sp-s);border:1px solid var(--card-edge);background:var(--card);border-radius:14px;
+ overflow:hidden;position:relative;will-change:transform;
+ transition:transform .38s var(--ease-spring),border-color .55s var(--ease),box-shadow .55s var(--ease)}
+.plate::before{content:"";position:absolute;inset:0;z-index:0;opacity:0;transition:opacity .6s var(--ease);
+ background:linear-gradient(140deg,var(--rose),transparent 52%),radial-gradient(130% 130% at 100% 100%,var(--gold-glow),transparent 60%)}
+.plate>*{position:relative;z-index:1}
+.plate:hover{transform:translateY(-7px);border-color:var(--gold-solid);box-shadow:var(--shadow)}
+.plate:hover::before{opacity:.18}
+.plate .pname{font-family:'Bodoni Moda','Playfair Display',serif;font-weight:500;font-size:var(--t-h3);line-height:var(--lh-head);margin:0;
+ transition:color .5s var(--ease),transform .5s var(--ease-spring)}
+.plate:hover .pname{transform:translateX(8px)}
+
+/* мобильные плитки: ниже, имя крупнее относительно карточки, ровный левый край,
+   перенос строки только если реально не влезает (даёт аккуратные пропорции).
+   Стоит ПОСЛЕ базовых .plate, иначе база перебивает по каскаду. */
+@media (max-width:640px){
+  .plates{grid-template-columns:repeat(2,1fr);gap:12px}
+  .plate{min-height:clamp(128px,42vw,168px);padding:16px;justify-content:flex-end}
+  .plate .pname{font-size:clamp(20px,5.6vw,27px);line-height:1.05;text-wrap:balance}
+  .plate.wide{grid-column:1/-1;min-height:clamp(92px,26vw,120px)}
+  .plate.wide .pname{font-size:clamp(24px,7vw,32px)}
+}
+
+/* ===== Merch — кампейн-видео с золотыми скобками «дропа» ===== */
+.merch-film{margin:6px auto 0;max-width:560px;border-radius:16px;overflow:hidden;border:1px solid var(--card-edge);background:#0b0b0b;box-shadow:var(--shadow);position:relative}
+.merch-film::after{content:"";position:absolute;inset:12px;z-index:2;pointer-events:none;
+ --bc:rgba(238,214,142,.6);--bw:2px;--bl:24px;
+ background:
+  linear-gradient(var(--bc),var(--bc)) 0    0    / var(--bl) var(--bw) no-repeat,
+  linear-gradient(var(--bc),var(--bc)) 0    0    / var(--bw) var(--bl) no-repeat,
+  linear-gradient(var(--bc),var(--bc)) 100% 0    / var(--bl) var(--bw) no-repeat,
+  linear-gradient(var(--bc),var(--bc)) 100% 0    / var(--bw) var(--bl) no-repeat,
+  linear-gradient(var(--bc),var(--bc)) 0    100% / var(--bl) var(--bw) no-repeat,
+  linear-gradient(var(--bc),var(--bc)) 0    100% / var(--bw) var(--bl) no-repeat,
+  linear-gradient(var(--bc),var(--bc)) 100% 100% / var(--bl) var(--bw) no-repeat,
+  linear-gradient(var(--bc),var(--bc)) 100% 100% / var(--bw) var(--bl) no-repeat;
+ filter:drop-shadow(0 0 5px rgba(201,162,39,.4))}
+.merch-film video{width:100%;height:auto;display:block;aspect-ratio:1/1;object-fit:cover;background:#000}
+
+/* ===== Светлая память — одиночная карточка ===== */
+.memoriam{max-width:440px;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center}
+.memoriam-photo{width:100%;aspect-ratio:4/5;border-radius:16px;border:1px solid var(--card-edge);overflow:hidden;background-color:var(--card);background-repeat:no-repeat;background-position:center;filter:grayscale(.35);transition:filter .7s var(--ease),transform 1s var(--ease-out);transform:translateZ(0)}
+.memoriam:hover .memoriam-photo{filter:grayscale(0);transform:scale(1.02) translateZ(0)}
+.memoriam-mark{font-size:20px;margin-top:26px;color:var(--gold-solid);line-height:1}
+.memoriam-name{font-family:'Bodoni Moda',serif;font-weight:500;font-size:var(--t-h3);margin-top:14px;line-height:var(--lh-head)}
+.memoriam-bio{font-family:'Bodoni Moda',serif;font-style:italic;color:var(--ink-soft);font-size:var(--t-lead);margin-top:14px;max-width:32ch;line-height:var(--lh-body)}
+
+/* ===== Переливающийся градиент за «87» (цвета --iri* заданы в темах) ===== */
+.hero-logo-wrap{position:relative;display:inline-block;line-height:0}
+.hero-logo-wrap .logo87{position:relative;z-index:1}
+.iri{position:absolute;top:50%;left:50%;width:120%;height:154%;transform:translate(-50%,-50%) rotate(0deg);z-index:0;pointer-events:none;border-radius:50%;
+ background:conic-gradient(from 90deg,var(--iri1),var(--iri2),var(--iri3),var(--iri4),var(--iri1));
+ filter:blur(50px);opacity:var(--iri-op);animation:spin 18s linear infinite;will-change:transform}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+@media (prefers-reduced-motion:reduce){
+  .js .reveal{opacity:1;transform:none;transition:none}
+  .loader>div{animation:none}
+  .iri{animation:none}
+}
+
+/* ===== Мобильная оптимизация ===== */
+@media (max-width:820px), (pointer:coarse){
+  .grain{display:none}
+  .hero::before{filter:none;animation:none;inset:-8%}
+  /* aurora без fixed-слоя: рисуется один раз и уезжает со скроллом (дешевле на Android) */
+  body::before{position:absolute;height:140vh;inset:0 0 auto 0}
+
+  .nav{backdrop-filter:none;-webkit-backdrop-filter:none}
+  :root[data-theme="light"] .nav{background:rgba(242,234,219,.96)}
+  :root[data-theme="dark"]  .nav{background:rgba(13,28,20,.95)}
+  
+  .mobile-menu{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .iri{filter:blur(34px);width:128%;height:150%}
+  .hero{min-height:88vh;min-height:88svh;min-height:88dvh}
+}
+
+/* ===== Флагманские штрихи ===== */
+.route-bar{position:fixed;top:0;left:0;height:2px;width:100%;z-index:900;transform:scaleX(0);transform-origin:left;background:var(--gold-line);pointer-events:none;opacity:0}
+.route-bar.go{animation:route .62s var(--ease-out)}
+@keyframes route{0%{transform:scaleX(0);opacity:1}65%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+
+/* тактильный отклик нажатия (на инлайн-магнитные кнопки не влияет — там transform из JS) */
+.icon-btn:active,.burger:active,.arcade-play:active,.sn-btn:active,.buy:active,.btn:active{transform:scale(.96)}
+
+
+.plate:hover .pname{color:var(--gold-solid)}
+
+.page-rule.reveal{transform:scaleX(0);transform-origin:left;opacity:1}
+.page-rule.reveal.in{transform:scaleX(1)}
+
+.page-title,.plates-head h2,.hero-name,.star-name,.alley-text h3,.plate .pname,.join h3,.memoriam-name,.soon-big{text-wrap:balance}
+.page-desc,.star-bio,.alley-text p,.memoriam-bio,.hero-slogan{text-wrap:pretty}
+
+@media (prefers-reduced-motion:reduce){.route-bar{display:none}.plate{will-change:auto}}
+
+/* ===== Шире nav-брейкпоинт (6 пунктов помещаются только при наличии места) ===== */
+@media (max-width:1100px){.nav-links{display:none}.burger{display:flex}}
+
+/* ===== Nav: прятать вниз / показывать вверх ===== */
+.ticker.top,.nav{transition:transform .45s var(--ease),border-color .5s var(--ease),box-shadow .5s var(--ease),background .7s var(--ease)}
+body.nav-up .ticker.top{transform:translateY(-100%)}
+body.nav-up .nav{transform:translateX(-50%) translateY(calc(-100% - var(--ticker-h) - var(--safe-top) - 14px))}
+
+/* ===== Плашка-фичер (ТОП 100) на всю ширину ===== */
+.plate.wide{grid-column:1/-1;min-height:clamp(150px,16vw,210px)}
+
+/* ===== ТОП 100 — Forbes-luxe ===== */
+.t100-lead{display:grid;grid-template-columns:auto 1fr;gap:var(--sp-m);align-items:center;padding:var(--sp-m);border:1px solid var(--card-edge);background:var(--card);border-radius:18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.t100-lead::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 130% at 100% 0,var(--gold-glow),transparent 60%);opacity:.6}
+.t100-lead>*{position:relative;z-index:1}
+.t100-rank{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:var(--t-display);line-height:var(--lh-num);letter-spacing:var(--ls-tight);background:var(--gold-text);-webkit-background-clip:text;background-clip:text;color:transparent}
+.t100-kicker{font-size:var(--t-caption);letter-spacing:var(--ls-eyebrow);text-transform:uppercase;color:var(--gold-solid);font-weight:600}
+.t100-name{font-family:'Bodoni Moda',serif;font-weight:500;font-size:var(--t-h2);line-height:var(--lh-head);margin:10px 0 20px}
+.t100-metric{display:flex;flex-direction:column;gap:6px}
+.t100-label{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-faint)}
+.t100-val{font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:var(--t-h4)}
+.t100-list{list-style:none;margin:var(--sp-s) 0 0;padding:0;border-top:1px solid var(--line)}
+.t100-row{display:grid;grid-template-columns:clamp(44px,6vw,76px) 1fr auto auto;align-items:center;gap:var(--sp-xs);padding:var(--sp-xs) 6px;border-bottom:1px solid var(--line);transition:background .4s var(--ease),padding .4s var(--ease)}
+.t100-row:hover{background:linear-gradient(90deg,var(--gold-glow),transparent 70%);padding-left:18px}
+.t100-n{font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:var(--t-h4);color:var(--ink-faint);transition:color .4s var(--ease)}
+.t100-row:hover .t100-n{color:var(--gold-solid)}
+.t100-rn{font-family:'Bodoni Moda',serif;font-size:var(--t-h5)}
+.t100-move{font-size:var(--t-small);font-weight:700;letter-spacing:.04em;justify-self:end}
+.t100-move.up{color:#5a9468}.t100-move.down{color:#c07d74}.t100-move.new{color:var(--gold-solid)}
+.t100-rv{font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:var(--t-lead);justify-self:end;white-space:nowrap;color:var(--ink-soft)}
+.t100-more{text-align:center;padding:26px 6px;color:var(--ink-faint);font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase}
+@media (max-width:640px){
+  .t100-lead{grid-template-columns:1fr;text-align:left}
+  /* стрелки движения остаются и на телефоне — просто компактнее */
+  .t100-row{grid-template-columns:clamp(30px,9vw,44px) 1fr auto auto;gap:10px}
+  .t100-move{font-size:var(--t-caption)}
+  .t100-rv{font-size:var(--t-small)}
+}
+
+/* ===== Мобильная читаемость: тап-таргеты 44px и минимум 11px для подписей ===== */
+@media (pointer:coarse){
+  .icon-btn{width:44px;height:44px}
+  .burger{width:44px;height:44px}
+  .fcol a{padding:11px 0}
+  .to-top{padding:11px 0}
+}
+
+/* ===== Доступность + детали ===== */
+a:focus-visible,button:focus-visible{outline:2px solid var(--gold-solid);outline-offset:3px;border-radius:4px}
+@media (hover:hover){
+  *::-webkit-scrollbar{width:10px;height:10px}
+  *::-webkit-scrollbar-track{background:var(--bg)}
+  *::-webkit-scrollbar-thumb{background:var(--card-edge);border-radius:10px;border:2px solid var(--bg)}
+  *::-webkit-scrollbar-thumb:hover{background:var(--gold-solid)}
+}
+
+/* смена раздела: мягкий подъём (transform+opacity — композитные свойства) */
+.view.active{animation:viewin2 .55s var(--ease-out)}
+/* --vdx задаёт направление входа: едем «в сторону» выбранного раздела */
+@keyframes viewin2{from{opacity:0;transform:translateY(10px) translateX(calc(var(--vdx,0)*1px))}to{opacity:1;transform:none}}
+
+/* смена темы — круговая волна (View Transitions API); дефолтный кроссфейд глушим */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-old(root){z-index:1}
+::view-transition-new(root){z-index:2}
+
+/* золотой перелив — медленный бесшовный блик по крупным заголовкам (та самая живость).
+   Слой 1 (движется) — белёсый хайлайт; слой 2 — статичное золото. Пауза вне вкладки/экрана. */
+.page-title.gold,.plates-head h2.gold,.soon-big.gold,.footer-87.gold,.t100-rank,.join h3.gold{
+  background-image:var(--gold-shimmer);
+  background-size:200% auto;background-repeat:repeat;background-position:0 center;
+  animation:goldshine 7.5s linear infinite}
+@media (hover:hover) and (pointer:fine){
+  .gold,.t100-rank{transition:filter .5s var(--ease)}
+  .gold:hover,.t100-rank:hover{filter:saturate(1.1) brightness(1.04)}
+}
+@media (prefers-reduced-motion:reduce){
+  .page-title.gold,.plates-head h2.gold,.soon-big.gold,.footer-87.gold,.t100-rank,.join h3.gold{animation:none;background-image:var(--gold-text);background-size:100% auto}
+}
+
+/* пауза всего движущегося при свёрнутой вкладке / вне вьюпорта */
+body.tab-hidden .iri,.iri.off,
+body.tab-hidden .page-title.gold,body.tab-hidden .plates-head h2.gold,body.tab-hidden .soon-big.gold,body.tab-hidden .footer-87.gold,body.tab-hidden .t100-rank,body.tab-hidden .join h3.gold,.gold.off{animation-play-state:paused}
+
+/* пасхалка №1: тикер изредка «спотыкается» на слове */
+@keyframes stut{0%,100%{transform:none;opacity:1}35%{transform:skewX(-14deg) translateY(-1px);opacity:.3}70%{transform:skewX(9deg);opacity:.85}}
+.ticker-track span.stut{animation:stut .38s steps(2,end) 1}
+
+/* пасхалка №2: ярлык «87» на 87% прогресса скролла */
+.sp-egg{position:fixed;top:7px;left:calc(87% - 14px);z-index:981;font:800 10px/1 ui-monospace,Menlo,monospace;color:var(--gold-solid);letter-spacing:.08em;opacity:0;transform:translateY(-5px);transition:opacity .35s var(--ease),transform .4s var(--ease-spring);pointer-events:none}
+.sp-egg.show{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.ticker-track span.stut{animation:none}.sp-egg{display:none}}
+
+/* имена теплеют золотом при наведении */
+.star-name,.alley-text h3{transition:color .5s var(--ease)}
+.star-card:hover .star-name,.alley-row:hover .alley-text h3{color:var(--gold-solid)}
+
+/* лёгкий 3D-наклон карточек (только transform — без перерисовок) */
+.star-card:hover{box-shadow:var(--shadow)}
+
+/* золотая полоса прогресса скролла (transform-only) */
+.scroll-prog{position:fixed;top:0;left:0;right:0;height:2px;z-index:980;background:var(--gold-line);transform:scaleX(0);transform-origin:left;pointer-events:none}
+
+/* пульс кнопки звука, пока играет трек */
+#soundBtn.live::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--gold-solid);opacity:0;animation:ringpulse 2.4s ease-out 3;pointer-events:none}
+@keyframes ringpulse{0%{transform:scale(.82);opacity:.65}70%{transform:scale(1.18);opacity:0}100%{transform:scale(1.18);opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  .view.active{animation:none}
+  .star-card{transition:none}
+  #soundBtn.live::after{animation:none;opacity:0}
+  .scroll-prog{display:none}
+}
+
+/* couture-микротипографика: табличные цифры в счётчиках и рейтингах */
+.t100-rank,.t100-val,.t100-n,.t100-rv,.cnt,.star-years,.mh-date,.pfolio,.page-head .folio{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"lnum" 1}
+
+/* ═══════════ АРКАДА · Змейка 87 ═══════════ */
+#view-games,#snake87,#pong87{ --ar-bg:#0a140f; --ar-bg2:#11231a; --ar-grid:rgba(120,210,160,.07); --ar-line:rgba(210,224,150,.16) }
+.arcade-wrap{ max-width:1120px; margin:0 auto; padding:calc(var(--ticker-h,40px) + var(--safe-top,0px) + 92px) var(--pad) var(--sp-xl); }
+
+/* ── галерея игр (листается) ── */
+.arcade-gallery{ display:flex; gap:var(--sp-xs); overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding:6px 2px 22px; scrollbar-width:thin; }
+.arcade-gallery::-webkit-scrollbar{ height:6px }
+.arcade-gallery::-webkit-scrollbar-thumb{ background:var(--gold-line); border-radius:99px }
+.arcade-card{ scroll-snap-align:start; flex:0 0 clamp(260px,78vw,340px); border-radius:20px; padding:18px; position:relative; overflow:hidden;
+  background:linear-gradient(165deg,var(--ar-bg2),var(--ar-bg)); border:1px solid var(--ar-line); box-shadow:var(--shadow); color:#f3ead4;
+  transition:transform .5s var(--ease), border-color .4s var(--ease), box-shadow .5s var(--ease); }
+.arcade-card:hover{ transform:translateY(-6px); border-color:var(--gold-solid); box-shadow:0 34px 70px -34px rgba(0,0,0,.7), 0 0 46px -18px rgba(201,162,39,.5) }
+.arcade-card.soon{ opacity:.62 }
+.arcade-card-art{ position:relative; height:clamp(150px,30vw,176px); border-radius:13px; overflow:hidden; margin-bottom:16px;
+  background-image:radial-gradient(70% 90% at 50% 18%,#2b1f37,#0c0910 78%),
+    linear-gradient(var(--ar-grid) 1px,transparent 1px),linear-gradient(90deg,var(--ar-grid) 1px,transparent 1px);
+  background-size:cover,22px 22px,22px 22px; display:grid; place-items:center }
+.arcade-card-head{ width:60px; height:60px; border-radius:50%; object-fit:cover; border:2px solid var(--gold-solid);
+  box-shadow:0 0 0 4px rgba(0,0,0,.35),0 6px 18px rgba(0,0,0,.5); position:relative; z-index:2 }
+.arcade-card-badge{ position:absolute; right:12px; top:11px; font:800 19px/1 ui-monospace,Menlo,monospace; letter-spacing:.02em;
+  color:transparent; background:var(--gold-text); -webkit-background-clip:text; background-clip:text; z-index:3 }
+.arcade-card-trail{ position:absolute; z-index:1; width:13px; height:13px; border-radius:4px; background:var(--gold-solid); opacity:.9 }
+.arcade-card h3{ font-family:'Bodoni Moda',serif; font-weight:600; font-size:var(--t-h5); margin:2px 0 6px }
+.arcade-card p{ font-size:var(--t-small); line-height:1.5; color:#cdbf9f; margin:0 0 16px; min-height:38px }
+.arcade-play{ display:inline-flex; align-items:center; gap:9px; font:700 12px/1 'Schibsted Grotesk',sans-serif; letter-spacing:var(--ls-caps); text-transform:uppercase;
+  padding:13px 22px; border-radius:99px; color:#1a120a; background:var(--gold-text); border:none; cursor:pointer; transition:transform .35s var(--ease-spring), filter .35s }
+.arcade-play:hover{ transform:translateY(-2px); filter:brightness(1.06) }
+.arcade-play[disabled]{ background:#3a3030; color:#9a8e7e; cursor:default; transform:none; filter:none }
+
+/* ── сцена игры ── */
+.arcade-stage{ animation:viewin .45s var(--ease-out) }
+.arcade-stage[hidden]{ display:none }
+.arcade-back{ display:inline-flex; align-items:center; gap:8px; background:none; border:1px solid var(--line); color:var(--ink);
+  font:600 11px/1 'Schibsted Grotesk',sans-serif; letter-spacing:var(--ls-caps); text-transform:uppercase; padding:11px 18px; border-radius:99px; cursor:pointer;
+  transition:border-color .35s, transform .35s; margin-bottom:18px }
+.arcade-back:hover{ border-color:var(--gold-solid); transform:translateX(-3px) }
+
+/* ── змейка ── */
+.snake87{ max-width:560px; margin:0 auto; }
+.sn-hud{ display:flex; align-items:center; gap:clamp(12px,3vw,30px); justify-content:center; margin-bottom:14px; flex-wrap:wrap }
+.sn-stat{ font:600 10px/1.4 'Schibsted Grotesk',sans-serif; letter-spacing:var(--ls-caps); text-transform:uppercase; color:var(--ink-soft); text-align:center }
+.sn-stat b{ display:block; font:800 22px/1 ui-monospace,Menlo,monospace; letter-spacing:0; color:transparent; background:var(--gold-text); -webkit-background-clip:text; background-clip:text; margin-top:5px; font-variant-numeric:tabular-nums }
+.sn-sfx{ background:none; border:1px solid var(--line); border-radius:50%; width:38px; height:38px; display:grid; place-items:center; cursor:pointer; color:var(--ink); transition:border-color .3s }
+.sn-sfx:hover{ border-color:var(--gold-solid) }
+.sn-sfx svg{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round }
+.sn-sfx.off .sfx-on{ display:none } .sn-sfx .sfx-off{ display:none } .sn-sfx.off .sfx-off{ display:block }
+
+.sn-board-wrap{ position:relative; width:100%; aspect-ratio:1/1; max-width:min(560px, 92vw, calc(100dvh - 235px)); margin:0 auto; border-radius:18px; overflow:hidden;
+  background:linear-gradient(160deg,var(--ar-bg2),var(--ar-bg)); border:1px solid var(--ar-line);
+  box-shadow:var(--shadow), inset 0 0 60px rgba(0,0,0,.55),
+    0 0 0 1px rgba(232,207,138,.16), 0 24px 60px -30px rgba(201,162,39,.34) }
+.sn-board-wrap::after{ content:""; position:absolute; inset:0; pointer-events:none; z-index:5; border-radius:18px;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px); mix-blend-mode:overlay; opacity:.5 }
+#snCanvas, #pongCanvas{ display:block; width:100%; height:100%; position:relative; z-index:2 }
+
+/* ── экраны ── */
+.sn-screen{ position:absolute; inset:0; z-index:8; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center;
+  padding:24px; background:radial-gradient(120% 120% at 50% 36%,rgba(20,15,26,.6),rgba(7,5,9,.93)); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); color:#f3ead4 }
+.sn-screen[hidden]{ display:none }
+.sn-screen .sn-title{ font-family:'Bodoni Moda',serif; font-weight:600; font-size:clamp(30px,8vw,52px); line-height:1; letter-spacing:-.01em;
+  color:transparent; background:var(--gold-text); -webkit-background-clip:text; background-clip:text }
+.sn-screen .sn-sub{ font:600 11px/1.6 'Schibsted Grotesk',sans-serif; letter-spacing:var(--ls-caps); text-transform:uppercase; color:#bdae8f; max-width:300px }
+.sn-keys{ display:flex; gap:7px; flex-wrap:wrap; justify-content:center }
+.sn-keys span{ font:700 11px/1 ui-monospace,Menlo,monospace; padding:7px 10px; border:1px solid var(--ar-line); border-radius:7px; color:#e8cf8a }
+.sn-btn{ font:700 12px/1 'Schibsted Grotesk',sans-serif; letter-spacing:var(--ls-caps); text-transform:uppercase; padding:14px 26px; border-radius:99px;
+  color:#1a120a; background:var(--gold-text); border:none; cursor:pointer; transition:transform .35s var(--ease-spring), filter .35s }
+.sn-btn:hover{ transform:translateY(-2px); filter:brightness(1.07) }
+.sn-btn.ghost{ background:none; border:1px solid rgba(232,207,138,.4); color:#e8cf8a }
+
+/* победа (типографика заголовка — в блоке «кинематографичная победа» ниже) */
+.sn-burst{ position:absolute; inset:0; pointer-events:none; z-index:-1; background:radial-gradient(circle at 50% 46%,rgba(246,224,150,.5),rgba(246,224,150,.12) 40%,transparent 62%); animation:snGlow 1.3s ease-out infinite alternate }
+.sn-spark{ position:absolute; font:800 16px/1 ui-monospace,monospace; color:#f1d97c; opacity:0; animation:snSpark 1.8s ease-out infinite }
+
+/* поражение */
+.sn-cross{ position:relative; display:inline-block; font:900 clamp(70px,20vw,130px)/1 ui-monospace,Menlo,monospace; color:#e9ddc4; letter-spacing:var(--ls-tight); animation:snShake .5s var(--ease-out) both }
+.sn-cross::after{ content:""; position:absolute; left:-10%; top:48%; width:120%; height:9px; background:#e23b3b; border-radius:6px; transform:scaleX(0) rotate(-14deg); transform-origin:left center; box-shadow:0 0 18px rgba(226,59,59,.7); animation:snStrike .45s .25s var(--ease-out) forwards }
+
+@keyframes snPop{ 0%{ transform:scale(.5); opacity:0 } 60%{ transform:scale(1.12) } 100%{ transform:scale(1); opacity:1 } }
+@keyframes snGlow{ from{ opacity:.5 } to{ opacity:1 } }
+@keyframes snSpark{ 0%{ transform:translateY(0) scale(.4); opacity:0 } 25%{ opacity:1 } 100%{ transform:translateY(-60px) scale(1); opacity:0 } }
+@keyframes snShake{ 0%,100%{ transform:translateX(0) } 20%{ transform:translateX(-9px) } 40%{ transform:translateX(8px) } 60%{ transform:translateX(-5px) } 80%{ transform:translateX(4px) } }
+@keyframes snStrike{ to{ transform:scaleX(1) rotate(-14deg) } }
+
+/* ── d-pad (тач) ── */
+.sn-dpad{ display:none; grid-template-columns:repeat(3,54px); grid-template-rows:repeat(3,54px); gap:8px; justify-content:center; margin:20px auto 0 }
+.sn-dpad button{ border:1px solid var(--line); background:var(--card); border-radius:13px; display:grid; place-items:center; cursor:pointer; color:var(--ink);
+  -webkit-tap-highlight-color:transparent; touch-action:manipulation; transition:transform .12s, border-color .3s }
+.sn-dpad button:active{ transform:scale(.9); border-color:var(--gold-solid) }
+.sn-dpad button svg{ width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round }
+.sn-dpad .du{ grid-area:1/2 } .sn-dpad .dl{ grid-area:2/1 } .sn-dpad .dr{ grid-area:2/3 } .sn-dpad .dd{ grid-area:3/2 }
+@media (pointer:coarse),(max-width:760px){ .sn-dpad{ display:grid } }
+@media (prefers-reduced-motion:reduce){ .arcade-stage,.sn-screen.win .sn-title,.sn-cross,.sn-cross::after,.sn-burst,.sn-spark{ animation:none!important } .sn-cross::after{ transform:scaleX(1) rotate(-14deg) } }
+
+/* ── полноэкранный режим ── */
+.sn-fsbtn .fs-close{ display:none }
+.sn-fsbtn.fs-on .fs-open{ display:none }
+.sn-fsbtn.fs-on .fs-close{ display:block }
+.sn-fsbtn.fs-on{ border-color:var(--gold-solid) }
+html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:none; touch-action:none; }
+.sn-fs{ position:fixed; inset:0; z-index:99999; width:100vw; height:100vh; height:100dvh; max-width:none; margin:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:clamp(10px,2.2vh,20px);
+  background:radial-gradient(135% 135% at 50% 0%,#161019,#0e0b10); -webkit-user-select:none; user-select:none;
+  padding:max(10px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom)); }
+.sn-fs .sn-hud{ margin:0 }
+.sn-fs .sn-board-wrap{ width:min(94vw,62vh); max-width:none }
+.sn-fs .sn-dpad{ margin:0 }
+@media (pointer:coarse){ .sn-fs .sn-board-wrap{ width:min(94vw,56vh) } }
+@media (max-width:760px) and (orientation:landscape){ .sn-fs .sn-board-wrap{ width:min(60vw,86vh) } }
+
+/* ── переключатели режимов на старте ── */
+.sn-screen.start{ gap:13px }
+.sn-screen{ overflow-y:auto }
+.sn-opts{ display:flex; flex-direction:column; gap:9px; align-items:center }
+.sn-optrow{ display:inline-flex; gap:3px; padding:4px; border:1px solid rgba(232,207,138,.22); border-radius:99px; background:rgba(0,0,0,.28) }
+.sn-optrow button{ font:700 10px/1 'Schibsted Grotesk',sans-serif; letter-spacing:var(--ls-caps); text-transform:uppercase; color:#bdae8f;
+  background:none; border:none; padding:9px 12px; border-radius:99px; cursor:pointer; transition:color .25s, background .25s; -webkit-tap-highlight-color:transparent }
+.sn-optrow button.on{ color:#1a120a; background:var(--gold-text) }
+.sn-optrow button:not(.on):hover{ color:#f1e3b6 }
+
+/* ── читаемость HUD/иконок в полноэкранном режиме (фон всегда тёмный) ── */
+.sn-fs .sn-stat{ color:#cdbf9f }
+.sn-fs .sn-stat b{ background:linear-gradient(180deg,#f6e6b0,#dcb85f); -webkit-background-clip:text; background-clip:text; color:transparent }
+.sn-fs .sn-sfx{ color:#f3ead4; border-color:rgba(232,207,138,.34) }
+.sn-fs .sn-sfx:hover{ border-color:#e8cf8a }
+
+/* ── Пинг-понг 87 ── */
+.pong-you{ color:#8fb6ff } .pong-you b{ background:linear-gradient(180deg,#cfe0ff,#5b8de0); -webkit-background-clip:text; background-clip:text; color:transparent }
+.pong-ai{ color:#ff9a9a } .pong-ai b{ background:linear-gradient(180deg,#ffd0cf,#e2554f); -webkit-background-clip:text; background-clip:text; color:transparent }
+.sn-fs .pong-you{ color:#9cc0ff } .sn-fs .pong-ai{ color:#ffaaaa }
+.pong-art .arcade-card-head{ width:46px; height:46px }
+.pong-art .pong-bar{ position:absolute; left:50%; transform:translateX(-50%); width:56px; height:7px; border-radius:4px; z-index:1 }
+.pong-art .pong-bar-top{ top:60px; background:#e2554f; box-shadow:0 0 12px rgba(226,85,79,.6) }
+.pong-art .pong-bar-bot{ bottom:60px; background:#5b8de0; box-shadow:0 0 12px rgba(91,141,224,.6) }
+.pong-art .pong-ball{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:10px; height:10px; border-radius:3px; background:#f6e6b0; box-shadow:0 0 9px rgba(246,230,176,.85); z-index:2 }
+.pong-art .pong-jig{ position:absolute; top:14px; left:50%; transform:translateX(-50%); border-color:#e2554f; z-index:2 }
+.pong-art .pong-tim{ position:absolute; bottom:14px; left:50%; transform:translateX(-50%); border-color:#5b8de0; z-index:2 }
+.sn-dpad.pong-dpad{ grid-template-columns:repeat(2,64px); grid-template-rows:64px }
+.sn-dpad.pong-dpad button{ grid-area:auto }
+
+/* доска вмещается в экран с учётом джойстика на телефоне */
+@media (pointer:coarse){ .sn-board-wrap{ max-width:min(560px, 94vw, calc(100dvh - 300px)) } }
+
+/* ── запрет случайного выделения и подсветки в играх (важно для свайпов в понге) ── */
+#view-games, #view-games *, .sn-fs, .sn-fs *{ -webkit-user-select:none; -moz-user-select:none; user-select:none; -webkit-touch-callout:none; }
+#view-games button, #view-games a, .sn-fs button{ -webkit-tap-highlight-color:transparent }
+#snCanvas, #pongCanvas, .sn-board-wrap, .sn-dpad, .sn-dpad button{ touch-action:none }
+/* крупнее зона нажатия джойстика на сенсорных экранах */
+@media (pointer:coarse){
+  .sn-dpad{ grid-template-columns:repeat(3,66px); grid-template-rows:repeat(3,66px); gap:10px }
+  .sn-dpad.pong-dpad{ grid-template-columns:repeat(2,84px); grid-template-rows:84px; gap:22px }
+  .sn-dpad button svg{ width:24px; height:24px }
+}
+
+/* ── кинематографичная победа ── */
+.sn-screen.win .sn-title{
+  font-family:'Schibsted Grotesk',sans-serif; font-weight:800;
+  font-size:clamp(36px,9.5vw,66px); line-height:1.16; letter-spacing:-.02em;
+  padding-bottom:.14em;  /* чтобы не обрезался нижний хвостик у «у» */
+  background:linear-gradient(180deg,#fff4d2 0%,#f4d271 46%,#c89a42 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:snPop2 .85s var(--ease-out) both;
+  filter:drop-shadow(0 3px 22px rgba(246,224,150,.6));
+}
+.sn-screen.win .sn-sub{ color:#e7d39a; animation:snSubIn .6s .45s both }
+/* вспышка */
+.sn-screen.win::after{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:radial-gradient(circle at 50% 47%,rgba(255,250,234,.7),transparent 58%); opacity:0; animation:snFlash .55s ease-out forwards }
+/* ударная волна */
+.sn-screen.win::before{ content:""; position:absolute; left:50%; top:47%; width:12px; height:12px; border-radius:50%; transform:translate(-50%,-50%);
+  border:3px solid rgba(246,224,150,.85); opacity:0; z-index:1; pointer-events:none; animation:snShock .85s .05s var(--ease-out) forwards }
+/* салют */
+.sn-fx{ position:absolute; inset:0; pointer-events:none; z-index:9; overflow:visible }
+.sn-fx-bit{ position:absolute; font-family:ui-monospace,Menlo,monospace; font-weight:800; color:#f3d97c;
+  text-shadow:0 0 10px rgba(246,224,150,.75); opacity:0; transform:translate(-50%,-50%);
+  animation:snBit var(--dur,1.2s) var(--delay,0s) ease-out forwards }
+@keyframes snPop2{ 0%{ transform:scale(.4) rotate(-5deg); opacity:0 } 55%{ transform:scale(1.2) rotate(1.5deg); opacity:1 } 76%{ transform:scale(.95) } 100%{ transform:scale(1) rotate(0); opacity:1 } }
+@keyframes snSubIn{ from{ opacity:0; transform:translateY(8px) } to{ opacity:1; transform:none } }
+@keyframes snFlash{ 0%{opacity:0} 12%{opacity:1} 100%{opacity:0} }
+@keyframes snShock{ 0%{ width:12px;height:12px;opacity:.9;border-width:4px } 100%{ width:170%;height:170%;opacity:0;border-width:1px } }
+@keyframes snBit{ 0%{ opacity:0; transform:translate(-50%,-50%) scale(.3) rotate(0deg) }
+  16%{ opacity:1 } 100%{ opacity:0; transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1) rotate(var(--rot)) } }
+@media (prefers-reduced-motion:reduce){ .sn-screen.win::after,.sn-screen.win::before,.sn-fx,.sn-fx-bit{ animation:none!important; opacity:0!important } }
+
+/* ═══════════ АРКАДА · декор «золотого автомата» ═══════════ */
+
+/* — карточки игр: золотое сияние за героем — */
+.arcade-card-art::before{
+  content:""; position:absolute; left:50%; top:54%; width:170px; height:170px;
+  transform:translate(-50%,-50%); border-radius:50%; z-index:0; pointer-events:none;
+  background:radial-gradient(circle,var(--gold-glow),transparent 64%);
+  filter:blur(6px); opacity:.55; transition:opacity .55s var(--ease),transform .55s var(--ease);
+}
+.arcade-card:hover .arcade-card-art::before{ opacity:1; transform:translate(-50%,-50%) scale(1.14) }
+.pong-art::before{ background:radial-gradient(circle,rgba(91,141,224,.4),transparent 64%) }
+.arcade-card-head{ transition:transform .5s var(--ease), box-shadow .5s var(--ease) }
+.arcade-card:hover .arcade-card-head{ transform:translateY(-2px) scale(1.06); box-shadow:0 0 0 4px rgba(0,0,0,.35),0 10px 26px rgba(0,0,0,.55) }
+
+.arcade-play{ box-shadow:0 8px 22px -12px rgba(201,162,39,.7) }
+.arcade-play:hover{ box-shadow:0 12px 30px -12px rgba(201,162,39,.9) }
+
+/* — игровое поле: рамка-автомат с золотыми угловыми скобками — */
+.sn-board-wrap::before{
+  content:""; position:absolute; inset:11px; z-index:6; pointer-events:none;
+  --bc:rgba(238,214,142,.62); --bw:2px; --bl:22px;
+  background:
+    linear-gradient(var(--bc),var(--bc)) 0    0    / var(--bl) var(--bw) no-repeat,
+    linear-gradient(var(--bc),var(--bc)) 0    0    / var(--bw) var(--bl) no-repeat,
+    linear-gradient(var(--bc),var(--bc)) 100% 0    / var(--bl) var(--bw) no-repeat,
+    linear-gradient(var(--bc),var(--bc)) 100% 0    / var(--bw) var(--bl) no-repeat,
+    linear-gradient(var(--bc),var(--bc)) 0    100% / var(--bl) var(--bw) no-repeat,
+    linear-gradient(var(--bc),var(--bc)) 0    100% / var(--bw) var(--bl) no-repeat,
+    linear-gradient(var(--bc),var(--bc)) 100% 100% / var(--bl) var(--bw) no-repeat,
+    linear-gradient(var(--bc),var(--bc)) 100% 100% / var(--bw) var(--bl) no-repeat;
+  filter:drop-shadow(0 0 5px rgba(201,162,39,.45));
+}
+
+/* — HUD: счётчики мягко светятся золотом — */
+.sn-stat b{ filter:drop-shadow(0 0 12px rgba(201,162,39,.28)) }
+.pong-you b{ filter:drop-shadow(0 0 12px rgba(91,141,224,.35)) }
+.pong-ai b{ filter:drop-shadow(0 0 12px rgba(226,85,79,.35)) }
+
+/* — клавиши-подсказки: лёгкое золотое тиснение — */
+.sn-keys span{ background:linear-gradient(180deg,rgba(232,207,138,.08),transparent); box-shadow:inset 0 1px 0 rgba(232,207,138,.18) }
+
+/* — игры смелее: дышащее неоновое свечение поля + живые скобки — */
+@keyframes arcadeGlowPulse{ 0%,100%{ box-shadow:var(--shadow), inset 0 0 60px rgba(0,0,0,.55), 0 0 0 1px rgba(232,207,138,.16), 0 24px 60px -30px rgba(201,162,39,.3) } 50%{ box-shadow:var(--shadow), inset 0 0 60px rgba(0,0,0,.55), 0 0 0 1px rgba(232,207,138,.3), 0 24px 74px -26px rgba(201,162,39,.52) } }
+@keyframes arcadeBracket{ 0%,100%{ opacity:.78 } 50%{ opacity:1 } }
+@media (hover:hover) and (pointer:fine){
+  .sn-board-wrap{ animation:arcadeGlowPulse 4.5s var(--ease) infinite }
+  .sn-board-wrap::before{ animation:arcadeBracket 2.6s var(--ease) infinite }
+}
+.arcade-play{ position:relative; overflow:hidden }
+.arcade-play::after{ content:""; position:absolute; top:0; left:-60%; width:45%; height:100%; transform:skewX(-20deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent); transition:none }
+.arcade-card:hover .arcade-play::after{ animation:arcadeSheen 1.1s var(--ease) }
+@keyframes arcadeSheen{ from{ left:-60% } to{ left:130% } }
+
+/* — событийные вспышки поля (доп. эффекты, без вмешательства в логику) — */
+.mn-flash{ position:absolute; inset:0; z-index:7; pointer-events:none; border-radius:inherit; opacity:0 }
+.mn-flash.go{ animation:mnFlashGold .5s ease-out forwards }
+.mn-flash.goblue{ animation:mnFlashBlue .55s ease-out forwards }
+.mn-flash.gored{ animation:mnFlashRed .55s ease-out forwards }
+@keyframes mnFlashGold{ 0%{opacity:0;box-shadow:inset 0 0 0 0 rgba(var(--game-flash,246,224,150),0)} 28%{opacity:1;box-shadow:inset 0 0 44px 2px rgba(var(--game-flash,246,224,150),.5)} 100%{opacity:0;box-shadow:inset 0 0 64px 5px rgba(var(--game-flash,246,224,150),0)} }
+@keyframes mnFlashBlue{ 0%{opacity:0;box-shadow:inset 0 0 0 0 rgba(var(--flash-you,91,141,224),0)} 26%{opacity:1;box-shadow:inset 0 0 60px 3px rgba(var(--flash-you,91,141,224),.62)} 100%{opacity:0;box-shadow:inset 0 0 90px 8px rgba(var(--flash-you,91,141,224),0)} }
+@keyframes mnFlashRed{ 0%{opacity:0;box-shadow:inset 0 0 0 0 rgba(var(--flash-ai,226,85,79),0)} 26%{opacity:1;box-shadow:inset 0 0 60px 3px rgba(var(--flash-ai,226,85,79),.62)} 100%{opacity:0;box-shadow:inset 0 0 90px 8px rgba(var(--flash-ai,226,85,79),0)} }
+
+@media (prefers-reduced-motion:reduce){
+  .arcade-card-art::before,.arcade-card:hover .arcade-card-art::before{ transition:none }
+  .sn-board-wrap,.sn-board-wrap::before,.arcade-card:hover .arcade-play::after{ animation:none }
+}
+
+.arcade-card.arcade-soon{opacity:.74;pointer-events:none}
+.arcade-card.arcade-soon .arcade-play{opacity:.55;cursor:default}
+.arcade-card.arcade-soon-bare{display:flex;align-items:center;justify-content:center;min-height:clamp(230px,42vw,320px)}
+.arcade-soon-only{font-family:'Bodoni Moda',serif;font-style:italic;font-size:var(--t-h3);letter-spacing:.04em;color:rgba(244,236,232,.62)}
+
+</style>
+<meta name="robots" content="index,follow,max-image-preview:large"/>
+<!-- Google Search Console: вставь сюда свой код (метод «HTML-тег»). Пример: content="abc123..." -->
+<meta name="google-site-verification" content="egUQDCqeblCtnGWoLCfHJBl2thNfq_6U3x_yVJKH9k0"/><meta name="yandex-verification" content="3e1b2cd45d11af16"/>
+<meta name="author" content="87 · Macan News"/>
+<meta name="keywords" content="Macan News, MacanNews, Macan News 87, MacanNews87, Макан Ньюс, макан ньюс, макан ньюс 87, Макан Ньюс 87, 87, News 87, News87, Новости 87, Новости87, новости 87, Macan 87, Macan87, макан 87, Макан 87, восемь семь, восемьдесят семь, восемь-семь, Macan, Макан, новостной канал 87, канал 87, макан новости, macan новости"/>
+<link rel="canonical" href="https://macannews.ru/"/>
+<meta property="og:site_name" content="87 · Macan News"/>
+<meta property="og:url" content="https://macannews.ru/"/>
+<meta property="og:locale" content="ru_RU"/>
+<meta property="og:image" content="https://macannews.ru/assets/og-cover.jpg"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="87 · Macan News — Макан Ньюс"/>
+<meta name="twitter:description" content="Официальный сайт новостного канала 87 (Macan News / Макан Ньюс). Мы не проверяем факты — мы их назначаем."/>
+<meta name="twitter:image" content="https://macannews.ru/assets/og-cover.jpg"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"87 · Macan News","alternateName":["Macan News","MacanNews","Macan News 87","MacanNews87","Макан Ньюс","Макан Ньюс 87","макан ньюс","макан ньюс 87","87","News 87","News87","Новости 87","Новости87","новости 87","Macan 87","Macan87","Макан 87","макан 87","Macan","Макан","новостной канал 87","канал 87","восемь семь","восемьдесят семь"],"url":"https://macannews.ru/","inLanguage":"ru","description":"Официальный сайт новостного канала 87 (Macan News, Макан Ньюс). Мы не проверяем факты — мы их назначаем."}</script>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<audio id="bgAudio" loop playsinline preload="none"><source src="assets/mp3-e3c1114de5.mp3" type="audio/mpeg"></audio>
+<div class="loader" id="loader" aria-hidden="true"><div><svg class="logo87" viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="87">
+  <defs><linearGradient id="g87" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="var(--g1)"/><stop offset="22%" stop-color="var(--g2)"/>
+    <stop offset="46%" stop-color="var(--g3)"/><stop offset="64%" stop-color="var(--g2)"/>
+    <stop offset="100%" stop-color="var(--g1)"/></linearGradient></defs>
+  <g fill="none" stroke="url(#g87)" stroke-width="32" stroke-linecap="butt" stroke-linejoin="miter">
+    <circle cx="175" cy="132" r="82"/><circle cx="175" cy="316" r="102"/>
+    <path d="M360 78 H632 L488 416"/><path d="M430 268 H556"/>
+  </g>
+</svg><div class="loader-tag">Macan News</div></div></div>
+<div class="route-bar" id="routeBar" aria-hidden="true"></div><div class="ticker top" aria-hidden="true"><div class="ticker-track"><span class="">Macan News</span><span class="st">✦</span><span class="">87</span><span class="st">✦</span><span class="">Breaking</span><span class="st">✦</span><span class="">Eight-Seven</span><span class="st">✦</span><span class="">Exclusive</span><span class="st">✦</span><span class="">Macan News</span><span class="st">✦</span><span class="">87</span><span class="st">✦</span><span class="">Breaking</span><span class="st">✦</span><span class="">Eight-Seven</span><span class="st">✦</span><span class="">Exclusive</span><span class="st">✦</span></div></div>
+<nav class="nav" id="nav">
+  <a href="#home" data-view="home" class="nav-mark">87</a>
+  <div class="nav-links">
+    <a href="#workers" data-view="workers">Работники месяца</a>
+    <a href="#merch" data-view="merch">Merch</a>
+    <a href="#news" data-view="news">NEWS</a>
+    <a href="#top100" data-view="top100">ТОП 100</a>
+    <a href="#pamyat" data-view="pamyat">Светлая память</a>
+    <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener">Telegram</a>
+  </div>
+  <div class="nav-tools">
+    <button class="icon-btn" id="soundBtn" aria-label="Звук" title="Звук">
+      <svg class="spk-on" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a9 9 0 0 1 0 12"/></svg>
+      <svg class="spk-off" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>
+    </button>
+    <button class="icon-btn" id="themeBtn" aria-label="Тема" title="Сменить тему">
+      <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
+    </button>
+    <button class="icon-btn" id="gamesBtn" data-view="games" aria-label="Игры" title="Игры">
+      <svg viewBox="0 0 24 24"><path d="M8 8h8a4 4 0 0 1 3.9 4.9l-.7 3.4A2.3 2.3 0 0 1 16.9 18c-.9 0-1.5-.6-2-1.2-.5-.6-1-.8-2.9-.8s-2.4.2-2.9.8c-.5.6-1.1 1.2-2 1.2a2.3 2.3 0 0 1-2.3-1.7l-.7-3.4A4 4 0 0 1 8 8z"/><path d="M7.5 11.5v3M6 13h3"/><circle cx="15.5" cy="12" r="1"/><circle cx="17.5" cy="14" r="1"/></svg>
+    </button>
+    <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#workers" data-view="workers">Работники месяца</a>
+  <a href="#merch" data-view="merch">Merch</a>
+  <a href="#news" data-view="news">NEWS</a>
+  <a href="#top100" data-view="top100">ТОП 100</a>
+  <a href="#pamyat" data-view="pamyat">Светлая память</a>
+  <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener">Telegram</a>
+</div><section class="view active" id="view-home"><header class="hero" id="top">
+  <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <div class="reveal hero-logo-wrap"><span class="iri" aria-hidden="true"></span><svg class="logo87" viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="87">
+  <defs><linearGradient id="g87" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="var(--g1)"/><stop offset="22%" stop-color="var(--g2)"/>
+    <stop offset="46%" stop-color="var(--g3)"/><stop offset="64%" stop-color="var(--g2)"/>
+    <stop offset="100%" stop-color="var(--g1)"/></linearGradient></defs>
+  <g fill="none" stroke="url(#g87)" stroke-width="32" stroke-linecap="butt" stroke-linejoin="miter">
+    <circle cx="175" cy="132" r="82"/><circle cx="175" cy="316" r="102"/>
+    <path d="M360 78 H632 L488 416"/><path d="M430 268 H556"/>
+  </g>
+</svg></div>
+    <div class="hero-name reveal">Macan News</div>
+    <p class="hero-slogan reveal">Мы не проверяем факты — мы их назначаем.</p>
+    <div class="hero-cta reveal">
+      <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener" class="btn gold-btn">
+        <svg viewBox="0 0 24 24"><path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.47-2.27 2.18c-.25.25-.46.46-.94.46l.34-4.8 8.73-7.9c.38-.34-.08-.53-.59-.19L6.99 13.2l-4.65-1.45c-1.01-.32-1.03-1.01.21-1.49L20.63 2.9c.84-.31 1.58.2 1.31 1.4z"/></svg>
+        <span>Перейти в Telegram</span>
+      </a>
+      <div class="qr-card">
+        <div class="qr-frame"><img src="assets/img-59e5004e09.png" alt="QR Telegram Macan News" width="396" height="396" fetchpriority="high" decoding="async"/></div>
+        <div class="qr-meta"><b>Сканируй</b><span>@macan777macan777macan777</span></div>
+      </div>
+    </div>
+  </div>
+
+</header><div class="ticker inline" aria-hidden="true"><div class="ticker-track"><span class="">Macan News</span><span class="st">✦</span><span class="">87</span><span class="st">✦</span><span class="">Breaking</span><span class="st">✦</span><span class="">Eight-Seven</span><span class="st">✦</span><span class="">Exclusive</span><span class="st">✦</span><span class="">Macan News</span><span class="st">✦</span><span class="">87</span><span class="st">✦</span><span class="">Breaking</span><span class="st">✦</span><span class="">Eight-Seven</span><span class="st">✦</span><span class="">Exclusive</span><span class="st">✦</span></div></div><section class="plates-sec"><div class="wrap">
+  <div class="plates-head"><h2 class="gold reveal">Разделы</h2></div>
+  <div class="plates"><a class="plate reveal" href="#workers" data-view="workers">
+      <span class="pname">Работники месяца</span>
+    </a><a class="plate reveal" href="#merch" data-view="merch">
+      <span class="pname">Merch</span>
+    </a><a class="plate reveal" href="#news" data-view="news">
+      <span class="pname">NEWS</span>
+    </a><a class="plate reveal" href="#top100" data-view="top100">
+      <span class="pname">ТОП 100</span>
+    </a><a class="plate reveal wide" href="#pamyat" data-view="pamyat">
+      <span class="pname">Светлая память</span>
+    </a></div>
+</div></section></section><section class="view" id="view-workers"><section class="page-head"><div class="wrap">
+    <div class="eyebrow reveal">Аллея Славы</div>
+    <h1 class="page-title gold reveal">Работники месяца</h1>
+    <p class="page-desc reveal">Назначены редакцией. Обжалованию не подлежат.</p>
+    <hr class="hairline page-rule reveal"/>
+  </div></section><section><div class="wrap"><div class="stars-grid"><article class="star-card reveal">
+      <div class="media" role="img" aria-label="Тимати" style="background-image:url(assets/img-db75aeeda6.jpg);background-image:-webkit-image-set(url(assets/img-db75aeeda6.webp) 1x);background-image:image-set(url(assets/img-db75aeeda6.webp) type('image/webp'),url(assets/img-db75aeeda6.jpg) type('image/jpeg'));background-size:cover;background-position:center 22%;background-repeat:no-repeat"></div>
+      <div class="star-info">
+        <div class="star-rank">Работник месяца</div>
+        <h3 class="star-name">Тимати</h3>
+        <p class="star-bio">Паинька, милашка, добрейший человек.</p>
+      </div>
+    </article><article class="star-card reveal">
+      <div class="media" role="img" aria-label="Джиган" style="background-image:url(assets/img-f493158f25.jpg);background-image:-webkit-image-set(url(assets/img-f493158f25.webp) 1x);background-image:image-set(url(assets/img-f493158f25.webp) type('image/webp'),url(assets/img-f493158f25.jpg) type('image/jpeg'));background-size:cover;background-position:center 22%;background-repeat:no-repeat"></div>
+      <div class="star-info">
+        <div class="star-rank">Работник месяца</div>
+        <h3 class="star-name">Джиган</h3>
+        <p class="star-bio">Главный злодей, тупой подонок.</p>
+      </div>
+    </article></div><div class="alley"><article class="alley-row reveal">
+      <div class="alley-media" role="img" aria-label="Артём Андреевич" style="background-image:url(assets/img-618f8e9ab9.jpg);background-image:-webkit-image-set(url(assets/img-618f8e9ab9.webp) 1x);background-image:image-set(url(assets/img-618f8e9ab9.webp) type('image/webp'),url(assets/img-618f8e9ab9.jpg) type('image/jpeg'));background-size:cover;background-position:center 26%;background-repeat:no-repeat"></div>
+      <div class="alley-text">
+        <div class="role">Работник месяца</div>
+        <h3>Артём Андреевич</h3>
+        <p>Контролирует 87% мирового запаса харизмы. За отчётный период трижды перевернул индустрию и дважды — собственный зад. Местонахождение засекречено.</p>
+      </div>
+    </article><article class="alley-row reveal">
+      <div class="alley-media" role="img" aria-label="Дима Масленников" style="background-image:url(assets/img-cd0f40616a.jpg);background-image:-webkit-image-set(url(assets/img-cd0f40616a.webp) 1x);background-image:image-set(url(assets/img-cd0f40616a.webp) type('image/webp'),url(assets/img-cd0f40616a.jpg) type('image/jpeg'));background-size:cover;background-position:center 26%;background-repeat:no-repeat"></div>
+      <div class="alley-text">
+        <div class="role">Работник месяца</div>
+        <h3>Дима Масленников</h3>
+        <p>Г@нд*н с небритой жопой.</p>
+      </div>
+    </article><article class="alley-row reveal">
+      <div class="alley-media" role="img" aria-label="Мистер Бист" style="background-image:url(assets/img-753e7dea12.jpg);background-image:-webkit-image-set(url(assets/img-753e7dea12.webp) 1x);background-image:image-set(url(assets/img-753e7dea12.webp) type('image/webp'),url(assets/img-753e7dea12.jpg) type('image/jpeg'));background-size:cover;background-position:center 26%;background-repeat:no-repeat"></div>
+      <div class="alley-text">
+        <div class="role">Работник месяца</div>
+        <h3>Мистер Бист</h3>
+        <p>Сломленный герой💔, a.k.a. MrBeast.</p>
+      </div>
+    </article><article class="alley-row reveal">
+      <div class="alley-media" role="img" aria-label="Артём" style="background-image:url(assets/img-50e82083f9.jpg);background-image:-webkit-image-set(url(assets/img-50e82083f9.webp) 1x);background-image:image-set(url(assets/img-50e82083f9.webp) type('image/webp'),url(assets/img-50e82083f9.jpg) type('image/jpeg'));background-size:cover;background-position:center 26%;background-repeat:no-repeat"></div>
+      <div class="alley-text">
+        <div class="role">Работник месяца</div>
+        <h3>Артём</h3>
+        <p>Неизвестно.</p>
+      </div>
+    </article></div><div class="join reveal">
+    <h3 class="gold">Хочешь сюда?</h3>
+    <div class="price serif">Добавим тебя или знакомого за 87 ₸</div>
+    <p>Официальное место в Аллее Славы. Без проверки достижений — мы верим на слово.</p>
+    <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener" class="btn gold-btn">Добавить в Аллею →</a>
+  </div></div></section></section><section class="view" id="view-merch"><section class="page-head"><div class="wrap">
+    
+    <h1 class="page-title gold reveal">Merch</h1>
+    <p class="page-desc reveal">Ограниченные дропы 87. Носится как доказательство, что ты был в курсе раньше остальных.</p>
+    <hr class="hairline page-rule reveal"/>
+  </div></section><section><div class="wrap">
+  <div class="merch-film reveal"><video src="assets/mp4-030acbbbfc.mp4" autoplay loop muted playsinline preload="metadata"></video></div>
+</div></section></section><section class="view" id="view-news"><section class="page-head"><div class="wrap">
+    
+    <h1 class="page-title gold reveal">NEWS</h1>
+    <p class="page-desc reveal">Свежие выпуски, дропы и события. Даты меняются так же внезапно, как культурные авторитеты.</p>
+    <hr class="hairline page-rule reveal"/>
+  </div></section><section><div class="wrap"><div class="soon reveal">
+  <div class="soon-big gold">coming soon</div>
+  <hr class="hairline"/>
+  <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener" class="btn gold-btn soon-cta">
+    <svg viewBox="0 0 24 24"><path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.47-2.27 2.18c-.25.25-.46.46-.94.46l.34-4.8 8.73-7.9c.38-.34-.08-.53-.59-.19L6.99 13.2l-4.65-1.45c-1.01-.32-1.03-1.01.21-1.49L20.63 2.9c.84-.31 1.58.2 1.31 1.4z"/></svg>
+    <span>Узнать первым</span>
+  </a>
+</div></div></section></section><section class="view" id="view-top100"><section class="page-head"><div class="wrap">
+    <div class="eyebrow reveal">Индекс влияния</div>
+    <h1 class="page-title gold reveal">ТОП 100</h1>
+    <p class="page-desc reveal">Рейтинг по версии редакции. Капитал влияния пересчитывается по настроению. Источники засекречены.</p>
+    <hr class="hairline page-rule reveal"/>
+  </div></section><section><div class="wrap">
+    <div class="t100-lead reveal">
+    <div class="t100-rank">01</div>
+    <div class="t100-lead-body">
+      <div class="t100-kicker">№1 рейтинга</div>
+      <h3 class="t100-name">Артём Андреевич</h3>
+      <div class="t100-metric"><span class="t100-label">Капитал влияния</span><span class="t100-val"><span class="cnt" data-count="87" data-dec="1">87,0</span> млрд ₸</span></div>
+    </div>
+  </div>
+  <ol class="t100-list"><li class="t100-row reveal">
+      <span class="t100-n">02</span>
+      <span class="t100-rn">Тимати</span>
+      <span class="t100-move up">▲</span>
+      <span class="t100-rv">70,4 млрд ₸</span>
+    </li><li class="t100-row reveal">
+      <span class="t100-n">03</span>
+      <span class="t100-rn">Мистер Бист</span>
+      <span class="t100-move up">▲</span>
+      <span class="t100-rv">63,1 млрд ₸</span>
+    </li><li class="t100-row reveal">
+      <span class="t100-n">04</span>
+      <span class="t100-rn">Джиган</span>
+      <span class="t100-move down">▼</span>
+      <span class="t100-rv">0,87 млрд ₸</span>
+    </li><li class="t100-row reveal">
+      <span class="t100-n">05</span>
+      <span class="t100-rn">Дима Масленников</span>
+      <span class="t100-move down">▼</span>
+      <span class="t100-rv">8 700 ₸</span>
+    </li><li class="t100-row reveal">
+      <span class="t100-n">06</span>
+      <span class="t100-rn">Артём</span>
+      <span class="t100-move new">NEW</span>
+      <span class="t100-rv">— ₸</span>
+    </li>
+    <li class="t100-more">07 — 100 · coming soon</li>
+  </ol>
+</div></section></section><section class="view" id="view-pamyat"><section class="page-head"><div class="wrap">
+    
+    <h1 class="page-title gold reveal">Светлая память</h1>
+    
+    <hr class="hairline page-rule reveal"/>
+  </div></section><section><div class="wrap"><div class="memoriam reveal">
+  <div class="memoriam-photo" role="img" aria-label="Сивожелезов" style="background-image:url(assets/img-dccb894f4c.jpg);background-image:-webkit-image-set(url(assets/img-dccb894f4c.webp) 1x);background-image:image-set(url(assets/img-dccb894f4c.webp) type('image/webp'),url(assets/img-dccb894f4c.jpg) type('image/jpeg'));background-size:cover;background-position:center"></div>
+  <div class="memoriam-mark">✦</div>
+  <h3 class="memoriam-name">Сивожелезов</h3>
+  <p class="memoriam-bio">Сердце, которого нас лишила администрация</p>
+</div></div></section></section><section class="view" id="view-games"><div class="arcade-wrap">
+  <picture style="display:none"><source type="image/webp" srcset="assets/img-c3125116b0.webp"/><img id="snHeadSrc" src="assets/img-c3125116b0.png" alt="" decoding="async"/></picture>
+  <picture style="display:none"><source type="image/webp" srcset="assets/img-349d298e8e.webp"/><img id="pongTimSrc" src="assets/img-349d298e8e.png" alt="" decoding="async"/></picture>
+
+  <!-- галерея игр -->
+  <div class="arcade-gallery" id="arcadeGallery">
+    <article class="arcade-card" data-game="snake87">
+      <div class="arcade-card-art">
+        <span class="arcade-card-badge">87</span>
+        <span class="arcade-card-trail" style="left:18%;top:64%"></span>
+        <span class="arcade-card-trail" style="left:30%;top:64%;opacity:.7"></span>
+        <span class="arcade-card-trail" style="left:42%;top:64%;opacity:.5"></span>
+        <img class="arcade-card-head" id="snCardHead" alt="Джиган" decoding="async"/>
+      </div>
+      <h3>Змейка 87</h3>
+      <p>Змейка во главе с Джиганом. Вырасти до 87</p>
+      <button class="arcade-play" data-game="snake87">Играть</button>
+    </article>
+    <article class="arcade-card" data-game="pong87">
+      <div class="arcade-card-art pong-art">
+        <span class="arcade-card-badge">87</span>
+        <img class="arcade-card-head pong-jig" id="pongCardHead" alt="Джиган" decoding="async"/>
+        <span class="pong-bar pong-bar-top"></span>
+        <span class="pong-bar pong-bar-bot"></span>
+        <span class="pong-ball"></span>
+        <img class="arcade-card-head pong-tim" id="pongCardTim" alt="Тимати" decoding="async"/>
+      </div>
+      <h3>Пинг-понг 87</h3>
+      <p>Тимати против Джигана</p>
+      <button class="arcade-play" data-game="pong87">Играть</button>
+    </article>
+    <article class="arcade-card arcade-soon arcade-soon-bare"><span class="arcade-soon-only">скоро…</span></article>
+  </div>
+
+  <!-- сцена игры -->
+  <div class="arcade-stage" id="arcadeStage" hidden>
+    <button class="arcade-back" id="arcadeBack" type="button">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      К играм
+    </button>
+
+    <div class="snake87" id="snake87">
+      <div class="sn-hud">
+        <div class="sn-stat">Счёт<b id="snScore">0</b></div>
+        <div class="sn-stat">Длина<b id="snLen">3<small style="font-size:.5em;opacity:.6">/87</small></b></div>
+        <div class="sn-stat">Рекорд<b id="snBest">0</b></div>
+        <button class="sn-sfx" id="snSfx" type="button" aria-label="Звук игры" title="Звук игры">
+          <svg class="sfx-on" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>
+          <svg class="sfx-off" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>
+        </button>
+        <button class="sn-sfx sn-fsbtn" id="snFs" type="button" aria-label="На весь экран" title="На весь экран">
+          <svg class="fs-open" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          <svg class="fs-close" viewBox="0 0 24 24"><path d="M9 4v3a2 2 0 0 1-2 2H4M15 4v3a2 2 0 0 0 2 2h3M20 15h-3a2 2 0 0 0-2 2v3M4 15h3a2 2 0 0 1 2 2v3"/></svg>
+        </button>
+      </div>
+
+      <div class="sn-board-wrap">
+        <canvas id="snCanvas" width="560" height="560"></canvas>
+
+        <div class="sn-screen start" id="snStart">
+          <div class="sn-title">Змейка 87</div>
+          <div class="sn-sub">Веди Джигана, ешь 87, расти до максимума</div>
+          <div class="sn-keys"><span>↑ ↓ ← →</span><span>W A S D</span><span>SWIPE</span></div>
+          <div class="sn-opts">
+            <div class="sn-optrow" id="snDiff" role="group" aria-label="Сложность">
+              <button type="button" data-diff="easy">Лёгкий</button>
+              <button type="button" data-diff="classic" class="on">Классика</button>
+              <button type="button" data-diff="hard">Сложно</button>
+            </div>
+            <div class="sn-optrow" id="snWrap" role="group" aria-label="Границы">
+              <button type="button" data-wrap="0" class="on">С границей</button>
+              <button type="button" data-wrap="1">Без границ</button>
+            </div>
+          </div>
+          <button class="sn-btn" id="snStartBtn" type="button">Играть</button>
+        </div>
+
+        <div class="sn-screen win" id="snWin" hidden>
+          <div class="sn-burst"></div>
+          <span class="sn-spark" style="left:24%;top:32%;animation-delay:0s">87</span>
+          <span class="sn-spark" style="left:70%;top:30%;animation-delay:.3s">✦</span>
+          <span class="sn-spark" style="left:40%;top:24%;animation-delay:.6s">87</span>
+          <span class="sn-spark" style="left:60%;top:60%;animation-delay:.9s">✦</span>
+          <div class="sn-title">87 по крутости</div>
+          <div class="sn-sub" id="snWinSub">Максимальный размер достигнут</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+            <button class="sn-btn" id="snWinAgain" type="button">Заново</button>
+            <button class="sn-btn ghost" id="snWinBack" type="button">К играм</button>
+          </div>
+        </div>
+
+        <div class="sn-screen lose" id="snLose" hidden>
+          <span class="sn-cross">87</span>
+          <div class="sn-sub" id="snLoseSub">Не в этот раз</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+            <button class="sn-btn" id="snLoseAgain" type="button">Заново</button>
+            <button class="sn-btn ghost" id="snLoseBack" type="button">К играм</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sn-dpad" id="snDpad">
+        <button class="du" data-dir="up" type="button" aria-label="Вверх"><svg viewBox="0 0 24 24"><path d="M12 19V6M5 13l7-7 7 7"/></svg></button>
+        <button class="dl" data-dir="left" type="button" aria-label="Влево"><svg viewBox="0 0 24 24"><path d="M19 12H6M13 5l-7 7 7 7"/></svg></button>
+        <button class="dr" data-dir="right" type="button" aria-label="Вправо"><svg viewBox="0 0 24 24"><path d="M5 12h13M11 5l7 7-7 7"/></svg></button>
+        <button class="dd" data-dir="down" type="button" aria-label="Вниз"><svg viewBox="0 0 24 24"><path d="M12 5v13M5 11l7 7 7-7"/></svg></button>
+      </div>
+    </div>
+  </div>
+    <div class="arcade-stage" id="arcadeStagePong" hidden>
+      <button class="arcade-back" id="pongBack" type="button">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        К играм
+      </button>
+      <div class="pong87" id="pong87">
+        <div class="sn-hud">
+          <div class="sn-stat pong-you">Тимати<b id="pongYou">0</b></div>
+          <div class="sn-stat">до 7</div>
+          <div class="sn-stat pong-ai">Джиган<b id="pongAi">0</b></div>
+          <button class="sn-sfx" id="pongSfx" type="button" aria-label="Звук игры" title="Звук игры">
+            <svg class="sfx-on" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>
+            <svg class="sfx-off" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>
+          </button>
+          <button class="sn-sfx sn-fsbtn" id="pongFs" type="button" aria-label="На весь экран" title="На весь экран">
+            <svg class="fs-open" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            <svg class="fs-close" viewBox="0 0 24 24"><path d="M9 4v3a2 2 0 0 1-2 2H4M15 4v3a2 2 0 0 0 2 2h3M20 15h-3a2 2 0 0 0-2 2v3M4 15h3a2 2 0 0 1 2 2v3"/></svg>
+          </button>
+        </div>
+        <div class="sn-board-wrap pong-board-wrap">
+          <canvas id="pongCanvas" width="560" height="560"></canvas>
+          <div class="sn-screen start" id="pongStart">
+            <div class="sn-title">Пинг-понг 87</div>
+            <div class="sn-sub">Ты — Тимати (синие). Обыграй Джигана до 7 очков</div>
+            <div class="sn-keys"><span>← →</span><span>A D</span><span>SWIPE</span></div>
+            <div class="sn-opts">
+              <div class="sn-optrow" id="pongDiff" role="group" aria-label="Сложность">
+                <button type="button" data-diff="easy">Лёгкий</button>
+                <button type="button" data-diff="classic" class="on">Классика</button>
+                <button type="button" data-diff="hard">Сложно</button>
+              </div>
+            </div>
+            <button class="sn-btn" id="pongStartBtn" type="button">Играть</button>
+          </div>
+          <div class="sn-screen win" id="pongWin" hidden>
+            <div class="sn-burst"></div>
+            <span class="sn-spark" style="left:24%;top:32%;animation-delay:0s">87</span>
+            <span class="sn-spark" style="left:70%;top:30%;animation-delay:.3s">✦</span>
+            <span class="sn-spark" style="left:42%;top:24%;animation-delay:.6s">87</span>
+            <div class="sn-title">87 по крутости</div>
+            <div class="sn-sub">Тимати обыграл Джигана</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+              <button class="sn-btn" id="pongWinAgain" type="button">Заново</button>
+              <button class="sn-btn ghost" id="pongWinBack" type="button">К играм</button>
+            </div>
+          </div>
+          <div class="sn-screen lose" id="pongLose" hidden>
+            <span class="sn-cross">87</span>
+            <div class="sn-sub">Джиган оказался сильнее</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+              <button class="sn-btn" id="pongLoseAgain" type="button">Заново</button>
+              <button class="sn-btn ghost" id="pongLoseBack" type="button">К играм</button>
+            </div>
+          </div>
+        </div>
+        <div class="sn-dpad pong-dpad" id="pongDpad">
+          <button data-dir="left" type="button" aria-label="Влево"><svg viewBox="0 0 24 24"><path d="M19 12H6M13 5l-7 7 7 7"/></svg></button>
+          <button data-dir="right" type="button" aria-label="Вправо"><svg viewBox="0 0 24 24"><path d="M5 12h13M11 5l7 7-7 7"/></svg></button>
+        </div>
+      </div>
+    </div>
+</div></section>
+<footer class="footer"><div class="wrap">
+  <div class="footer-top">
+    <div>
+      <div class="footer-87 gold">87</div>
+      <div class="footer-tag">Macan News — мы не проверяем факты, мы их назначаем.</div>
+    </div>
+    <div class="fcol">
+      <h5>Разделы</h5>
+      <a href="#workers" data-view="workers">Работники месяца</a>
+      <a href="#merch" data-view="merch">Merch</a>
+      <a href="#news" data-view="news">NEWS</a>
+      <a href="#top100" data-view="top100">ТОП 100</a>
+      <a href="#pamyat" data-view="pamyat">Светлая память</a>
+    </div>
+    <div class="fcol">
+      <h5>Канал</h5>
+      <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener">Telegram-канал ↗</a>
+      <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Добавить в Аллею ↗</a>
+      <div class="footer-qr"><div class="qr-frame" style="width:74px;height:74px"><img src="assets/img-59e5004e09.png" alt="QR Telegram" width="396" height="396" loading="lazy" decoding="async"/></div><span class="eyebrow" style="font-size:10px;max-width:9em">Сканируй и подпишись</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <small>© 2026 87 · Macan News. Все совпадения с реальностью — творческий выбор редакции.</small>
+    <a href="#home" data-view="home" class="to-top"><span>Наверх</span> <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
+  </div>
+</div></footer><script>
+(function(){
+ 'use strict';
+ var root=document.documentElement;
+ root.className += ' js';
+
+ /* ---------- мобильное меню ---------- */
+ var burger=document.getElementById('burger'), menu=document.getElementById('mobileMenu');
+ function toggleMenu(s){
+   if(!menu) return;
+   var open=(s===undefined)?!menu.classList.contains('open'):s;
+   menu.classList.toggle('open',open);
+   menu.setAttribute('aria-hidden', open?'false':'true');
+   if(burger){ burger.classList.toggle('open',open); burger.setAttribute('aria-expanded', open?'true':'false'); }
+   document.body.style.overflow=open?'hidden':'';
+   if(open){ var f=menu.querySelector('a'); if(f) f.focus(); }
+   else if(burger && burger.classList.contains('was-open')){ burger.classList.remove('was-open'); burger.focus(); }
+   if(open && burger) burger.classList.add('was-open');
+ }
+ if(burger) burger.addEventListener('click',function(){toggleMenu();});
+ if(menu) menu.setAttribute('aria-hidden','true');
+ document.addEventListener('keydown', function(e){ if(e.key==='Escape' && menu && menu.classList.contains('open')) toggleMenu(false); });
+
+ /* ---------- появление элементов ---------- */
+ /* каскад: элементы, входящие в кадр одновременно, появляются со сдвигом 60мс;
+    инлайновый delay снимается после прохода, чтобы не тормозить hover-переходы */
+ function _revealNow(el, idx){
+   var d=Math.min(idx,8)*0.06;
+   if(d) el.style.transitionDelay=d+'s';
+   el.classList.add('in');
+   setTimeout(function(){ el.style.transitionDelay=''; }, 1000+d*1000);
+ }
+ var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){
+   var n=0;
+   es.forEach(function(e){ if(e.isIntersecting){ _revealNow(e.target,n); io.unobserve(e.target); n++; } });
+ },{threshold:0.08, rootMargin:'0px 0px -6% 0px'}) : null;
+ function bindReveals(scope){ var els=(scope||document).querySelectorAll('.reveal:not(.in)'); for(var i=0;i<els.length;i++){ if(io) io.observe(els[i]); else els[i].classList.add('in'); } }
+ function revealInView(scope){
+   var vh=window.innerHeight||800, els=(scope||document).querySelectorAll('.reveal:not(.in)'), n=0;
+   for(var i=0;i<els.length;i++){ var r=els[i].getBoundingClientRect(); if(r.top<vh*0.96 && r.bottom>0){ _revealNow(els[i],n); if(io) io.unobserve(els[i]); n++; } }
+ }
+
+ /* ---------- разделы (SPA) ---------- */
+ var VIEWS=['home','workers','merch','news','pamyat','top100','games'];
+ var TITLES={home:'87 · Macan News — Макан Ньюс | Новости 87',workers:'Работники месяца — 87 · Macan News',merch:'Merch — 87 · Macan News',news:'NEWS — 87 · Macan News',pamyat:'Светлая память — 87 · Macan News',top100:'ТОП 100 — 87 · Macan News',games:'Игры — 87 · Macan News'};
+ function slug(){var s=(location.hash||'').replace(/^#/,'');return VIEWS.indexOf(s)>=0?s:'home';}
+ var _prevView='home';
+ function showView(s, reveal){
+   if(VIEWS.indexOf(s)<0) s='home';
+   var views=document.querySelectorAll('.view'); for(var i=0;i<views.length;i++) views[i].classList.remove('active');
+   var el=document.getElementById('view-'+s)||document.getElementById('view-home');
+   /* направление входа: к «дальнему» разделу — слева направо, назад — наоборот */
+   var di=VIEWS.indexOf(s)-VIEWS.indexOf(_prevView);
+   el.style.setProperty('--vdx', di>0?22:(di<0?-22:0));
+   _prevView=s;
+   el.classList.add('active');
+   var links=document.querySelectorAll('[data-view]'); for(var j=0;j<links.length;j++){ links[j].classList.toggle('active', links[j].getAttribute('data-view')===s); }
+   document.title=TITLES[s]||TITLES.home;
+   window.scrollTo(0,0);
+   if(s==='merch'){ var v=el.querySelector('video'); if(v){ var pp=v.play(); if(pp&&pp.catch) pp.catch(function(){}); } }
+   if(reveal!==false){ routeFx(); revealInView(el); bindReveals(el); }
+ }
+ window.addEventListener('hashchange',function(){ if(menu&&menu.classList.contains('open')) toggleMenu(false); showView(slug()); });
+ /* стрелки ← → листают разделы (кроме игр — там стрелки управляют змейкой) */
+ var NAVSEQ=['home','workers','merch','news','top100','pamyat'];
+ document.addEventListener('keydown',function(e){
+   if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey) return;
+   if(slug()==='games') return;
+   if(menu&&menu.classList.contains('open')) return;
+   var i=NAVSEQ.indexOf(slug()); if(i<0) return;
+   if(e.key==='ArrowRight'){ location.hash=NAVSEQ[(i+1)%NAVSEQ.length]; }
+   else if(e.key==='ArrowLeft'){ location.hash=NAVSEQ[(i-1+NAVSEQ.length)%NAVSEQ.length]; }
+ });
+ document.addEventListener('click',function(e){
+   var a=e.target&&e.target.closest?e.target.closest('[data-view]'):null; if(!a) return;
+   e.preventDefault(); var s=a.getAttribute('data-view');
+   if(menu&&menu.classList.contains('open')) toggleMenu(false);
+   if(slug()===s) showView(s); else location.hash=s;
+ });
+
+ /* ---------- вход (заставка) + звук ---------- */
+ var audio=document.getElementById('bgAudio'), sb=document.getElementById('soundBtn'), loaderEl=document.getElementById('loader');
+ var intendOn=true, entered=false;
+ if(audio){
+   audio.addEventListener('play', function(){ if(sb) sb.classList.remove('muted'); });
+   audio.addEventListener('pause',function(){ if(sb) sb.classList.add('muted'); });
+ }
+ /* WebAudio-мост громкости: iOS игнорирует volume у <audio>, но не GainNode.
+    Мост строится лениво при первом set() (после жеста, когда AudioContext разрешён);
+    при любой ошибке тихо откатывается на element.volume (как раньше). */
+ window.__bgVol=(function(){
+   var gain=null;
+   function bridge(){
+     if(gain!==null) return;
+     try{
+       var mk=window.__arcadeAC, ac=mk?mk():null;
+       if(!ac||!audio){ gain=false; return; }
+       var src=ac.createMediaElementSource(audio);
+       var g=ac.createGain(); g.gain.value=(audio.volume!=null?audio.volume:0.8);
+       src.connect(g); g.connect(ac.destination);
+       audio.volume=1;    /* элемент отдаёт полный сигнал, громкостью правит gain */
+       gain=g;
+     }catch(e){ gain=false; }
+   }
+   return {
+     set:function(v){ bridge(); if(gain){ try{gain.gain.value=v;}catch(e){} } else { try{audio.volume=v;}catch(e){} } },
+     get:function(){ try{ return gain?gain.gain.value:(audio?audio.volume:1); }catch(e){ return 1; } }
+   };
+ })();
+ /* трек входит плавно (1.2с), не спорим с «дакингом» громкости в играх */
+ function fadeIn(){
+   if(window.__arcadeMusic && window.__arcadeMusic.isDucked && window.__arcadeMusic.isDucked()) return;
+   try{
+     window.__bgVol.set(0); var t0=performance.now();
+     (function st(ts){ var k=Math.min(1,(ts-t0)/1200); window.__bgVol.set(k*0.8); if(k<1) requestAnimationFrame(st); })(t0);   /* потолок 0.8 = FULL аркадного модуля */
+   }catch(e){}
+ }
+ function tryStart(){ if(intendOn && audio && audio.paused){ var p=audio.play(); if(p&&p.then){ p.then(fadeIn).catch(function(){}); } else { fadeIn(); } } }
+ function doEnter(){
+   if(entered) return; entered=true;
+   if(loaderEl) loaderEl.classList.add('done');
+   revealInView(document); bindReveals(document);
+   tryStart();
+ }
+ if(loaderEl){
+   loaderEl.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); doEnter(); });
+   loaderEl.addEventListener('touchend', function(e){ e.preventDefault(); e.stopPropagation(); doEnter(); }, {passive:false});
+ }
+ document.addEventListener('keydown', function(){ doEnter(); });
+ /* заставка — вуаль, а не гейт: сайт открывается сам через 2.4с;
+    клик по ней — мгновенный вход + попытка звука */
+ setTimeout(doEnter, 1800);
+ /* подстраховка старта трека на любом жесте, пока он реально не заиграет (кликам не мешает) */
+ var RG=['pointerdown','touchend','click','keydown'];
+ function retry(){ tryStart(); }
+ RG.forEach(function(ev){ document.addEventListener(ev, retry, true); });
+ if(audio) audio.addEventListener('playing', function(){ RG.forEach(function(ev){ document.removeEventListener(ev, retry, true); }); });
+ if(sb) sb.addEventListener('click',function(e){
+   e.preventDefault(); e.stopPropagation();
+   if(audio && audio.paused){ intendOn=true; tryStart(); } else if(audio){ intendOn=false; audio.pause(); }
+ });
+ document.addEventListener('visibilitychange', function(){
+   if(document.hidden){ if(audio) audio.pause(); }
+   else if(intendOn && entered){ tryStart(); }
+ });
+ window.addEventListener('pagehide', function(){ if(audio) audio.pause(); });
+
+ /* ---------- тема ---------- */
+ try{var stj=localStorage.getItem('mn-theme'); if(stj&&stj!=='light'&&stj!=='dark'){stj='light';try{localStorage.setItem('mn-theme','light');}catch(e2){}} if(stj) root.setAttribute('data-theme',stj);}catch(e){}
+ var tb=document.getElementById('themeBtn');
+ var _mt=document.querySelector('meta[name="theme-color"]');
+ function syncMeta(){ if(_mt){ var _t=root.getAttribute('data-theme'); _mt.setAttribute('content', _t==='dark' ? '#0a1610' : '#ece1cd'); } }
+ syncMeta();
+ /* смена темы: круговая волна от кнопки через View Transitions API (где есть) */
+ if(tb) tb.addEventListener('click',function(ev){
+   function applyTheme(){
+     var _o=['light','dark'];var _c=root.getAttribute('data-theme')||'light';
+     var nv=_o[(_o.indexOf(_c)+1+_o.length)%_o.length];
+     root.setAttribute('data-theme',nv);
+     try{localStorage.setItem('mn-theme',nv);}catch(e){}
+     syncMeta();
+   }
+   var canVT=document.startViewTransition && !matchMedia('(prefers-reduced-motion:reduce)').matches;
+   if(!canVT){ applyTheme(); return; }
+   var x=ev.clientX||innerWidth-40, y=ev.clientY||40;
+   var vt=document.startViewTransition(applyTheme);
+   vt.ready.then(function(){
+     var r=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+     document.documentElement.animate(
+       {clipPath:['circle(0px at '+x+'px '+y+'px)','circle('+r+'px at '+x+'px '+y+'px)']},
+       {duration:550,easing:'cubic-bezier(.4,0,.2,1)',pseudoElement:'::view-transition-new(root)'});
+   }).catch(function(){});
+ });
+
+
+ /* ---------- единый rAF-диспетчер скролла (один слушатель, ноль reflow в кадре) ----------
+    Раньше было три отдельных scroll-слушателя, один без троттлинга и один
+    с чтением scrollHeight каждый кадр — отсюда фризы. Теперь один rAF-проход,
+    высота документа кэшируется и пересчитывается только на resize/reveal. */
+ var _scrollCbs=[], _scrollTick=false, _docH=0;
+ function _recalcDocH(){ _docH=document.documentElement.scrollHeight-window.innerHeight; }
+ function onScrollDispatch(){
+   var y=window.scrollY;
+   for(var i=0;i<_scrollCbs.length;i++){ try{ _scrollCbs[i](y); }catch(e){} }
+   _scrollTick=false;
+ }
+ window.addEventListener('scroll', function(){ if(_scrollTick) return; _scrollTick=true; requestAnimationFrame(onScrollDispatch); }, {passive:true});
+ window.addEventListener('resize', function(){ _recalcDocH(); }, {passive:true});
+ window.addEventListener('load', function(){ _recalcDocH(); }, {passive:true});
+ window.addEventListener('hashchange', function(){ requestAnimationFrame(function(){ _recalcDocH(); onScrollDispatch(); }); });
+
+ /* nav: тень при скролле + прятать вниз / показывать вверх */
+ var nav=document.getElementById('nav'), _lastY=0, _navUp=false;
+ _scrollCbs.push(function(y){
+   if(nav) nav.classList.toggle('scrolled', y>40);
+   if(menu && menu.classList.contains('open')){ _lastY=y; return; }
+   if(y>140 && y>_lastY+5 && !_navUp){ document.body.classList.add('nav-up'); _navUp=true; }
+   else if((y<_lastY-5 || y<140) && _navUp){ document.body.classList.remove('nav-up'); _navUp=false; }
+   _lastY=y;
+ });
+
+ /* ---------- частицы (только десктоп) ---------- */
+ var canvas=document.getElementById('heroCanvas');
+ var heavyOK = !matchMedia('(prefers-reduced-motion:reduce)').matches && !matchMedia('(max-width:820px)').matches && !matchMedia('(pointer:coarse)').matches;
+ if(canvas && heavyOK){
+   var ctx=canvas.getContext('2d'),w,h,parts,raf=null,DPR=Math.min(devicePixelRatio||1,2);
+   var _canRun=true;
+   function size(){var r=canvas.getBoundingClientRect();w=r.width;h=r.height;if(!w||!h)return;canvas.width=w*DPR;canvas.height=h*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);var nn=Math.min(42,Math.floor(w/34));parts=Array.from({length:nn},function(){return{x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+.4,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,a:Math.random()*.45+.12};});}
+   function draw(){if(!_canRun){raf=null;return;}if(!parts){raf=requestAnimationFrame(draw);return;}ctx.clearRect(0,0,w,h);for(var i=0;i<parts.length;i++){var p=parts[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fillStyle='rgba(201,162,39,'+p.a+')';ctx.fill();}raf=requestAnimationFrame(draw);}
+   function startLoop(){ if(raf===null && _canRun) raf=requestAnimationFrame(draw); }
+   function stopLoop(){ if(raf!==null){ cancelAnimationFrame(raf); raf=null; } }
+   size();startLoop();
+   var rzt; function reflow(){stopLoop();size();startLoop();}
+   addEventListener('resize',function(){clearTimeout(rzt);rzt=setTimeout(reflow,200);});
+   addEventListener('orientationchange',function(){clearTimeout(rzt);rzt=setTimeout(reflow,320);});
+
+   /* пауза, когда канвас вне вьюпорта (другой раздел SPA/скролл) или вкладка неактивна */
+   var _hVisible=true;
+   function _hSync(){ _canRun=_hVisible && !document.hidden; if(_canRun) startLoop(); else stopLoop(); }
+   var _hIO=('IntersectionObserver' in window)?new IntersectionObserver(function(es){ _hVisible=es[0].isIntersecting; _hSync(); },{threshold:0}):null;
+   if(_hIO) _hIO.observe(canvas);
+   document.addEventListener('visibilitychange',_hSync);
+ }
+
+ /* ---------- флагманские микро-взаимодействия ---------- */
+ var _fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+ var _rm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+ var routeBar=document.getElementById('routeBar');
+ function routeFx(){ if(!routeBar||_rm) return; routeBar.classList.remove('go'); void routeBar.offsetWidth; routeBar.classList.add('go'); }
+ if(_fine && !_rm){
+   var plts=document.querySelectorAll('.plate');
+   for(var pi=0;pi<plts.length;pi++){ (function(p){
+     /* пасхалка №3: плитка «Светлая память» единственная кланяется на 0.87° */
+     var bow=(p.getAttribute('data-view')==='pamyat')?' rotate(-.87deg)':'';
+     var _r=null, _mt=false, _mx=0, _my=0;
+     p.addEventListener('mouseenter', function(){ _r=p.getBoundingClientRect(); });  /* rect кэшируем один раз на входе — без layout в каждом mousemove */
+     p.addEventListener('mousemove', function(e){
+       if(!_r) return; _mx=e.clientX; _my=e.clientY;
+       if(_mt) return; _mt=true;
+       requestAnimationFrame(function(){ _mt=false;
+         var dx=((_mx-_r.left)/_r.width-0.5)*12, dy=((_my-_r.top)/_r.height-0.5)*12;
+         p.style.transform='translate3d('+dx.toFixed(1)+'px,'+(dy-7).toFixed(1)+'px,0)'+bow;
+       });
+     });
+     p.addEventListener('mouseleave', function(){ _r=null; p.style.transform=''; });
+   })(plts[pi]); }
+   var hlogo=document.querySelector('.hero-logo-wrap .logo87'), hinner=document.querySelector('.hero-inner'), _heroLive=true;
+   var _heroSec=document.querySelector('.hero');
+   if(_heroSec && 'IntersectionObserver' in window){ new IntersectionObserver(function(es){ _heroLive=es[0].isIntersecting; },{threshold:0}).observe(_heroSec); }
+   if(hlogo){ _scrollCbs.push(function(y){
+     if(!_heroLive) return;              /* не считаем параллакс, когда hero ушёл с экрана */
+     hlogo.style.transform='translate3d(0,'+(y*0.12).toFixed(1)+'px,0)';
+     if(hinner){ var vh=window.innerHeight||800, p=Math.min(1,Math.max(0,(y-vh*0.35)/(vh*0.55))); hinner.style.opacity=(1-p*0.85).toFixed(3); }
+   }); }
+ }
+
+ /* ---------- тач-наклон плиток (мобильный аналог 3D-эффекта с ПК) ----------
+    Наклон применяется МГНОВЕННО на касание (не за .16с, как раньше — потому и не
+    успевал показаться при быстром тапе), возврат — плавный покадровый лерп. Работает
+    на всех плитках, включая широкую «Светлая память». Сбрасывается, если палец поехал
+    (это скролл), поэтому прокрутке не мешает. */
+ if(matchMedia('(pointer:coarse)').matches && !_rm){
+   var _tplts=document.querySelectorAll('.plate');
+   for(var tp=0;tp<_tplts.length;tp++){ (function(p){
+     var cx=0,cy=0,cs=0, tx=0,ty=0,ts=0, raf=null, r=null, sx=0, sy=0, active=false;
+     function apply(){ p.style.transform='perspective(760px) rotateX('+cy.toFixed(2)+'deg) rotateY('+cx.toFixed(2)+'deg) scale('+(1-cs*0.03).toFixed(3)+')'; }
+     function loop(){
+       cx+=(tx-cx)*0.35; cy+=(ty-cy)*0.35; cs+=(ts-cs)*0.35;
+       apply();
+       if(Math.abs(tx-cx)>0.02||Math.abs(ty-cy)>0.02||Math.abs(ts-cs)>0.01){ raf=requestAnimationFrame(loop); }
+       else{ raf=null; if(ts===0){ p.style.transform=''; p.style.transition=''; } }   /* полностью сброшено — снимаем inline-стиль */
+     }
+     function kick(){ if(!raf) raf=requestAnimationFrame(loop); }
+     p.addEventListener('touchstart', function(e){
+       var t=e.touches[0]; r=p.getBoundingClientRect(); sx=t.clientX; sy=t.clientY; active=true;
+       p.style.transition='none';
+       var dx=(t.clientX-r.left)/r.width-0.5, dy=(t.clientY-r.top)/r.height-0.5;
+       tx=dx*15; ty=-dy*15; ts=1;
+       cx=tx*0.6; cy=ty*0.6; cs=0.6;   /* стартуем уже наклонёнными на 60% — видно даже при мгновенном тапе */
+       apply(); kick();
+     }, {passive:true});
+     p.addEventListener('touchmove', function(e){
+       if(!active) return; var t=e.touches[0];
+       if(Math.abs(t.clientX-sx)>10||Math.abs(t.clientY-sy)>10){ active=false; tx=0;ty=0;ts=0; kick(); }  /* это скролл */
+     }, {passive:true});
+     function rel(){ if(!active) return; active=false; tx=0;ty=0;ts=0; kick(); }
+     p.addEventListener('touchend', rel, {passive:true});
+     p.addEventListener('touchcancel', rel, {passive:true});
+   })(_tplts[tp]); }
+ }
+
+ /* ---------- золотой перелив: пауза для заголовков вне экрана (перф) ---------- */
+ if('IntersectionObserver' in window){
+   var goldIO=new IntersectionObserver(function(es){
+     es.forEach(function(e){ e.target.classList.toggle('off', !e.isIntersecting); });
+   },{rootMargin:'40px'});
+   var _golds=document.querySelectorAll('.page-title.gold,.plates-head h2.gold,.soon-big.gold,.footer-87.gold,.t100-rank,.join h3.gold');
+   for(var gi=0;gi<_golds.length;gi++){ _golds[gi].classList.add('off'); goldIO.observe(_golds[gi]); }
+ }
+
+ /* ---------- ири-градиент за лого: пауза вне hero ---------- */
+ var _iri=document.querySelector('.iri'), _heroEl=document.querySelector('.hero');
+ if(_iri && _heroEl && 'IntersectionObserver' in window){
+   var irio=new IntersectionObserver(function(es){ _iri.classList.toggle('off', !es[0].isIntersecting); },{threshold:0});
+   irio.observe(_heroEl);
+ }
+
+ /* ---------- пасхалка №1: тикер изредка спотыкается на слове ---------- */
+ var _tt=document.querySelector('.ticker.top .ticker-track');
+ if(_tt && !_rm){
+   setInterval(function(){
+     if(document.hidden || Math.random()<0.5) return;
+     var ws=_tt.querySelectorAll('span:not(.st)'); if(!ws.length) return;
+     var w=ws[(Math.random()*ws.length)|0];
+     w.classList.add('stut'); setTimeout(function(){ w.classList.remove('stut'); }, 500);
+   }, 16000);
+ }
+
+ /* ---------- счётчик чисел (ТОП 100, №1) ---------- */
+ var cobs = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ countUp(e.target); cobs.unobserve(e.target); } }); },{threshold:0.4}) : null;
+ function countUp(el){ var target=parseFloat(el.getAttribute('data-count'))||0, dec=parseInt(el.getAttribute('data-dec')||'0',10), dur=1200, t0=null; function fmt(v){ return v.toFixed(dec).replace('.', ','); } function step(ts){ if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1), e=1-Math.pow(1-p,3); el.textContent=fmt(target*e); if(p<1) requestAnimationFrame(step); else el.textContent=fmt(target); } requestAnimationFrame(step); }
+ var _cnts=document.querySelectorAll('.cnt[data-count]'); for(var ci=0;ci<_cnts.length;ci++){ if(cobs) cobs.observe(_cnts[ci]); }
+
+
+ /* ---------- память выбора звука (кнопка управляет ТОЛЬКО треком) ---------- */
+ try{
+   var _sv=localStorage.getItem('mn-sound');
+   if(_sv==='off'){ intendOn=false; if(sb) sb.classList.add('muted'); }
+ }catch(e){}
+ if(sb) sb.addEventListener('click', function(){
+   try{ localStorage.setItem('mn-sound', intendOn?'on':'off'); }catch(e){}
+ });
+ if(audio&&sb){
+   audio.addEventListener('play', function(){ sb.classList.add('live'); });
+   audio.addEventListener('pause', function(){ sb.classList.remove('live'); });
+ }
+
+ /* ---------- глобальная пауза при свёрнутой вкладке ---------- */
+ document.addEventListener('visibilitychange', function(){
+   document.body.classList.toggle('tab-hidden', document.hidden);
+ });
+
+ /* ---------- ховер-звуки: duck (Джиган) и throw it (Артём Андреевич) ---------- */
+ var SFX={
+   duck:'assets/mp3-b891688a69.mp3',
+   throw_it:'assets/mp3-560aa913da.mp3'
+ };
+ var _duckRaf=null;
+ function tweenBg(target,ms){
+   if(!audio) return;
+   cancelAnimationFrame(_duckRaf);
+   var from=window.__bgVol.get(), t0=performance.now();
+   (function step(ts){
+     var p=Math.min(1,(ts-t0)/ms), e=1-Math.pow(1-p,2);
+     window.__bgVol.set(from+(target-from)*e);
+     if(p<1) _duckRaf=requestAnimationFrame(step);
+   })(t0);
+ }
+ var _sfxLast=0, _sfxLive=0, _safety=null;
+ function _sfxBack(){
+   _sfxLive--;
+   if(_sfxLive<=0){ _sfxLive=0; clearTimeout(_safety); if(audio && !audio.paused) tweenBg(0.8,700); }
+ }
+ function playSfx(key){
+   if(!entered) return;
+   var now=Date.now(); if(now-_sfxLast<500) return;
+   _sfxLast=now;
+   var a=new Audio(SFX[key]); a.volume=0.8;
+   if(audio && !audio.paused){
+     _sfxLive++;
+     tweenBg(0.12,140);
+     clearTimeout(_safety);
+     _safety=setTimeout(function(){ _sfxLive=0; if(audio && !audio.paused) tweenBg(0.8,700); },5000);
+     a.addEventListener('ended', _sfxBack);
+     a.addEventListener('error', _sfxBack);
+     var p=a.play(); if(p&&p.catch) p.catch(_sfxBack);
+   } else {
+     var p2=a.play(); if(p2&&p2.catch) p2.catch(function(){});
+   }
+ }
+ function bindSfx(label,key){
+   var m=document.querySelector('[aria-label="'+label+'"]'); if(!m) return;
+   var card=m.closest('.star-card,.alley-row')||m;
+   card.addEventListener('pointerenter', function(){ playSfx(key); });
+ }
+ bindSfx('Джиган','duck');
+ bindSfx('Артём Андреевич','throw_it');
+
+ /* (паузу частиц и ири-градиента вне вьюпорта ведут IO-блоки выше — здесь были дубли) */
+
+ /* ---------- бегущие ленты ----------
+    1) Копий текста ровно столько, чтобы покрыть экран + один период:
+       раньше их было две — на широких экранах перед перезапуском
+       вылезала пустота, тот самый видимый «конец и начало».
+    2) Период — точные дробные пиксели: стык сходится в ноль.
+    3) Наведение мягко тормозит ленту и плавно разгоняет обратно. */
+ var _tickAnims=[];
+ if(!_rm){
+   var _tracks=document.querySelectorAll('.ticker-track');
+   for(var ti=0;ti<_tracks.length;ti++){ (function(t){
+     if(!t.animate || !t.children.length) return;
+     /* исходная единица — первая половина ленты (в разметке две копии) */
+     var n0=Math.max(1, Math.floor(t.children.length/2)), unit='';
+     for(var u=0;u<n0;u++) unit+=t.children[u].outerHTML;
+     var anim=null, rateRaf=null;
+     function go(){
+       /* две копии — замер точного периода по дробным координатам */
+       t.innerHTML=unit+unit;
+       var kids=t.children, half=kids.length/2;
+       var P=kids[half].getBoundingClientRect().left - kids[0].getBoundingClientRect().left;
+       if(!(P>0)) P=t.getBoundingClientRect().width/2;
+       if(!(P>0)) return;
+       /* добираем копии: ширина ленты ≥ экран + период (+запас) */
+       var need=Math.max(2, Math.ceil((window.innerWidth+P)/P)+1);
+       var html=''; for(var c=0;c<need;c++) html+=unit;
+       t.innerHTML=html;
+       var idx=_tickAnims.indexOf(anim);
+       if(anim){ anim.cancel(); if(idx>-1) _tickAnims.splice(idx,1); }
+       anim=t.animate(
+         [{transform:'translate3d(0,0,0)'},{transform:'translate3d(-'+P+'px,0,0)'}],
+         {duration: P/38*1000, iterations:Infinity});
+       _tickAnims.push(anim);
+     }
+     function tweenRate(to,ms){
+       if(!anim) return;
+       cancelAnimationFrame(rateRaf);
+       var from=anim.playbackRate, t0=performance.now();
+       (function step(ts){
+         var p=Math.min(1,(ts-t0)/ms), e=1-Math.pow(1-p,3);
+         try{ anim.playbackRate=from+(to-from)*e; }catch(err){}
+         if(p<1) rateRaf=requestAnimationFrame(step);
+       })(t0);
+     }
+     go();
+     if(document.fonts && document.fonts.ready) document.fonts.ready.then(go);
+     var rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt=setTimeout(go,200); });
+     /* фишка с паузой — снова есть, но бархатная */
+     var box=t.closest('.ticker');
+     if(box){
+       box.addEventListener('pointerenter', function(){ tweenRate(0,450); });
+       box.addEventListener('pointerleave', function(){ tweenRate(1,650); });
+     }
+   })(_tracks[ti]); }
+   document.addEventListener('visibilitychange', function(){
+     for(var i=0;i<_tickAnims.length;i++){ document.hidden?_tickAnims[i].pause():_tickAnims[i].play(); }
+   });
+ }
+
+ /* ---------- золотая полоса прогресса скролла ---------- */
+ var _sp=document.createElement('div'); _sp.className='scroll-prog'; _sp.setAttribute('aria-hidden','true');
+ document.body.appendChild(_sp);
+ /* пасхалка №2: на ровно 87% прогресса на секунду выглядывает ярлык «87» */
+ var _egg=document.createElement('span'); _egg.className='sp-egg'; _egg.textContent='87'; _egg.setAttribute('aria-hidden','true');
+ document.body.appendChild(_egg);
+ var _eggWas=false,_eggT=null;
+ _recalcDocH();
+ _scrollCbs.push(function(y){
+   var p=_docH>0?Math.min(1,y/_docH):0;   /* высота документа кэшируется — без reflow в кадре */
+   _sp.style.transform='scaleX('+p+')';
+   var hit=p>=0.865&&p<=0.885;
+   if(hit&&!_eggWas){ _egg.classList.add('show'); clearTimeout(_eggT); _eggT=setTimeout(function(){ _egg.classList.remove('show'); },1100); }
+   _eggWas=hit;
+ });
+
+ /* ---------- 3D-наклон карточек + магнитные кнопки (rAF + кэш rect) ---------- */
+ function magnetize(el, build){
+   var r=null, tick=false, mx=0, my=0;
+   el.addEventListener('mouseenter', function(){ r=el.getBoundingClientRect(); });
+   el.addEventListener('mousemove', function(e){
+     if(!r) return; mx=e.clientX; my=e.clientY;
+     if(tick) return; tick=true;
+     requestAnimationFrame(function(){ tick=false; el.style.transform=build((mx-r.left)/r.width-0.5,(my-r.top)/r.height-0.5); });
+   });
+   el.addEventListener('mouseleave', function(){ r=null; el.style.transform=''; });
+ }
+ if(_fine && !_rm){
+   var _scs=document.querySelectorAll('.star-card');
+   for(var si=0;si<_scs.length;si++){ magnetize(_scs[si], function(dx,dy){ return 'perspective(900px) rotateX('+(-dy*3).toFixed(2)+'deg) rotateY('+(dx*3).toFixed(2)+'deg) translateY(-4px)'; }); }
+   var _btns=document.querySelectorAll('.btn');
+   for(var bi=0;bi<_btns.length;bi++){ magnetize(_btns[bi], function(dx,dy){ return 'translate3d('+(dx*8).toFixed(1)+'px,'+(dy*8).toFixed(1)+'px,0)'; }); }
+ }
+
+
+ /* ---------- старт (раскрытие — после входа) ---------- */
+ function start(){ showView(slug(), false); }
+ if(document.readyState!=='loading') start(); else document.addEventListener('DOMContentLoaded',start);
+})();
+</script>
+<script>
+/* ═══════════ Общий аркадный модуль: музыка + звук игр + полноэкранный режим ═══════════ */
+
+/* единый AudioContext для звука игр + пробуждение по жесту (лечит «нет звука в играх») */
+window.__arcadeAudioWakers = window.__arcadeAudioWakers || [];
+window.__arcadeAC = (function(){
+  var ac=null;
+  function get(){
+    if(ac===null){ try{ ac=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ ac=false; } }
+    if(ac && ac.state==='suspended'){ try{ ac.resume(); }catch(e){} }
+    return ac||null;
+  }
+  window.__arcadeAudioWakers.push(get);
+  return get;
+})();
+(function(){
+  function wake(){ var L=window.__arcadeAudioWakers; for(var i=0;i<L.length;i++){ try{ L[i](); }catch(e){} } }
+  ['pointerdown','touchstart','touchend','keydown','mousedown'].forEach(function(ev){ document.addEventListener(ev, wake, true); });
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) wake(); });
+})();
+
+window.__arcadeMusic = (function(){
+  var bg = document.getElementById('bgAudio');
+  var FULL = 0.8;                 // основной трек тише на ~20%
+  try{ if(bg){ bg.volume = FULL; bg.loop = true; } }catch(e){}
+  // страховка зацикливания: если трек всё же закончился — запускаем снова
+  if(bg){ bg.addEventListener('ended', function(){ try{ bg.currentTime=0; var p=bg.play(); if(p&&p.catch)p.catch(function(){}); }catch(e){} }); }
+  var raf=null, ducked=false;
+  function fade(to, ms, done){
+    if(!bg){ if(done) done(); return; }
+    if(raf) cancelAnimationFrame(raf);
+    var from=(window.__bgVol?window.__bgVol.get():bg.volume), t0=performance.now();
+    (function step(ts){
+      var p=Math.min(1,(ts-t0)/ms), e=1-Math.pow(1-p,2);
+      var _nv=Math.max(0,Math.min(1, from+(to-from)*e)); if(window.__bgVol){ window.__bgVol.set(_nv); } else { try{ bg.volume=_nv; }catch(err){} }
+      if(p<1){ raf=requestAnimationFrame(step); } else { raf=null; if(done) done(); }
+    })(t0);
+  }
+  // ВАЖНО: глушим только ГРОМКОСТЬ (не паузу), чтобы не конфликтовать с кнопкой звука.
+  // Воспроизведением/паузой трека и значком mute полностью управляет сама кнопка сайта.
+  function duck(){ if(ducked||!bg) return; ducked=true; fade(0, 600); }
+  function restore(){ if(!ducked||!bg) return; ducked=false; fade(FULL, 800); }
+  function anyGameOpen(){
+    var v=document.getElementById('view-games');
+    var s1=document.getElementById('arcadeStage'), s2=document.getElementById('arcadeStagePong');
+    var open=(s1&&!s1.hidden)||(s2&&!s2.hidden);
+    return !!(v && v.classList.contains('active') && open);
+  }
+  window.addEventListener('hashchange', function(){
+    setTimeout(function(){ if(anyGameOpen()) duck(); else restore(); }, 0);
+  });
+  return { duck:duck, restore:restore, isDucked:function(){return ducked;} };
+})();
+
+window.__arcadeFS = (function(){
+  var isIOS = /iP(hone|od|ad)/.test(navigator.userAgent) ||
+              (navigator.maxTouchPoints>1 && /Macintosh/i.test(navigator.userAgent));
+  var active=false, root=null, btn=null, ph=null, onChange=null;
+  function blockTouch(e){ if(e.target&&e.target.closest&&e.target.closest('button')) return; if(e.cancelable) e.preventDefault(); }
+  function blockWheel(e){ if(e.cancelable) e.preventDefault(); }
+  function enter(r,b,cb){
+    if(active || !r) return;
+    root=r; btn=b||null; onChange=cb||null;
+    ph=document.createComment('arc-fs'); r.parentNode.insertBefore(ph,r);
+    document.body.appendChild(r);
+    r.classList.add('sn-fs');
+    document.documentElement.classList.add('sn-fs-lock');
+    document.body.classList.add('sn-fs-lock');
+    window.addEventListener('touchmove', blockTouch, {passive:false});
+    window.addEventListener('wheel', blockWheel, {passive:false});
+    active=true; if(btn) btn.classList.add('fs-on');
+    if(!isIOS){
+      try{ var rq=r.requestFullscreen||r.webkitRequestFullscreen; if(rq){ var pr=rq.call(r); if(pr&&pr.catch) pr.catch(function(){}); } }catch(e){}
+    }
+    if(onChange){ requestAnimationFrame(onChange); requestAnimationFrame(function(){ requestAnimationFrame(onChange); }); }
+  }
+  function exit(){
+    if(!active) return; active=false;
+    root.classList.remove('sn-fs');
+    document.documentElement.classList.remove('sn-fs-lock');
+    document.body.classList.remove('sn-fs-lock');
+    window.removeEventListener('touchmove', blockTouch, {passive:false});
+    window.removeEventListener('wheel', blockWheel, {passive:false});
+    if(ph&&ph.parentNode){ ph.parentNode.insertBefore(root,ph); ph.parentNode.removeChild(ph); } ph=null;
+    try{ if(document.fullscreenElement||document.webkitFullscreenElement){ (document.exitFullscreen||document.webkitExitFullscreen).call(document); } }catch(e){}
+    if(btn) btn.classList.remove('fs-on');
+    var cb=onChange; root=null; btn=null; onChange=null;
+    if(cb){ requestAnimationFrame(cb); requestAnimationFrame(function(){ requestAnimationFrame(cb); }); }
+  }
+  function toggle(r,b,cb){ if(active) exit(); else enter(r,b,cb); }
+  function onNative(){ var fe=document.fullscreenElement||document.webkitFullscreenElement; if(!fe && active && !isIOS) exit(); }
+  document.addEventListener('fullscreenchange', onNative);
+  document.addEventListener('webkitfullscreenchange', onNative);
+  return { enter:enter, exit:exit, toggle:toggle, isActive:function(){return active;} };
+})();
+
+/* салют при победе — вылетающие 87 и искры */
+window.__arcadeWinFX = function(host){
+  if(!host) return;
+  var old=host.querySelector('.sn-fx'); if(old&&old.parentNode) old.parentNode.removeChild(old);
+  var fx=document.createElement('div'); fx.className='sn-fx';
+  var N=28;
+  for(var i=0;i<N;i++){
+    var s=document.createElement('span'); s.className='sn-fx-bit';
+    var isNum=Math.random()<0.55;
+    s.textContent = isNum ? '87' : (Math.random()<0.5?'✦':'✧');
+    var ang=Math.random()*Math.PI*2, dist=70+Math.random()*160;
+    s.style.setProperty('--dx', (Math.cos(ang)*dist).toFixed(1)+'px');
+    s.style.setProperty('--dy', (Math.sin(ang)*dist-30).toFixed(1)+'px');
+    s.style.setProperty('--rot', (Math.random()*720-360).toFixed(0)+'deg');
+    s.style.setProperty('--dur', (0.9+Math.random()*0.9).toFixed(2)+'s');
+    s.style.setProperty('--delay', (Math.random()*0.2).toFixed(2)+'s');
+    s.style.fontSize=(12+Math.random()*20).toFixed(0)+'px';
+    s.style.left=(50+(Math.random()*28-14)).toFixed(1)+'%';
+    s.style.top=(46+(Math.random()*14-7)).toFixed(1)+'%';
+    if(!isNum) s.style.color = Math.random()<0.5 ? '#fff1c8' : '#ffe08a';
+    fx.appendChild(s);
+  }
+  host.appendChild(fx);
+  setTimeout(function(){ if(fx&&fx.parentNode) fx.parentNode.removeChild(fx); }, 2400);
+};
+/* ═══════════ Змейка 87 — аркадный модуль (vanilla, без зависимостей) ═══════════ */
+(function(){
+  "use strict";
+  var view = document.getElementById('view-games');
+  if(!view) return;
+  var $ = function(id){ return document.getElementById(id); };
+
+  var gallery=$('arcadeGallery'), stage=$('arcadeStage'), backBtn=$('arcadeBack'),
+      canvas=$('snCanvas'), hudScore=$('snScore'), hudLen=$('snLen'), hudBest=$('snBest'),
+      scrStart=$('snStart'), scrWin=$('snWin'), scrLose=$('snLose'),
+      startBtn=$('snStartBtn'), winAgain=$('snWinAgain'), winBack=$('snWinBack'),
+      loseAgain=$('snLoseAgain'), loseBack=$('snLoseBack'),
+      dpad=$('snDpad'), sfxBtn=$('snSfx'), fsBtn=$('snFs'), root=$('snake87'),
+      headSrc=$('snHeadSrc'), cardHead=$('snCardHead');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  /* preload Jigan head into card + game */
+  var headImg = new Image();
+  if(headSrc){ var _hs=headSrc.currentSrc||headSrc.src; headImg.src = _hs; if(cardHead) cardHead.src = _hs; }
+
+  /* ── конфигурация ── */
+  var GRID=16, WIN_LEN=87, START_LEN=3;
+  var DIFFS={ easy:{base:175,min:110,drop:0.6}, classic:{base:140,min:78,drop:1.1}, hard:{base:105,min:55,drop:1.7} };
+  var diff='classic', wrap=false;
+  try{ var sd=localStorage.getItem('snake87_diff'); if(sd&&DIFFS[sd]) diff=sd; }catch(e){}
+  try{ wrap = localStorage.getItem('snake87_wrap')==='1'; }catch(e){}
+
+  /* ── состояние ── */
+  var snake, prev, dir, turnQ=[], food, score, best, tickMs, lastStep, raf=null,
+      running=false, paused=false, eatPop=0, cell=0, sizePx=0, foods=0,
+      fsActive=false, fsPlaceholder=null;
+
+  /* ── рекорд ── */
+  try{ best = parseInt(localStorage.getItem('snake87_best'),10)||0; }catch(e){ best=0; }
+  if(hudBest) hudBest.textContent = best;
+
+  /* ── звук (Web Audio, синтез) ── */
+  var actx=null, sfxOn=true;
+  try{ sfxOn = localStorage.getItem('snake87_sfx')!=='0'; }catch(e){}
+  function syncSfxBtn(){ if(sfxBtn) sfxBtn.classList.toggle('off', !sfxOn); }
+  syncSfxBtn();
+  function AC(){
+    if(window.__arcadeAC) return window.__arcadeAC();
+    if(actx===null){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ actx=false; } }
+    if(actx && actx.state==='suspended'){ actx.resume(); }
+    return actx||null;
+  }
+  function tone(freq, t0, dur, type, vol){
+    var a=AC(); if(!a) return;
+    var o=a.createOscillator(), g=a.createGain();
+    o.type=type||'square'; o.frequency.setValueAtTime(freq, a.currentTime+t0);
+    g.gain.setValueAtTime(0.0001, a.currentTime+t0);
+    g.gain.exponentialRampToValueAtTime((vol||0.12), a.currentTime+t0+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, a.currentTime+t0+dur);
+    o.connect(g); g.connect(a.destination);
+    o.start(a.currentTime+t0); o.stop(a.currentTime+t0+dur+0.02);
+  }
+  function sEat(){ if(!sfxOn) return; tone(660,0,0.06,'square',0.10); tone(990,0.045,0.07,'square',0.10); }
+  function sWin(){ if(!sfxOn) return; var n=[523,659,784,1046,1318]; for(var i=0;i<n.length;i++) tone(n[i], i*0.11, 0.16,'square',0.11); }
+  function sLose(){ if(!sfxOn) return;
+    var a=AC(); if(!a) return;
+    var o=a.createOscillator(), g=a.createGain();
+    o.type='sawtooth';
+    o.frequency.setValueAtTime(380, a.currentTime);
+    o.frequency.exponentialRampToValueAtTime(70, a.currentTime+0.55);
+    g.gain.setValueAtTime(0.16, a.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, a.currentTime+0.6);
+    o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+0.62);
+  }
+
+  /* ── размеры (DPR, квадрат) ── */
+  function fit(){
+    var wrap = canvas.parentElement;
+    var w = wrap ? wrap.clientWidth : 0;
+    if(!w){ return false; }
+    sizePx = w;
+    var dpr = Math.min(window.devicePixelRatio||1, 2);
+    canvas.width = Math.round(sizePx*dpr);
+    canvas.height = Math.round(sizePx*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    cell = sizePx/GRID;
+    render(performance.now());
+    return true;
+  }
+
+  /* ── утилиты ── */
+  function cc(x,y){ return { cx:(x+0.5)*cell, cy:(y+0.5)*cell }; }
+  function lerp(a,b,t){ return a+(b-a)*t; }
+  function eq(a,b){ return a.x===b.x && a.y===b.y; }
+
+  function placeFood(){
+    var free=[];
+    for(var y=0;y<GRID;y++) for(var x=0;x<GRID;x++){
+      var on=false; for(var i=0;i<snake.length;i++){ if(snake[i].x===x&&snake[i].y===y){on=true;break;} }
+      if(!on) free.push({x:x,y:y});
+    }
+    food = free.length ? free[(Math.random()*free.length)|0] : null;
+  }
+
+  function reset(){
+    var m=(GRID/2)|0;
+    snake=[]; for(var i=0;i<START_LEN;i++) snake.push({x:m-i, y:m});
+    prev = snake.map(function(s){ return {x:s.x,y:s.y}; });
+    dir={x:1,y:0}; turnQ=[];
+    score=0; foods=0; tickMs=DIFFS[diff].base; eatPop=0;
+    placeFood();
+    updateHud();
+  }
+
+  function updateHud(){
+    if(hudScore) hudScore.textContent = score;
+    if(hudLen) hudLen.innerHTML = snake.length + '<small style="font-size:.5em;opacity:.6">/'+WIN_LEN+'</small>';
+    if(hudBest) hudBest.textContent = best;
+  }
+
+  function setDir(nx,ny){
+    if(!running||paused) return;
+    var lastD = turnQ.length ? turnQ[turnQ.length-1] : dir;
+    if(nx===-lastD.x && ny===-lastD.y) return;   // запрет разворота на 180°
+    if(nx===lastD.x && ny===lastD.y) return;     // тот же курс — игнор
+    if(turnQ.length>=2) return;                  // буфер не больше двух поворотов
+    turnQ.push({x:nx,y:ny});
+  }
+
+  function step(){
+    if(turnQ.length) dir = turnQ.shift();
+    prev = snake.map(function(s){ return {x:s.x,y:s.y}; });
+    var head=snake[0], nh={x:head.x+dir.x, y:head.y+dir.y};
+    if(wrap){ nh.x=(nh.x+GRID)%GRID; nh.y=(nh.y+GRID)%GRID; }
+    else if(nh.x<0||nh.y<0||nh.x>=GRID||nh.y>=GRID){ return die(); }
+    var willEat = food && nh.x===food.x && nh.y===food.y;
+    // тело, с которым возможно столкновение (хвост уйдёт, если не едим)
+    var body = willEat ? snake : snake.slice(0, snake.length-1);
+    for(var i=0;i<body.length;i++){ if(body[i].x===nh.x&&body[i].y===nh.y){ return die(); } }
+    snake.unshift(nh);
+    if(willEat){
+      foods++; score+=10; eatPop=1; sEat();
+      tickMs = Math.max(DIFFS[diff].min, DIFFS[diff].base - foods*DIFFS[diff].drop);
+      if(snake.length>=WIN_LEN){ updateHud(); return win(); }
+      placeFood();
+    } else {
+      snake.pop();
+    }
+    updateHud();
+  }
+
+  function commitBest(){
+    if(score>best){ best=score; try{ localStorage.setItem('snake87_best',String(best)); }catch(e){} }
+    updateHud();
+  }
+  function win(){ running=false; commitBest(); showScreen('win'); sWin(); }
+  function die(){ running=false; commitBest(); showScreen('lose'); sLose(); }
+
+  /* ── отрисовка ── */
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+  }
+  function render(now){
+    if(!cell) return;
+    ctx.clearRect(0,0,sizePx,sizePx);
+    // сетка
+    ctx.strokeStyle='rgba(232,207,138,.05)'; ctx.lineWidth=1;
+    for(var i=1;i<GRID;i++){
+      ctx.beginPath(); ctx.moveTo(i*cell,0); ctx.lineTo(i*cell,sizePx); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,i*cell); ctx.lineTo(sizePx,i*cell); ctx.stroke();
+    }
+    var t = (running && !paused) ? Math.min(1,(now-lastStep)/tickMs) : 1;
+    // еда "87"
+    if(food){
+      var f=cc(food.x,food.y), pr=cell*0.92, p=1+0.07*Math.sin(now/210);
+      ctx.save(); ctx.translate(f.cx,f.cy); ctx.scale(p,p);
+      ctx.shadowColor='rgba('+window.MNgc('glow','246,224,150')+',.7)'; ctx.shadowBlur=cell*0.5;
+      ctx.fillStyle=window.MNgc('food','#f6e6b0');
+      ctx.font='800 '+(cell*0.62).toFixed(0)+'px ui-monospace,Menlo,monospace';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('87',0,cell*0.03);
+      ctx.restore();
+    }
+    // тело (от хвоста к голове, с интерполяцией)
+    for(var s=snake.length-1; s>=1; s--){
+      var pp = prev[s] || prev[prev.length-1] || snake[s];
+      var cur=snake[s];
+      var tt = (Math.abs(cur.x-pp.x)>1 || Math.abs(cur.y-pp.y)>1) ? 1 : t;
+      var x=lerp((pp.x+0.5)*cell,(cur.x+0.5)*cell,tt);
+      var y=lerp((pp.y+0.5)*cell,(cur.y+0.5)*cell,tt);
+      var ratio = s/Math.max(1,snake.length-1);
+      var col = mixGold(ratio);
+      var sz = cell*(0.86 - ratio*0.18);
+      ctx.fillStyle=col;
+      roundRect(x-sz/2, y-sz/2, sz, sz, sz*0.32); ctx.fill();
+    }
+    // голова = Джиган
+    var hp = prev[0] || snake[0], hc=snake[0];
+    var ht = (Math.abs(hc.x-hp.x)>1 || Math.abs(hc.y-hp.y)>1) ? 1 : t;
+    var hx=lerp((hp.x+0.5)*cell,(hc.x+0.5)*cell,ht);
+    var hy=lerp((hp.y+0.5)*cell,(hc.y+0.5)*cell,ht);
+    drawHead(hx,hy);
+    // вспышка при поедании
+    if(eatPop>0 && food===null){}
+    if(eatPop>0){
+      eatPop -= 0.06;
+      if(eatPop<0) eatPop=0;
+    }
+  }
+  function mixGold(r){
+    // r=0 голова(ярко) … r=1 хвост(темнее) — цвета из текущей темы
+    var c1=window.MNhex2rgb(window.MNgc('head','#f3dd87')), c2=window.MNhex2rgb(window.MNgc('tail','#8a6a1e'));
+    var R=Math.round(lerp(c1[0],c2[0],r)), G=Math.round(lerp(c1[1],c2[1],r)), B=Math.round(lerp(c1[2],c2[2],r));
+    return 'rgb('+R+','+G+','+B+')';
+  }
+  function drawHead(px,py){
+    var d=cell*1.18, r=d/2;
+    ctx.save();
+    // подложка-кружок
+    ctx.beginPath(); ctx.arc(px,py,r,0,Math.PI*2);
+    ctx.fillStyle='#1a1118'; ctx.shadowColor='rgba(0,0,0,.5)'; ctx.shadowBlur=cell*0.3; ctx.fill();
+    ctx.shadowBlur=0;
+    // клип и фото
+    ctx.beginPath(); ctx.arc(px,py,r-1.5,0,Math.PI*2); ctx.clip();
+    if(headImg.complete && headImg.naturalWidth){
+      ctx.drawImage(headImg, px-d/2, py-d/2, d, d);
+    } else {
+      ctx.fillStyle='#e8c45a'; ctx.fillRect(px-d/2,py-d/2,d,d);
+    }
+    ctx.restore();
+    // золотое кольцо
+    ctx.beginPath(); ctx.arc(px,py,r-1.5,0,Math.PI*2);
+    ctx.lineWidth=Math.max(1.5,cell*0.07); ctx.strokeStyle='#f3dd87'; ctx.stroke();
+  }
+
+  /* ── цикл ── */
+  function active(){ return view.classList.contains('active') && !stage.hidden; }
+  function loop(now){
+    if(!active() || document.hidden){ raf=null; lastStep=now; return; }  // авто-стоп вне раздела/вкладки
+    raf = requestAnimationFrame(loop);
+    if(running && !paused){
+      if(now-lastStep >= tickMs){ step(); lastStep=now; }
+    }
+    render(now);
+  }
+  function kick(){ if(raf===null){ lastStep=performance.now(); raf=requestAnimationFrame(loop); } }
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) kick(); });
+  window.addEventListener('hashchange', function(){ if(active()) kick(); });
+
+  /* ── экраны ── */
+  function showScreen(which){
+    scrStart.hidden = which!=='start';
+    scrWin.hidden  = which!=='win';
+    scrLose.hidden = which!=='lose';
+    // перезапуск анимации экрана
+    if(which==='win'){ scrWin.classList.remove('win'); void scrWin.offsetWidth; scrWin.classList.add('win'); if(window.__arcadeWinFX) window.__arcadeWinFX(scrWin); }
+    if(which==='lose'){ var c=scrLose.querySelector('.sn-cross'); if(c){ var n=c.cloneNode(true); c.parentNode.replaceChild(n,c); } }
+  }
+  function startRun(){
+    AC();
+    scrStart.hidden=true; scrWin.hidden=true; scrLose.hidden=true;
+    reset();
+    running=true; paused=false;
+    if(!fit()){ requestAnimationFrame(function(){ fit(); }); }
+    lastStep=performance.now(); kick();
+  }
+  function launch(){
+    gallery.style.display='none';
+    stage.hidden=false;
+    try{ root.scrollIntoView({block:'center'}); }catch(e){}
+    if(window.__arcadeMusic) window.__arcadeMusic.duck();
+    running=false; paused=false;
+    reset();
+    requestAnimationFrame(function(){ if(!fit()) requestAnimationFrame(fit); });
+    showScreen('start');
+    kick();
+  }
+  function backToGallery(){
+    if(fsActive) exitFS();
+    running=false; paused=false;
+    stage.hidden=true;
+    gallery.style.display='';
+    if(window.__arcadeMusic) window.__arcadeMusic.restore();
+  }
+
+  /* ── ввод ── */
+  var KEYS={ ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0],
+             w:[0,-1],s:[0,1],a:[-1,0],d:[1,0], ц:[0,-1],ы:[0,1],ф:[-1,0],в:[1,0] };
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape' && fsActive){ exitFS(); return; }
+    if(!active()) return;
+    var k=e.key, low=(k&&k.length===1)?k.toLowerCase():k;
+    var v=KEYS[k]||KEYS[low];
+    if(v){ e.preventDefault(); if(running&&!paused) setDir(v[0],v[1]); return; }
+    if((k===' '||k==='Enter')){
+      if(!scrStart.hidden){ e.preventDefault(); startRun(); }
+      else if(!scrWin.hidden||!scrLose.hidden){ e.preventDefault(); startRun(); }
+    }
+  });
+  if(dpad){
+    function dpadDir(px,py){
+      var r=dpad.getBoundingClientRect(), dx=px-(r.left+r.width/2), dy=py-(r.top+r.height/2);
+      if(Math.abs(dx)<5 && Math.abs(dy)<5) return;
+      if(Math.abs(dx)>Math.abs(dy)) setDir(dx>0?1:-1,0); else setDir(0,dy>0?1:-1);
+    }
+    dpad.addEventListener('pointerdown', function(e){
+      e.preventDefault();
+      var b=e.target.closest('[data-dir]');
+      if(b){ var m={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[b.getAttribute('data-dir')]; if(m){ setDir(m[0],m[1]); return; } }
+      dpadDir(e.clientX, e.clientY);   // попадание мимо кнопки — берём направление по позиции нажатия
+    });
+  }
+  // свайпы по доске — низкий порог, можно свайпать подряд не отрывая палец
+  var tsx=0,tsy=0,tracking=false;
+  canvas.addEventListener('touchstart', function(e){ var t=e.changedTouches[0]; tsx=t.clientX; tsy=t.clientY; tracking=true; }, {passive:true});
+  canvas.addEventListener('touchmove', function(e){
+    if(!tracking) return;
+    var t=e.changedTouches[0], dx=t.clientX-tsx, dy=t.clientY-tsy;
+    if(Math.abs(dx)<15 && Math.abs(dy)<15) return;
+    e.preventDefault();
+    if(Math.abs(dx)>Math.abs(dy)) setDir(dx>0?1:-1,0); else setDir(0,dy>0?1:-1);
+    tsx=t.clientX; tsy=t.clientY;   // переустанавливаем якорь для следующего свайпа
+  }, {passive:false});
+  canvas.addEventListener('touchend', function(){ tracking=false; }, {passive:true});
+
+  /* ── кнопки ── */
+  function bindLaunch(el){ if(el) el.addEventListener('click', function(e){ e.preventDefault(); launch(); }); }
+  // карточка + кнопка "Играть"
+  if(gallery){
+    gallery.addEventListener('click', function(e){
+      var t=e.target.closest('[data-game="snake87"]'); if(!t) return;
+      if(t.tagName==='BUTTON' && t.hasAttribute('disabled')) return;
+      e.preventDefault(); launch();
+    });
+  }
+  if(backBtn) backBtn.addEventListener('click', function(e){ e.preventDefault(); backToGallery(); });
+  if(startBtn) startBtn.addEventListener('click', function(e){ e.preventDefault(); startRun(); });
+  if(winAgain) winAgain.addEventListener('click', function(e){ e.preventDefault(); startRun(); });
+  if(loseAgain) loseAgain.addEventListener('click', function(e){ e.preventDefault(); startRun(); });
+  if(winBack) winBack.addEventListener('click', function(e){ e.preventDefault(); backToGallery(); });
+  if(loseBack) loseBack.addEventListener('click', function(e){ e.preventDefault(); backToGallery(); });
+  if(sfxBtn) sfxBtn.addEventListener('click', function(e){
+    e.preventDefault(); sfxOn=!sfxOn; syncSfxBtn();
+    try{ localStorage.setItem('snake87_sfx', sfxOn?'1':'0'); }catch(err){}
+    if(sfxOn) AC();
+  });
+
+  /* ── полноэкранный режим ── */
+  function syncFsBtn(){
+    if(!fsBtn) return;
+    fsBtn.classList.toggle('fs-on', fsActive);
+    fsBtn.setAttribute('aria-label', fsActive?'Выйти из полноэкранного режима':'На весь экран');
+    fsBtn.title = fsActive?'Выйти':'На весь экран';
+  }
+  // глушим прокрутку/жесты страницы под игрой, не мешая кнопкам
+  function blockTouch(e){
+    if(e.target && e.target.closest && e.target.closest('button')) return;
+    if(e.cancelable) e.preventDefault();
+  }
+  function blockWheel(e){ if(e.cancelable) e.preventDefault(); }
+  function enterFS(){
+    if(fsActive || !root) return;
+    fsPlaceholder = document.createComment('sn-fs');
+    root.parentNode.insertBefore(fsPlaceholder, root);   // запоминаем место
+    document.body.appendChild(root);                      // выносим поверх всего
+    root.classList.add('sn-fs');
+    document.documentElement.classList.add('sn-fs-lock');
+    document.body.classList.add('sn-fs-lock');
+    window.addEventListener('touchmove', blockTouch, {passive:false});
+    window.addEventListener('wheel', blockWheel, {passive:false});
+    fsActive=true; syncFsBtn();
+    try{ var rq=root.requestFullscreen||root.webkitRequestFullscreen;
+         if(rq){ var pr=rq.call(root); if(pr&&pr.catch) pr.catch(function(){}); } }catch(e){}
+    requestAnimationFrame(function(){ fit(); requestAnimationFrame(fit); });
+  }
+  function exitFS(){
+    if(!fsActive) return;
+    fsActive=false;
+    root.classList.remove('sn-fs');
+    document.documentElement.classList.remove('sn-fs-lock');
+    document.body.classList.remove('sn-fs-lock');
+    window.removeEventListener('touchmove', blockTouch, {passive:false});
+    window.removeEventListener('wheel', blockWheel, {passive:false});
+    if(fsPlaceholder && fsPlaceholder.parentNode){
+      fsPlaceholder.parentNode.insertBefore(root, fsPlaceholder);   // возвращаем на место
+      fsPlaceholder.parentNode.removeChild(fsPlaceholder);
+    }
+    fsPlaceholder=null;
+    try{ if(document.fullscreenElement||document.webkitFullscreenElement){
+           (document.exitFullscreen||document.webkitExitFullscreen).call(document); } }catch(e){}
+    syncFsBtn();
+    requestAnimationFrame(function(){ fit(); requestAnimationFrame(fit); });
+  }
+  function toggleFS(){ if(fsActive) exitFS(); else enterFS(); }
+  if(fsBtn) fsBtn.addEventListener('click', function(e){ e.preventDefault(); toggleFS(); });
+  function onFsChange(){ var fe=document.fullscreenElement||document.webkitFullscreenElement; if(!fe && fsActive) exitFS(); }
+  document.addEventListener('fullscreenchange', onFsChange);
+  document.addEventListener('webkitfullscreenchange', onFsChange);
+
+  /* ── выбор режима игры (сложность + границы) ── */
+  (function initOpts(){
+    var dr=$('snDiff'), wr=$('snWrap');
+    function wire(group, attr, getCur, setCur, key){
+      if(!group) return;
+      var btns=group.querySelectorAll('button');
+      Array.prototype.forEach.call(btns, function(b){
+        b.classList.toggle('on', b.getAttribute(attr)===getCur());
+        b.addEventListener('click', function(e){
+          e.preventDefault(); setCur(b.getAttribute(attr));
+          try{ localStorage.setItem(key, b.getAttribute(attr)); }catch(err){}
+          Array.prototype.forEach.call(btns, function(x){ x.classList.toggle('on', x===b); });
+        });
+      });
+    }
+    wire(dr,'data-diff', function(){return diff;}, function(v){ if(DIFFS[v]) diff=v; }, 'snake87_diff');
+    wire(wr,'data-wrap', function(){return wrap?'1':'0';}, function(v){ wrap=(v==='1'); }, 'snake87_wrap');
+  })();
+
+  /* ── интеграция с SPA ── */
+  window.addEventListener('hashchange', function(){
+    if(fsActive) exitFS();
+    requestAnimationFrame(function(){ if(active()){ if(!fit()) requestAnimationFrame(fit); } });
+  });
+  window.addEventListener('resize', function(){ if(active()) fit(); });
+  document.addEventListener('visibilitychange', function(){ if(document.hidden){ paused=true; } else if(active()){ paused=false; lastStep=performance.now(); } });
+
+  // первичная подгонка карточного превью головы
+  headImg.addEventListener('load', function(){ if(active()) render(performance.now()); });
+
+  /* ── тест-хук (не в UI) ── */
+  window.__sn87 = {
+    launch:launch, start:startRun, back:backToGallery,
+    setDir:function(n){ var m={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[n]; if(m) setDir(m[0],m[1]); },
+    toggleFS:function(){ toggleFS(); }, enterFS:function(){ enterFS(); }, exitFS:function(){ exitFS(); },
+    setMode:function(d,w){ if(DIFFS[d]) diff=d; wrap=!!w; },
+    forceWin:function(){ if(snake){ while(snake.length<WIN_LEN-1){ snake.push({x:0,y:0}); } score=999; running=true; paused=false; turnQ=[]; food={x:snake[0].x+dir.x,y:snake[0].y+dir.y}; if(food.x<0||food.x>=GRID||food.y<0||food.y>=GRID){ dir={x:-1,y:0}; turnQ=[]; food={x:snake[0].x-1,y:snake[0].y}; } step(); } },
+    forceLose:function(){ running=true; paused=false; dir={x:1,y:0}; turnQ=[]; snake=[{x:GRID-1,y:0}]; prev=snake.slice(); step(); },
+    state:function(){ return { running:running, len:snake?snake.length:0, score:score, best:best,
+      start:!scrStart.hidden, win:!scrWin.hidden, lose:!scrLose.hidden, stageHidden:stage.hidden, fs:fsActive, diff:diff, wrap:wrap,
+      dir:{x:dir.x,y:dir.y}, head:snake?{x:snake[0].x,y:snake[0].y}:null, q:turnQ.length }; }
+  };
+})();
+/* ═══════════ Пинг-понг 87 — Тимати (синие) против Джигана (красные) ═══════════ */
+(function(){
+  "use strict";
+  var view=document.getElementById('view-games'); if(!view) return;
+  var $=function(id){ return document.getElementById(id); };
+  var gallery=$('arcadeGallery'), stage=$('arcadeStagePong'), backBtn=$('pongBack'),
+      canvas=$('pongCanvas'), youEl=$('pongYou'), aiEl=$('pongAi'),
+      scrStart=$('pongStart'), scrWin=$('pongWin'), scrLose=$('pongLose'),
+      startBtn=$('pongStartBtn'), winAgain=$('pongWinAgain'), winBack=$('pongWinBack'),
+      loseAgain=$('pongLoseAgain'), loseBack=$('pongLoseBack'),
+      dpad=$('pongDpad'), sfxBtn=$('pongSfx'), fsBtn=$('pongFs'), root=$('pong87'),
+      headSrc=$('snHeadSrc'), timSrc=$('pongTimSrc'), cardHead=$('pongCardHead'), cardTim=$('pongCardTim');
+  if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  var headImg=new Image(); if(headSrc){ var _hs=headSrc.currentSrc||headSrc.src; headImg.src=_hs; if(cardHead) cardHead.src=_hs; }
+  var timImg=new Image(); if(timSrc){ var _ts=timSrc.currentSrc||timSrc.src; timImg.src=_ts; if(cardTim) cardTim.src=_ts; }
+
+  var WIN_SCORE=7, padW=0.26, padH=0.042, ballR=0.023, TOP=0.085, BOT=0.915;
+  var DIFFS={
+    easy:    { ai:0.75, ball:0.72, max:1.15, err:0.30,  lead:0.05 },
+    classic: { ai:1.05, ball:0.86, max:1.50, err:0.19,  lead:0.12 },
+    hard:    { ai:1.45, ball:1.00, max:1.90, err:0.075, lead:0.18 }
+  };
+  var diff='classic';
+  try{ var sd=localStorage.getItem('pong87_diff'); if(sd&&DIFFS[sd]) diff=sd; }catch(e){}
+
+  var sizePx=0, you=0.5, youTarget=0.5, ai=0.5, ball=null, youScore=0, aiScore=0,
+      running=false, raf=null, last=0, keyDir=0, aiErr=0, aiTracking=false, auto=false;
+
+  /* ── звук ── */
+  var actx=null, sfxOn=true;
+  try{ sfxOn=localStorage.getItem('snake87_sfx')!=='0'; }catch(e){}
+  function syncSfx(){ if(sfxBtn) sfxBtn.classList.toggle('off',!sfxOn); }
+  syncSfx();
+  function AC(){ if(window.__arcadeAC) return window.__arcadeAC(); if(actx===null){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ actx=false; } } if(actx&&actx.state==='suspended') actx.resume(); return actx||null; }
+  function tone(f,t0,dur,type,vol){ var a=AC(); if(!a) return; var o=a.createOscillator(),g=a.createGain(); o.type=type||'square'; o.frequency.setValueAtTime(f,a.currentTime+t0); g.gain.setValueAtTime(0.0001,a.currentTime+t0); g.gain.exponentialRampToValueAtTime(vol||0.1,a.currentTime+t0+0.01); g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+t0+dur); o.connect(g); g.connect(a.destination); o.start(a.currentTime+t0); o.stop(a.currentTime+t0+dur+0.02); }
+  function sHitYou(){ if(sfxOn) tone(540,0,0.05,'square',0.12); }
+  function sHitAi(){ if(sfxOn) tone(360,0,0.05,'square',0.12); }
+  function sWall(){ if(sfxOn) tone(760,0,0.03,'triangle',0.07); }
+  function sScore(){ if(sfxOn) tone(300,0,0.13,'sawtooth',0.10); }
+  function sWin(){ if(!sfxOn) return; var n=[523,659,784,1046,1318]; for(var i=0;i<n.length;i++) tone(n[i],i*0.11,0.16,'square',0.11); }
+  function sLose(){ if(!sfxOn) return; var a=AC(); if(!a) return; var o=a.createOscillator(),g=a.createGain(); o.type='sawtooth'; o.frequency.setValueAtTime(360,a.currentTime); o.frequency.exponentialRampToValueAtTime(70,a.currentTime+0.55); g.gain.setValueAtTime(0.16,a.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+0.6); o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+0.62); }
+
+  /* ── размеры ── */
+  function fit(){ var wrap=canvas.parentElement, w=wrap?wrap.clientWidth:0; if(!w) return false; sizePx=w;
+    var dpr=Math.min(window.devicePixelRatio||1,2); canvas.width=Math.round(sizePx*dpr); canvas.height=Math.round(sizePx*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0); render(); return true; }
+
+  function clampPad(v){ return Math.max(padW/2, Math.min(1-padW/2, v)); }
+  function resetBall(dir){ var d=DIFFS[diff], ang=(Math.random()*0.7-0.35), sp=d.ball;
+    ball={ x:0.5, y:0.5, vx:Math.sin(ang)*sp, vy:(dir||(Math.random()<0.5?1:-1))*Math.abs(Math.cos(ang))*sp }; }
+  function reset(){ you=0.5; youTarget=0.5; ai=0.5; youScore=0; aiScore=0; keyDir=0; aiErr=0; aiTracking=false; resetBall(); updateHud(); }
+  function updateHud(){ if(youEl) youEl.textContent=youScore; if(aiEl) aiEl.textContent=aiScore; }
+
+  function bounce(center, vyDir, d){
+    var off=Math.max(-1,Math.min(1,(ball.x-center)/(padW/2)));
+    var sp=Math.min(d.max, Math.hypot(ball.vx,ball.vy)*1.05);
+    var ang=off*1.05;
+    ball.vx=Math.sin(ang)*sp;
+    ball.vy=vyDir*Math.abs(Math.cos(ang))*sp;
+    if(Math.abs(ball.vy)<sp*0.4){ ball.vy=vyDir*sp*0.4; }
+  }
+  function step(dt){
+    var d=DIFFS[diff];
+    // игрок (Тимати)
+    if(auto && ball) youTarget=clampPad(ball.x);
+    if(keyDir) youTarget=clampPad(youTarget+keyDir*1.7*dt);
+    you += (youTarget-you)*Math.min(1,dt*18); you=clampPad(you);
+    // ИИ (Джиган) — реагирует, когда мяч летит вверх
+    // ИИ Джигана: на каждый заход мяча выбирает прицел со своей ошибкой (зависит от уровня)
+    if(ball.vy<0){
+      if(!aiTracking){ aiTracking=true; aiErr=(Math.random()*2-1)*d.err; }
+      var target = clampPad(ball.x + ball.vx*d.lead + aiErr);
+      var mv = d.ai*dt;
+      ai += Math.max(-mv, Math.min(mv, target-ai));
+    } else {
+      aiTracking=false;
+      ai += (0.5-ai)*Math.min(1, dt*1.0);   // мяч уходит — лениво к центру
+    }
+    ai=clampPad(ai);
+    // мяч
+    ball.x+=ball.vx*dt; ball.y+=ball.vy*dt;
+    if(ball.x<ballR){ ball.x=ballR; ball.vx=Math.abs(ball.vx); sWall(); }
+    else if(ball.x>1-ballR){ ball.x=1-ballR; ball.vx=-Math.abs(ball.vx); sWall(); }
+    if(ball.vy<0 && ball.y-ballR<=TOP+padH/2 && ball.y>TOP-padH){
+      if(Math.abs(ball.x-ai)<=padW/2+ballR){ bounce(ai,1,d); ball.y=TOP+padH/2+ballR; sHitAi(); }
+    }
+    if(ball.vy>0 && ball.y+ballR>=BOT-padH/2 && ball.y<BOT+padH){
+      if(Math.abs(ball.x-you)<=padW/2+ballR){ bounce(you,-1,d); ball.y=BOT-padH/2-ballR; sHitYou(); }
+    }
+    if(ball.y<-0.03){ youScore++; updateHud(); sScore(); if(youScore>=WIN_SCORE) return win(); resetBall(1); }
+    else if(ball.y>1.03){ aiScore++; updateHud(); sScore(); if(aiScore>=WIN_SCORE) return lose(); resetBall(-1); }
+  }
+
+  /* ── отрисовка ── */
+  function roundRect(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+  function render(){
+    if(!sizePx) return; var S=sizePx;
+    ctx.clearRect(0,0,S,S);
+    // рамка корта
+    ctx.strokeStyle='rgba(232,207,138,.22)'; ctx.lineWidth=Math.max(1.5,S*0.004);
+    roundRect(S*0.02, S*0.02, S*0.96, S*0.96, S*0.03); ctx.stroke();
+    // центральная сетка
+    ctx.strokeStyle='rgba(232,207,138,.18)'; ctx.lineWidth=2; ctx.setLineDash([S*0.022,S*0.022]);
+    ctx.beginPath(); ctx.moveTo(S*0.04,S*0.5); ctx.lineTo(S*0.96,S*0.5); ctx.stroke(); ctx.setLineDash([]);
+    // зоны ворот (тонкая подсветка краёв)
+    var _ai='rgba('+(getComputedStyle(document.documentElement).getPropertyValue('--flash-ai').trim()||'226,85,79'), _you='rgba('+(getComputedStyle(document.documentElement).getPropertyValue('--flash-you').trim()||'91,141,224');
+    var g1=ctx.createLinearGradient(0,0,0,S*0.05); g1.addColorStop(0,_ai+',.18)'); g1.addColorStop(1,_ai+',0)');
+    ctx.fillStyle=g1; ctx.fillRect(0,0,S,S*0.05);
+    var g2=ctx.createLinearGradient(0,S*0.95,0,S); g2.addColorStop(0,_you+',0)'); g2.addColorStop(1,_you+',.18)');
+    ctx.fillStyle=g2; ctx.fillRect(0,S*0.95,S,S*0.05);
+    // мяч
+    if(ball){ var bx=ball.x*S, by=ball.y*S, br=ballR*S;
+      ctx.save(); ctx.shadowColor='rgba('+window.MNgc('glow','246,230,176')+',.9)'; ctx.shadowBlur=br*2.2; ctx.fillStyle='#fff';
+      roundRect(bx-br,by-br,br*2,br*2,br*0.45); ctx.fill();
+      ctx.shadowBlur=0; ctx.fillStyle=window.MNgc('food','#f6e6b0'); roundRect(bx-br*0.7,by-br*0.7,br*1.4,br*1.4,br*0.35); ctx.fill();
+      ctx.restore(); }
+    drawPaddle(ai, TOP, window.MNgc('p2','#e2554f'), headImg);
+    drawPaddle(you, BOT, window.MNgc('p1','#5b8de0'), timImg);
+  }
+  function drawPaddle(cx, cy, color, img){
+    var S=sizePx, w=padW*S, h=padH*S, x=cx*S, y=cy*S;
+    // яркая платформа с подсветкой
+    ctx.save(); ctx.shadowColor=color; ctx.shadowBlur=h*2.4; ctx.fillStyle=color;
+    roundRect(x-w/2,y-h/2,w,h,h/2); ctx.fill();
+    ctx.shadowBlur=0; ctx.fillStyle='rgba(255,255,255,.45)';
+    roundRect(x-w/2+h*0.4, y-h/2+h*0.16, w-h*0.8, h*0.28, h*0.14); ctx.fill();
+    ctx.restore();
+    // аватар игрока
+    var r=Math.min(S*0.062, w*0.4);
+    ctx.save();
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle='#160e14'; ctx.shadowColor='rgba(0,0,0,.55)'; ctx.shadowBlur=S*0.02; ctx.fill(); ctx.shadowBlur=0;
+    ctx.beginPath(); ctx.arc(x,y,r-1.5,0,Math.PI*2); ctx.clip();
+    if(img && img.complete && img.naturalWidth){ ctx.drawImage(img, x-r, y-r, r*2, r*2); }
+    else { ctx.fillStyle=color; ctx.fillRect(x-r,y-r,r*2,r*2); }
+    ctx.restore();
+    ctx.beginPath(); ctx.arc(x,y,r-1.5,0,Math.PI*2); ctx.lineWidth=Math.max(2,S*0.009); ctx.strokeStyle=color; ctx.stroke();
+  }
+
+  /* ── цикл ── */
+  function active(){ return view.classList.contains('active') && !stage.hidden; }
+  function loop(now){
+    if(!active() || document.hidden){ raf=null; last=now; return; }  // авто-стоп вне раздела/вкладки
+    raf=requestAnimationFrame(loop);
+    var dt=(now-last)/1000; last=now; if(dt>0.05) dt=0.05; if(dt<0) dt=0;
+    if(running){ step(dt); }
+    render();
+  }
+  function kick(){ if(raf===null){ last=performance.now(); raf=requestAnimationFrame(loop); } }
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) kick(); });
+  window.addEventListener('hashchange', function(){ if(active()) kick(); });
+
+  /* ── экраны ── */
+  function showScreen(w){
+    scrStart.hidden=w!=='start'; scrWin.hidden=w!=='win'; scrLose.hidden=w!=='lose';
+    if(w==='win'){ scrWin.classList.remove('win'); void scrWin.offsetWidth; scrWin.classList.add('win'); if(window.__arcadeWinFX) window.__arcadeWinFX(scrWin); }
+    if(w==='lose'){ var c=scrLose.querySelector('.sn-cross'); if(c){ var n=c.cloneNode(true); c.parentNode.replaceChild(n,c); } }
+  }
+  function startRun(){ AC(); scrStart.hidden=true; scrWin.hidden=true; scrLose.hidden=true; reset(); running=true; if(!fit()) requestAnimationFrame(fit); last=performance.now(); kick(); }
+  function win(){ running=false; showScreen('win'); sWin(); }
+  function lose(){ running=false; showScreen('lose'); sLose(); }
+  function launch(){
+    gallery.style.display='none'; stage.hidden=false;
+    try{ root.scrollIntoView({block:'center'}); }catch(e){}
+    if(window.__arcadeMusic) window.__arcadeMusic.duck();
+    running=false; reset();
+    requestAnimationFrame(function(){ if(!fit()) requestAnimationFrame(fit); });
+    showScreen('start'); kick();
+  }
+  function backToGallery(){
+    if(window.__arcadeFS && window.__arcadeFS.isActive()) window.__arcadeFS.exit();
+    running=false; stage.hidden=true; gallery.style.display='';
+    if(window.__arcadeMusic) window.__arcadeMusic.restore();
+  }
+
+  /* ── ввод ── */
+  var KEYS={ ArrowLeft:-1, ArrowRight:1, a:-1, d:1, ф:-1, в:1 };
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape' && window.__arcadeFS && window.__arcadeFS.isActive()){ window.__arcadeFS.exit(); return; }
+    if(!active()) return;
+    var k=e.key, low=(k&&k.length===1)?k.toLowerCase():k, v=KEYS[k]; if(v===undefined) v=KEYS[low];
+    if(v!==undefined){ e.preventDefault(); if(running) keyDir=v; return; }
+    if(k===' '||k==='Enter'){ if(!scrStart.hidden){ e.preventDefault(); startRun(); } else if(!scrWin.hidden||!scrLose.hidden){ e.preventDefault(); startRun(); } }
+  });
+  document.addEventListener('keyup', function(e){ if(!active()) return; var k=e.key, low=(k&&k.length===1)?k.toLowerCase():k, v=KEYS[k]; if(v===undefined) v=KEYS[low]; if(v!==undefined) keyDir=0; });
+  if(dpad){
+    dpad.addEventListener('pointerdown', function(e){
+      e.preventDefault();
+      var b=e.target.closest('[data-dir]');
+      if(b){ keyDir = b.getAttribute('data-dir')==='left'?-1:1; return; }
+      var r=dpad.getBoundingClientRect();         // мимо кнопки — по половине области
+      keyDir = (e.clientX < r.left+r.width/2) ? -1 : 1;
+    });
+    var clr=function(){ keyDir=0; };
+    dpad.addEventListener('pointerup',clr); dpad.addEventListener('pointerleave',clr); dpad.addEventListener('pointercancel',clr);
+  }
+  function setFromX(clientX){ var r=canvas.getBoundingClientRect(); if(!r.width) return; youTarget=clampPad((clientX-r.left)/r.width); }
+  canvas.addEventListener('pointermove', function(e){ if(running) setFromX(e.clientX); });
+  canvas.addEventListener('pointerdown', function(e){ if(running) setFromX(e.clientX); });
+  canvas.addEventListener('touchmove', function(e){ if(!running) return; var t=e.changedTouches[0]; setFromX(t.clientX); if(e.cancelable) e.preventDefault(); }, {passive:false});
+
+  /* ── кнопки ── */
+  if(gallery){ gallery.addEventListener('click', function(e){ var t=e.target.closest('[data-game="pong87"]'); if(!t) return; if(t.tagName==='BUTTON'&&t.hasAttribute('disabled')) return; e.preventDefault(); launch(); }); }
+  if(backBtn) backBtn.addEventListener('click', function(e){ e.preventDefault(); backToGallery(); });
+  if(startBtn) startBtn.addEventListener('click', function(e){ e.preventDefault(); startRun(); });
+  if(winAgain) winAgain.addEventListener('click', function(e){ e.preventDefault(); startRun(); });
+  if(loseAgain) loseAgain.addEventListener('click', function(e){ e.preventDefault(); startRun(); });
+  if(winBack) winBack.addEventListener('click', function(e){ e.preventDefault(); backToGallery(); });
+  if(loseBack) loseBack.addEventListener('click', function(e){ e.preventDefault(); backToGallery(); });
+  if(sfxBtn) sfxBtn.addEventListener('click', function(e){ e.preventDefault(); sfxOn=!sfxOn; syncSfx(); try{ localStorage.setItem('snake87_sfx', sfxOn?'1':'0'); }catch(err){} if(sfxOn) AC(); });
+  if(fsBtn) fsBtn.addEventListener('click', function(e){ e.preventDefault(); if(window.__arcadeFS) window.__arcadeFS.toggle(root, fsBtn, function(){ fit(); requestAnimationFrame(fit); }); });
+
+  /* ── выбор сложности ── */
+  (function(){ var dr=$('pongDiff'); if(!dr) return; var btns=dr.querySelectorAll('button');
+    Array.prototype.forEach.call(btns, function(b){
+      b.classList.toggle('on', b.getAttribute('data-diff')===diff);
+      b.addEventListener('click', function(e){ e.preventDefault(); var v=b.getAttribute('data-diff'); if(DIFFS[v]) diff=v;
+        try{ localStorage.setItem('pong87_diff', diff); }catch(err){}
+        Array.prototype.forEach.call(btns, function(x){ x.classList.toggle('on', x===b); }); });
+    });
+  })();
+
+  /* ── SPA ── */
+  window.addEventListener('hashchange', function(){ requestAnimationFrame(function(){ if(active()){ if(!fit()) requestAnimationFrame(fit); } }); });
+  window.addEventListener('resize', function(){ if(active()) fit(); });
+  headImg.addEventListener('load', function(){ if(active()) render(); });
+  timImg.addEventListener('load', function(){ if(active()) render(); });
+
+  /* ── тест-хук ── */
+  window.__pong87 = {
+    _auto:function(v){ auto=!!v; },
+    launch:launch, start:startRun, back:backToGallery,
+    setDiff:function(d){ if(DIFFS[d]) diff=d; },
+    forceWin:function(){ youScore=WIN_SCORE-1; running=true; ball={x:0.5,y:-0.05,vx:0,vy:-0.6}; step(0.02); },
+    forceLose:function(){ aiScore=WIN_SCORE-1; running=true; ball={x:0.5,y:1.05,vx:0,vy:0.6}; step(0.02); },
+    state:function(){ return { running:running, you:youScore, ai:aiScore, start:!scrStart.hidden, win:!scrWin.hidden, lose:!scrLose.hidden, stageHidden:stage.hidden, fs:(window.__arcadeFS?window.__arcadeFS.isActive():false), diff:diff }; }
+  };
+})();
+
+</script>
+<script>
+/* доп. эффекты игр: вспышка поля при наборе очков (наблюдатель, логика игр не трогается) */
+(function(){
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  function flash(board, kind){
+    if(!board) return;
+    var f=document.createElement('div'); f.className='mn-flash '+kind;
+    board.appendChild(f);
+    setTimeout(function(){ if(f.parentNode) f.parentNode.removeChild(f); }, 560);
+  }
+  function watch(id, getBoard, kind){
+    var el=document.getElementById(id); if(!el) return;
+    var lastN=parseInt(el.textContent,10); if(isNaN(lastN)) lastN=0;
+    new MutationObserver(function(){
+      var n=parseInt(el.textContent,10); if(isNaN(n)) return;
+      if(n>lastN) flash(getBoard(), kind);
+      lastN=n;
+    }).observe(el,{childList:true,characterData:true,subtree:true});
+  }
+  function snB(){ return document.querySelector('#snake87 .sn-board-wrap'); }
+  function pgB(){ return document.querySelector('#pong87 .sn-board-wrap'); }
+  function init(){ watch('snScore', snB, 'go'); watch('pongYou', pgB, 'goblue'); watch('pongAi', pgB, 'gored'); }
+  if(document.readyState!=='loading') init(); else document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+<script>
+/* Service Worker: офлайн + мгновенные повторные визиты (только https/localhost) */
+if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+</script>
+</body></html>

@@ -1,0 +1,14 @@
+{
+  "name": "87 · Macan News",
+  "short_name": "87",
+  "description": "Новостной канал 87. Мы не проверяем факты — мы их назначаем.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ece1cd",
+  "theme_color": "#ece1cd",
+  "lang": "ru",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
