@@ -1322,15 +1322,19 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
    audio.addEventListener('pause',function(){ if(sb) sb.classList.add('muted'); });
  }
  /* WebAudio-мост громкости: iOS игнорирует volume у <audio>, но не GainNode.
-    Мост строится лениво при первом set() (после жеста, когда AudioContext разрешён);
-    при любой ошибке тихо откатывается на element.volume (как раньше). */
+    ВАЖНО: мост строим ТОЛЬКО когда AudioContext реально запущен (state==='running',
+    т.е. после жеста). Иначе createMediaElementSource перехватит звук и уведёт его
+    в «спящий» контекст → тишина, и это ломало бы автоплей до жеста. Пока контекст
+    спит — играем через обычный element.volume (на десктопе этого достаточно),
+    а на iOS мост достроится сам при первом же взаимодействии. */
  window.__bgVol=(function(){
-   var gain=null;
+   var gain=null;   /* null — ещё не строили; объект — мост готов; false — WebAudio недоступен */
    function bridge(){
      if(gain!==null) return;
      try{
        var mk=window.__arcadeAC, ac=mk?mk():null;
-       if(!ac||!audio){ gain=false; return; }
+       if(!ac||!audio){ gain=false; return; }        /* WebAudio недоступен — навсегда на element.volume */
+       if(ac.state!=='running'){ return; }            /* контекст ещё спит (нет жеста) — попробуем позже */
        var src=ac.createMediaElementSource(audio);
        var g=ac.createGain(); g.gain.value=(audio.volume!=null?audio.volume:0.8);
        src.connect(g); g.connect(ac.destination);
@@ -1351,7 +1355,15 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
      (function st(ts){ var k=Math.min(1,(ts-t0)/1200); window.__bgVol.set(k*0.8); if(k<1) requestAnimationFrame(st); })(t0);   /* потолок 0.8 = FULL аркадного модуля */
    }catch(e){}
  }
- function tryStart(){ if(intendOn && audio && audio.paused){ var p=audio.play(); if(p&&p.then){ p.then(fadeIn).catch(function(){}); } else { fadeIn(); } } }
+ function stopRetry(){ if(typeof RG!=='undefined'){ RG.forEach(function(ev){ document.removeEventListener(ev, retry, true); }); } }
+ /* включить трек: пробуем сразу (браузеры с «доверием» к сайту дают автоплей),
+    иначе сеть жестов ниже запустит на первом же взаимодействии */
+ function tryStart(){
+   if(!(intendOn && audio) || !audio.paused) return;
+   var p=audio.play();
+   if(p&&p.then){ p.then(function(){ stopRetry(); fadeIn(); }).catch(function(){}); }
+   else { stopRetry(); fadeIn(); }
+ }
  function doEnter(){
    if(entered) return; entered=true;
    if(loaderEl) loaderEl.classList.add('done');
@@ -1363,14 +1375,15 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
    loaderEl.addEventListener('touchend', function(e){ e.preventDefault(); e.stopPropagation(); doEnter(); }, {passive:false});
  }
  document.addEventListener('keydown', function(){ doEnter(); });
- /* заставка — вуаль, а не гейт: сайт открывается сам через 2.4с;
-    клик по ней — мгновенный вход + попытка звука */
+ /* заставка — вуаль, а не гейт: сайт открывается сам через 1.8с и сразу пытается
+    завести трек; если браузер не доверяет автоплею — заведётся на первом же
+    взаимодействии (клик по вуали тоже даёт мгновенный вход) */
  setTimeout(doEnter, 1800);
- /* подстраховка старта трека на любом жесте, пока он реально не заиграет (кликам не мешает) */
- var RG=['pointerdown','touchend','click','keydown'];
+ /* сеть жестов: включаем звук на первом взаимодействии любого рода —
+    тач, скролл-колесо (wheel), клик, клавиша; снимается сама, когда звук пошёл */
+ var RG=['pointerdown','mousedown','touchstart','touchend','click','keydown','wheel'];
  function retry(){ tryStart(); }
  RG.forEach(function(ev){ document.addEventListener(ev, retry, true); });
- if(audio) audio.addEventListener('playing', function(){ RG.forEach(function(ev){ document.removeEventListener(ev, retry, true); }); });
  if(sb) sb.addEventListener('click',function(e){
    e.preventDefault(); e.stopPropagation();
    if(audio && audio.paused){ intendOn=true; tryStart(); } else if(audio){ intendOn=false; audio.pause(); }
@@ -1860,9 +1873,13 @@ window.__arcadeWinFX = function(host){
   if(!canvas) return;
   var ctx = canvas.getContext('2d');
 
-  /* preload Jigan head into card + game */
+  /* preload Jigan head into card + game (png-фолбэк, если webp не декодится) */
   var headImg = new Image();
-  if(headSrc){ var _hs=headSrc.currentSrc||headSrc.src; headImg.src = _hs; if(cardHead) cardHead.src = _hs; }
+  if(headSrc){
+    var _hs=headSrc.currentSrc||headSrc.src, _png=headSrc.src||_hs;
+    headImg.onerror=function(){ if(_png && headImg.src!==_png){ headImg.onerror=null; headImg.src=_png; } };
+    headImg.src = _hs; if(cardHead) cardHead.src = _hs;
+  }
 
   /* ── конфигурация ── */
   var GRID=16, WIN_LEN=87, START_LEN=3;
@@ -2297,8 +2314,20 @@ window.__arcadeWinFX = function(host){
       headSrc=$('snHeadSrc'), timSrc=$('pongTimSrc'), cardHead=$('pongCardHead'), cardTim=$('pongCardTim');
   if(!canvas) return;
   var ctx=canvas.getContext('2d');
-  var headImg=new Image(); if(headSrc){ var _hs=headSrc.currentSrc||headSrc.src; headImg.src=_hs; if(cardHead) cardHead.src=_hs; }
-  var timImg=new Image(); if(timSrc){ var _ts=timSrc.currentSrc||timSrc.src; timImg.src=_ts; if(cardTim) cardTim.src=_ts; }
+  /* аватары (Джиган/Тимати): грузим надёжно — при сбое webp падаем на png,
+     на onload перерисовываем корт, чтобы лицо гарантированно проявилось */
+  function loadAvatar(pic, card){
+    var img=new Image();
+    if(pic){
+      var pref=pic.currentSrc||pic.src, png=pic.src||pref;
+      img.onload=function(){ try{ render(); }catch(e){} };
+      img.onerror=function(){ if(png && img.src!==png){ img.onerror=null; img.src=png; } };
+      img.src=pref; if(card) card.src=pref;
+    }
+    return img;
+  }
+  var headImg=loadAvatar(headSrc, cardHead);   // Джиган (красные)
+  var timImg=loadAvatar(timSrc, cardTim);       // Тимати (синие)
 
   var WIN_SCORE=7, padW=0.26, padH=0.042, ballR=0.023, TOP=0.085, BOT=0.915;
   var DIFFS={

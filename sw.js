@@ -5,7 +5,7 @@
    - ассеты (шрифты/картинки/аудио/видео) — cache-first: мгновенные
      повторные визиты, файлы контент-хэшированы именами и не меняются.
    При изменении списка ниже поднимай VERSION — старый кэш удалится сам. */
-var VERSION = '87-v7';
+var VERSION = '87-v8';
 var ASSET_RE = /\/assets\//;
 
 self.addEventListener('install', function (e) {
