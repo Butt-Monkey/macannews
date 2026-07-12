@@ -2,9 +2,15 @@
 // в news.json. Без API-токенов и без бота — страница открыта всем, это
 // обычный серверный HTTP-запрос (не браузерный iframe — блокировка встраивания
 // тут вообще ни при чём, мы просто читаем страницу, а не показываем её).
+//
+// Картинки постов скачиваются сюда же, в assets/news/<id>.jpg, и в news.json
+// попадает уже локальный путь, а не прямая ссылка на CDN Telegram — так
+// картинки грузятся с самого macannews.ru и не зависят от того, доступен ли
+// Telegram у посетителя напрямую (в РФ его CDN часто режут/блокируют).
 
 const CHANNEL = 'macan777macan777macan777';
 const KEEP = 6;
+const IMG_DIR = 'assets/news';
 
 function decodeEntities(s) {
   return s
@@ -31,6 +37,8 @@ function extract(re, html) {
 }
 
 async function main() {
+  const fs = await import('node:fs/promises');
+
   const res = await fetch(`https://t.me/s/${CHANNEL}`, {
     headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MacanNewsBot/1.0)' }
   });
@@ -55,14 +63,43 @@ async function main() {
       url: `https://t.me/${CHANNEL}/${id}`,
       date: datetime || null,
       text,
-      image: photo || null
+      imageSrc: photo || null   // временное поле, заменится ниже на локальный путь
     });
   }
 
   // на странице посты идут от старых к новым — берём последние KEEP и разворачиваем
   const latest = posts.slice(-KEEP).reverse();
 
-  const fs = await import('node:fs/promises');
+  await fs.mkdir(IMG_DIR, { recursive: true });
+
+  for (const post of latest) {
+    if (!post.imageSrc) { post.image = null; continue; }
+    try {
+      const imgRes = await fetch(post.imageSrc);
+      if (!imgRes.ok) throw new Error('HTTP ' + imgRes.status);
+      const buf = Buffer.from(await imgRes.arrayBuffer());
+      const localPath = `${IMG_DIR}/${post.id}.jpg`;
+      await fs.writeFile(localPath, buf);
+      post.image = localPath;
+    } catch (e) {
+      console.warn(`Не удалось скачать картинку поста ${post.id}:`, e.message);
+      post.image = null;
+    }
+    delete post.imageSrc;
+  }
+
+  // подчищаем картинки постов, которых больше нет среди последних KEEP —
+  // иначе assets/news будет бесконечно расти
+  const keepFiles = new Set(latest.filter(p => p.image).map(p => `${p.id}.jpg`));
+  try {
+    const existing = await fs.readdir(IMG_DIR);
+    for (const file of existing) {
+      if (!keepFiles.has(file)) await fs.unlink(`${IMG_DIR}/${file}`);
+    }
+  } catch (e) {
+    if (e.code !== 'ENOENT') throw e;
+  }
+
   await fs.writeFile('news.json', JSON.stringify(latest, null, 2) + '\n', 'utf8');
   console.log(`Сохранено постов: ${latest.length}`);
 }
