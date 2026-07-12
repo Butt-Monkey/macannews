@@ -31,12 +31,12 @@ jobs:
 
       - name: Закоммитить, если лента изменилась
         run: |
-          if git diff --quiet -- news.json; then
-            echo "Без изменений — новых постов нет"
-          else
+          if [ -n "$(git status --porcelain -- news.json)" ]; then
             git config user.name "87-news-bot"
             git config user.email "actions@users.noreply.github.com"
             git add news.json
             git commit -m "auto: обновление ленты Telegram"
             git push
+          else
+            echo "Без изменений — новых постов нет"
           fi
