@@ -289,6 +289,23 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .soon .hairline{max-width:220px;width:60%;margin-top:var(--sp-m)}
 .soon .soon-cta{margin-top:var(--sp-m)}
 
+/* ===== NEWS — карточки из news.json (наполняет GitHub Action сам, без iframe) ===== */
+.news-feed{display:grid;gap:var(--sp-xs)}
+.news-card{display:grid;grid-template-columns:120px 1fr;gap:var(--sp-xs);align-items:stretch;padding:var(--sp-xs);border-radius:16px;border:1px solid var(--card-edge);background:var(--card);text-align:left;will-change:transform;transition:transform .38s var(--ease-spring),border-color .55s var(--ease),box-shadow .55s var(--ease)}
+.news-card:not(.has-media){grid-template-columns:1fr}
+.news-card:hover{transform:translateY(-4px);border-color:var(--gold-solid);box-shadow:var(--shadow)}
+.news-card-media{border-radius:10px;background-size:cover;background-position:center;background-color:var(--card-2)}
+.news-card-body{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.news-card-date{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--gold-solid);font-weight:600}
+.news-card-text{margin-top:8px;color:var(--ink);font-size:var(--t-small);line-height:var(--lh-body);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.news-empty{text-align:center;padding:var(--sp-xl) 0;color:var(--ink-soft)}
+.news-empty a{color:var(--gold-solid)}
+.news-foot{text-align:center;margin-top:var(--sp-m)}
+@media (max-width:640px){
+  .news-card{grid-template-columns:88px 1fr;gap:12px}
+  .news-card-text{-webkit-line-clamp:3}
+}
+
 /* ===== FOOTER ===== */
 .footer{margin-top:var(--sp-2xl);border-top:1px solid var(--line);padding-top:var(--sp-l);padding-bottom:42px}
 .footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px}
@@ -977,16 +994,16 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
 </div></section></section><section class="view" id="view-news"><section class="page-head"><div class="wrap">
     
     <h1 class="page-title gold reveal">NEWS</h1>
-    <p class="page-desc reveal">Свежие выпуски, дропы и события. Даты меняются так же внезапно, как культурные авторитеты.</p>
     <hr class="hairline page-rule reveal"/>
-  </div></section><section><div class="wrap"><div class="soon reveal">
-  <div class="soon-big gold">coming soon</div>
-  <hr class="hairline"/>
-  <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener" class="btn gold-btn soon-cta">
-    <svg viewBox="0 0 24 24"><path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.47-2.27 2.18c-.25.25-.46.46-.94.46l.34-4.8 8.73-7.9c.38-.34-.08-.53-.59-.19L6.99 13.2l-4.65-1.45c-1.01-.32-1.03-1.01.21-1.49L20.63 2.9c.84-.31 1.58.2 1.31 1.4z"/></svg>
-    <span>Узнать первым</span>
-  </a>
-</div></div></section></section><section class="view" id="view-top100"><section class="page-head"><div class="wrap">
+  </div></section><section><div class="wrap">
+  <div class="news-feed reveal" id="newsFeed"><div class="news-empty">Загружаем ленту…</div></div>
+  <div class="news-foot">
+    <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener" class="btn gold-btn">
+      <svg viewBox="0 0 24 24"><path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.47-2.27 2.18c-.25.25-.46.46-.94.46l.34-4.8 8.73-7.9c.38-.34-.08-.53-.59-.19L6.99 13.2l-4.65-1.45c-1.01-.32-1.03-1.01.21-1.49L20.63 2.9c.84-.31 1.58.2 1.31 1.4z"/></svg>
+      <span>Открыть канал в Telegram</span>
+    </a>
+  </div>
+</div></section></section><section class="view" id="view-top100"><section class="page-head"><div class="wrap">
     <div class="eyebrow reveal">Индекс влияния</div>
     <h1 class="page-title gold reveal">ТОП 100</h1>
     <p class="page-desc reveal">Рейтинг по версии редакции. Капитал влияния пересчитывается по настроению. Источники засекречены.</p>
@@ -1225,8 +1242,8 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
     </div>
     <div class="fcol">
       <h5>Канал</h5>
-      <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener">Telegram-канал ↗</a>
-      <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Добавить в Аллею ↗</a>
+      <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener">Telegram-канал</a>
+      <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Добавить в Аллею</a>
       <div class="footer-qr"><div class="qr-frame" style="width:74px;height:74px"><img src="assets/img-59e5004e09.png" alt="QR Telegram" width="396" height="396" loading="lazy" decoding="async"/></div><span class="eyebrow" style="font-size:10px;max-width:9em">Сканируй и подпишись</span></div>
     </div>
   </div>
@@ -2575,6 +2592,74 @@ window.__arcadeWinFX = function(host){
   function pgB(){ return document.querySelector('#pong87 .sn-board-wrap'); }
   function init(){ watch('snScore', snB, 'go'); watch('pongYou', pgB, 'goblue'); watch('pongAi', pgB, 'gored'); }
   if(document.readyState!=='loading') init(); else document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+<script>
+/* ═══════════ NEWS — карточки из news.json, наполняет GitHub Action сам ═══════════
+   Без единого iframe: раз в ~15 мин Action на серверах GitHub читает публичную
+   страницу канала и коммитит news.json; сайт просто рисует обычные карточки
+   в своём собственном дизайне — тема, доступность, всё нативное. Файл вне
+   /assets/ и не HTML, sw.js его не трогает — всегда идёт живым запросом в сеть. */
+(function(){
+  "use strict";
+  var view=document.getElementById('view-news'); if(!view) return;
+  var feed=document.getElementById('newsFeed'); if(!feed) return;
+
+  function fmtDate(iso){
+    if(!iso) return '';
+    try{ return new Intl.DateTimeFormat('ru',{day:'numeric',month:'long'}).format(new Date(iso)); }
+    catch(e){ return ''; }
+  }
+  function clear(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+  function renderEmpty(msg, withLink){
+    clear(feed);
+    var d=document.createElement('div'); d.className='news-empty';
+    d.appendChild(document.createTextNode(msg+' '));
+    if(withLink){
+      var a=document.createElement('a'); a.href='https://t.me/macan777macan777macan777';
+      a.target='_blank'; a.rel='noopener'; a.textContent='Открыть канал в Telegram';
+      d.appendChild(a);
+    }
+    feed.appendChild(d);
+  }
+  function render(posts){
+    if(!posts || !posts.length){ renderEmpty('Пока пусто — загляните чуть позже.', false); return; }
+    clear(feed);
+    for(var i=0;i<posts.length;i++){
+      var p=posts[i];
+      var a=document.createElement('a');
+      a.className='news-card'+(p.image?' has-media':'');
+      a.href=p.url; a.target='_blank'; a.rel='noopener';
+      if(p.image){
+        var media=document.createElement('div');
+        media.className='news-card-media';
+        media.style.backgroundImage="url('"+p.image+"')";
+        a.appendChild(media);
+      }
+      var body=document.createElement('div'); body.className='news-card-body';
+      var date=document.createElement('span'); date.className='news-card-date'; date.textContent=fmtDate(p.date);
+      var text=document.createElement('p'); text.className='news-card-text'; text.textContent=p.text;
+      body.appendChild(date); body.appendChild(text); a.appendChild(body);
+      feed.appendChild(a);
+    }
+  }
+  var lastLoad=0, MIN_GAP=15000;   /* защита от дребезга: не чаще раза в 15с */
+  function refresh(){
+    var now=Date.now(); if(now-lastLoad<MIN_GAP) return; lastLoad=now;
+    fetch('news.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(render)
+      .catch(function(){ renderEmpty('Не получилось загрузить ленту.', true); });
+  }
+  var wasActive=false;
+  function checkActive(){
+    var isActive=view.classList.contains('active');
+    if(isActive && !wasActive) refresh();
+    wasActive=isActive;
+  }
+  var mo=new MutationObserver(checkActive);
+  mo.observe(view,{attributes:true, attributeFilter:['class']});
+  checkActive();   /* на случай если раздел уже активен на момент выполнения скрипта */
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden && view.classList.contains('active')) refresh(); });
 })();
 </script>
 <script>
