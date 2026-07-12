@@ -295,6 +295,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .news-card:not(.has-media){grid-template-columns:1fr}
 .news-card:hover{transform:translateY(-4px);border-color:var(--gold-solid);box-shadow:var(--shadow)}
 .news-card-media{border-radius:10px;background-size:cover;background-position:center;background-color:var(--card-2)}
+.news-card-media.noimg{display:flex;align-items:center;justify-content:center}
+.news-card-media.noimg::after{content:"⚡";font-size:26px;opacity:.32}
 .news-card-body{display:flex;flex-direction:column;justify-content:center;min-width:0}
 .news-card-date{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--gold-solid);font-weight:600}
 .news-card-text{margin-top:8px;color:var(--ink);font-size:var(--t-small);line-height:var(--lh-body);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
@@ -2633,7 +2635,12 @@ window.__arcadeWinFX = function(host){
       if(p.image){
         var media=document.createElement('div');
         media.className='news-card-media';
-        media.style.backgroundImage="url('"+p.image+"')";
+        (function(mediaEl, src){
+          var img=new Image();
+          img.onload=function(){ mediaEl.style.backgroundImage="url('"+src+"')"; };
+          img.onerror=function(){ mediaEl.classList.add('noimg'); };
+          img.src=src;
+        })(media, p.image);
         a.appendChild(media);
       }
       var body=document.createElement('div'); body.className='news-card-body';
