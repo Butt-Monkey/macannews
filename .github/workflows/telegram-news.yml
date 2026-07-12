@@ -1,0 +1,42 @@
+name: Обновление ленты Telegram
+
+# Раз в ~15 минут читает ПУБЛИЧНУЮ страницу-превью канала (t.me/s/<канал>) —
+# обычный HTTP-запрос с серверов GitHub, без токенов и без браузера, поэтому
+# блокировка встраивания (X-Frame-Options), из-за которой сломался iframe,
+# тут вообще ни при чём — это просто чтение страницы, а не встраивание.
+# Результат кладёт в news.json в корне репозитория; сайт сам его подхватывает.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Собрать news.json из публичной страницы канала
+        run: node .github/scripts/fetch-news.mjs
+
+      - name: Закоммитить, если лента изменилась
+        run: |
+          if git diff --quiet -- news.json; then
+            echo "Без изменений — новых постов нет"
+          else
+            git config user.name "87-news-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add news.json
+            git commit -m "auto: обновление ленты Telegram"
+            git push
+          fi
