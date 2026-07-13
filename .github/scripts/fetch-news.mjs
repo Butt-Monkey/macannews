@@ -39,8 +39,14 @@ function extract(re, html) {
 async function main() {
   const fs = await import('node:fs/promises');
 
-  const res = await fetch(`https://t.me/s/${CHANNEL}`, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MacanNewsBot/1.0)' }
+  // обычный браузерный User-Agent + метка времени в URL — иначе кэширующий слой
+  // перед t.me иногда отдаёт бот-подобным запросам старый снимок страницы
+  const res = await fetch(`https://t.me/s/${CHANNEL}?_=${Date.now()}`, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache'
+    }
   });
   if (!res.ok) throw new Error('Telegram HTTP ' + res.status);
   const html = await res.text();
