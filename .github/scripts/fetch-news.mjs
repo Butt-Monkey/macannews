@@ -1,58 +1,38 @@
-// Тянет последние посты из публичной страницы t.me/s/<канал> и сохраняет их
-// в news.json. Без API-токенов и без бота — страница открыта всем, это
-// обычный серверный HTTP-запрос (не браузерный iframe — блокировка встраивания
-// тут вообще ни при чём, мы просто читаем страницу, а не показываем её).
+// Тянет новые посты канала через официальный Bot API Telegram
+// (api.telegram.org) и добавляет их в news.json.
 //
-// Картинки постов скачиваются сюда же, в assets/news/<id>.jpg, и в news.json
-// попадает уже локальный путь, а не прямая ссылка на CDN Telegram — так
-// картинки грузятся с самого macannews.ru и не зависят от того, доступен ли
-// Telegram у посетителя напрямую (в РФ его CDN часто режут/блокируют).
+// Раньше скрипт читал t.me/s/<канал> напрямую, но с сети GitHub Actions этот
+// конкретный домен устойчиво не резолвится (DNS-сбой, не лечится ни сменой
+// User-Agent, ни ручным DNS через публичные сервера) — похоже, именно t.me
+// заблокирован на уровне сети GitHub Actions. api.telegram.org — другой
+// домен, официальный API для ботов, должен резолвиться нормально.
 //
-// ВАЖНО про DNS: штатный резолвер раннера GitHub Actions иногда не может
-// найти t.me (getaddrinfo ENOTFOUND), хотя домен реально доступен. Обычный
-// dns.setServers() тут не спасает — fetch()/undici резолвит имена через
-// системный getaddrinfo в обход этой настройки. Поэтому ниже IP резолвится
-// вручную через публичный DNS (dns.promises.Resolver), а запрос идёт через
-// node:https с явным подключением по этому IP (Host/SNI остаются "t.me").
+// Как это устроено:
+// - Бот должен быть администратором канала — иначе он вообще не получает посты.
+// - getUpdates отдаёт только НОВЫЕ посты с момента последнего запроса, поэтому
+//   мы храним offset (id последнего обработанного апдейта) в
+//   .github/state/telegram-offset.json и с каждым запуском продолжаем оттуда.
+// - Новые посты добавляются в начало news.json, старые вытесняются за пределы
+//   KEEP. Если пост удалили из канала — Bot API об этом не сообщает, так что
+//   удалённый пост останется в ленте, пока сам не вытеснится новыми (не дольше,
+//   чем на KEEP публикаций вперёд).
 
-import https from 'node:https';
-import dns from 'node:dns';
+const TOKEN = process.env.TG_BOT_TOKEN;
+if (!TOKEN) throw new Error('Нет TG_BOT_TOKEN — секрет репозитория не задан или не передан в workflow');
 
-const resolver = new dns.promises.Resolver();
-resolver.setServers(['1.1.1.1', '8.8.8.8']);
+const CHANNEL_FALLBACK = 'macan777macan777macan777';
+const KEEP = 6;
+const IMG_DIR = 'assets/news';
+const NEWS_FILE = 'news.json';
+const STATE_FILE = '.github/state/telegram-offset.json';
 
-function customLookup(hostname, options, callback) {
-  resolver.resolve4(hostname)
-    .then(addrs => callback(null, addrs[0], 4))
-    .catch(err => callback(err));
-}
-
-function httpsGet(url, headers) {
-  return new Promise((resolve, reject) => {
-    const req = https.get(url, { headers, lookup: customLookup, timeout: 15000 }, (res) => {
-      const chunks = [];
-      res.on('data', c => chunks.push(c));
-      res.on('end', () => {
-        resolve({
-          ok: res.statusCode >= 200 && res.statusCode < 300,
-          status: res.statusCode,
-          buffer: Buffer.concat(chunks)
-        });
-      });
-      res.on('error', reject);
-    });
-    req.on('timeout', () => req.destroy(new Error('timeout')));
-    req.on('error', reject);
-  });
-}
-
-// сеть иногда «икает» на секунду-две — пробуем несколько раз с паузой,
-// прежде чем считать это настоящим сбоем
-async function fetchWithRetry(url, headers, attempts = 4, delayMs = 5000) {
+async function fetchWithRetry(url, attempts = 3, delayMs = 4000) {
   let lastErr;
   for (let i = 0; i < attempts; i++) {
     try {
-      return await httpsGet(url, headers);
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res;
     } catch (e) {
       lastErr = e;
       console.warn(`Попытка ${i + 1}/${attempts} не удалась: ${e.message}`);
@@ -62,103 +42,105 @@ async function fetchWithRetry(url, headers, attempts = 4, delayMs = 5000) {
   throw lastErr;
 }
 
-const CHANNEL = 'macan777macan777macan777';
-const KEEP = 6;
-const IMG_DIR = 'assets/news';
-
-function decodeEntities(s) {
-  return s
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&');
+function truncate(s, max = 480) {
+  s = (s || '').trim();
+  return s.length > max ? s.slice(0, max).trim() + '…' : s;
 }
 
-function htmlToText(html) {
-  let s = html.replace(/<br\s*\/?>/gi, '\n');
-  s = s.replace(/<[^>]+>/g, '');
-  s = decodeEntities(s);
-  s = s.replace(/\n{3,}/g, '\n\n').trim();
-  if (s.length > 480) s = s.slice(0, 480).trim() + '…';
-  return s;
+function bestPhoto(sizes) {
+  if (!sizes || !sizes.length) return null;
+  return sizes[sizes.length - 1];   // последний размер — самый крупный
 }
 
-function extract(re, html) {
-  const m = html.match(re);
-  return m ? m[1] : null;
+async function downloadTelegramFile(fileId, destPath, fs) {
+  const infoRes = await fetchWithRetry(`https://api.telegram.org/bot${TOKEN}/getFile?file_id=${fileId}`);
+  const info = await infoRes.json();
+  if (!info.ok) throw new Error('getFile failed: ' + JSON.stringify(info));
+  const fileRes = await fetchWithRetry(`https://api.telegram.org/file/bot${TOKEN}/${info.result.file_path}`);
+  const buf = Buffer.from(await fileRes.arrayBuffer());
+  await fs.writeFile(destPath, buf);
 }
 
 async function main() {
   const fs = await import('node:fs/promises');
 
-  // обычный браузерный User-Agent + метка времени в URL — иначе кэширующий слой
-  // перед t.me иногда отдаёт бот-подобным запросам старый снимок страницы
-  const res = await fetchWithRetry(`https://t.me/s/${CHANNEL}?_=${Date.now()}`, {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-    'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache'
-  });
-  if (!res.ok) throw new Error('Telegram HTTP ' + res.status);
-  const html = res.buffer.toString('utf8');
+  let offset = 0;
+  try {
+    offset = JSON.parse(await fs.readFile(STATE_FILE, 'utf8')).offset || 0;
+  } catch (e) { /* состояния ещё нет — начинаем с нуля */ }
 
-  const marker = '<div class="tgme_widget_message ';
-  const parts = html.split(marker).slice(1);
+  let existing = [];
+  try {
+    existing = JSON.parse(await fs.readFile(NEWS_FILE, 'utf8'));
+  } catch (e) { /* ленты ещё нет */ }
 
-  const posts = [];
-  for (const raw of parts) {
-    const id = extract(new RegExp(`data-post="${CHANNEL}/(\\d+)"`), raw);
-    if (!id) continue;
-    const datetime = extract(/<time datetime="([^"]+)"/, raw);
-    const textHtml = extract(/<div class="tgme_widget_message_text js-message_text"[^>]*>([\s\S]*?)<\/div>/, raw);
-    const photo = extract(/tgme_widget_message_photo_wrap[^"]*"[^>]*style="[^"]*background-image:url\('([^']+)'\)/, raw)
-               || extract(/tgme_widget_message_video_thumb"[^>]*style="[^"]*background-image:url\('([^']+)'\)/, raw);
-    const text = textHtml ? htmlToText(textHtml) : '';
-    if (!text) continue;
-    posts.push({
-      id,
-      url: `https://t.me/${CHANNEL}/${id}`,
-      date: datetime || null,
-      text,
-      imageSrc: photo || null   // временное поле, заменится ниже на локальный путь
-    });
+  const allowed = encodeURIComponent(JSON.stringify(['channel_post']));
+  const url = `https://api.telegram.org/bot${TOKEN}/getUpdates?offset=${offset}&timeout=0&allowed_updates=${allowed}`;
+  const res = await fetchWithRetry(url);
+  const data = await res.json();
+  if (!data.ok) throw new Error('getUpdates failed: ' + JSON.stringify(data));
+
+  const updates = data.result;
+  if (!updates.length) {
+    console.log('Новых постов нет.');
+    return;
   }
-
-  // на странице посты идут от старых к новым — берём последние KEEP и разворачиваем
-  const latest = posts.slice(-KEEP).reverse();
 
   await fs.mkdir(IMG_DIR, { recursive: true });
 
-  for (const post of latest) {
-    if (!post.imageSrc) { post.image = null; continue; }
-    try {
-      const imgRes = await fetchWithRetry(post.imageSrc, {}, 2, 3000);
-      if (!imgRes.ok) throw new Error('HTTP ' + imgRes.status);
-      const localPath = `${IMG_DIR}/${post.id}.jpg`;
-      await fs.writeFile(localPath, imgRes.buffer);
-      post.image = localPath;
-    } catch (e) {
-      console.warn(`Не удалось скачать картинку поста ${post.id}:`, e.message);
-      post.image = null;
+  const newPosts = [];
+  for (const upd of updates) {
+    const post = upd.channel_post;
+    if (!post) continue;
+    const text = truncate(post.text || post.caption || '');
+    if (!text) continue;
+
+    const id = String(post.message_id);
+    const channel = (post.chat && post.chat.username) || CHANNEL_FALLBACK;
+    const entry = {
+      id,
+      url: `https://t.me/${channel}/${id}`,
+      date: new Date(post.date * 1000).toISOString(),
+      text,
+      image: null
+    };
+
+    let photoSize = bestPhoto(post.photo);
+    if (!photoSize && post.video) photoSize = post.video.thumbnail || post.video.thumb;
+    if (photoSize) {
+      try {
+        const localPath = `${IMG_DIR}/${id}.jpg`;
+        await downloadTelegramFile(photoSize.file_id, localPath, fs);
+        entry.image = localPath;
+      } catch (e) {
+        console.warn(`Не удалось скачать картинку поста ${id}:`, e.message);
+      }
     }
-    delete post.imageSrc;
+
+    newPosts.push(entry);
   }
 
-  // подчищаем картинки постов, которых больше нет среди последних KEEP —
-  // иначе assets/news будет бесконечно расти
-  const keepFiles = new Set(latest.filter(p => p.image).map(p => `${p.id}.jpg`));
+  // апдейты приходят от старых к новым; в ленте нужен обратный порядок (новые сверху)
+  const merged = [...newPosts.reverse(), ...existing].slice(0, KEEP);
+
+  // подчищаем картинки постов, которых больше нет в окне KEEP
+  const keepFiles = new Set(merged.filter(p => p.image).map(p => `${p.id}.jpg`));
   try {
-    const existing = await fs.readdir(IMG_DIR);
-    for (const file of existing) {
+    const files = await fs.readdir(IMG_DIR);
+    for (const file of files) {
       if (!keepFiles.has(file)) await fs.unlink(`${IMG_DIR}/${file}`);
     }
   } catch (e) {
     if (e.code !== 'ENOENT') throw e;
   }
 
-  await fs.writeFile('news.json', JSON.stringify(latest, null, 2) + '\n', 'utf8');
-  console.log(`Сохранено постов: ${latest.length}`);
+  await fs.writeFile(NEWS_FILE, JSON.stringify(merged, null, 2) + '\n', 'utf8');
+
+  const maxUpdateId = Math.max(...updates.map(u => u.update_id));
+  await fs.mkdir('.github/state', { recursive: true });
+  await fs.writeFile(STATE_FILE, JSON.stringify({ offset: maxUpdateId + 1 }, null, 2) + '\n', 'utf8');
+
+  console.log(`Добавлено новых постов: ${newPosts.length}. Всего в ленте: ${merged.length}.`);
 }
 
 main().catch(err => { console.error(err); process.exit(1); });
