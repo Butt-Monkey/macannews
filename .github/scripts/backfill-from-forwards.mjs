@@ -87,14 +87,19 @@ async function main() {
     existing = JSON.parse(await fs.readFile(NEWS_FILE, 'utf8'));
   } catch (e) { /* ленты ещё нет */ }
 
-  const allowed = encodeURIComponent(JSON.stringify(['message']));
-  const url = `https://api.telegram.org/bot${TOKEN}/getUpdates?offset=${offset}&timeout=0&allowed_updates=${allowed}`;
+  console.log(`Используемый offset: ${offset}`);
+
+  // без фильтра allowed_updates — берём вообще всё, что есть в очереди,
+  // чтобы точно увидеть, что реально прислал Telegram (для диагностики)
+  const url = `https://api.telegram.org/bot${TOKEN}/getUpdates?offset=${offset}&timeout=0`;
   const res = await fetchWithRetry(url);
   const data = await res.json();
   if (!data.ok) throw new Error('getUpdates failed: ' + JSON.stringify(data));
 
   const updates = data.result;
-  console.log(`Апдейтов типа message: ${updates.length}`);
+  console.log(`Всего апдейтов в очереди: ${updates.length}`);
+  console.log('Типы апдейтов:', updates.map(u => Object.keys(u).filter(k => k !== 'update_id')).flat());
+  if (updates.length) console.log('Сырой пример первого апдейта:', JSON.stringify(updates[0]).slice(0, 800));
 
   const found = [];
   for (const upd of updates) {
