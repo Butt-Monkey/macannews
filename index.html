@@ -2670,6 +2670,41 @@ window.__arcadeWinFX = function(host){
 })();
 </script>
 <script>
+/* ═══════════ Ссылки на Telegram — сначала приложение, потом сайт ═══════════
+   t.me иногда не резолвится (DNS-блокировка домена у части провайдеров),
+   при этом само приложение Telegram работает нормально. Поэтому клик по
+   любой ссылке на t.me сначала пробует открыть приложение через tg://
+   (не трогает DNS вообще), и только если оно не установлено/не открылось —
+   через ~1.2с откатывается на обычную https://t.me/... ссылку. */
+(function(){
+  "use strict";
+  function toTgDeepLink(httpsUrl){
+    try{
+      var u=new URL(httpsUrl);
+      if(u.hostname!=='t.me') return null;
+      var parts=u.pathname.split('/').filter(Boolean);
+      if(!parts.length) return null;
+      var domain=parts[0], post=parts[1];
+      return 'tg://resolve?domain='+encodeURIComponent(domain)+(post?('&post='+encodeURIComponent(post)):'');
+    }catch(e){ return null; }
+  }
+  document.addEventListener('click', function(e){
+    var a=e.target&&e.target.closest?e.target.closest('a[href^="https://t.me/"]'):null;
+    if(!a) return;
+    var tg=toTgDeepLink(a.href);
+    if(!tg) return;   /* не распознали — обычная ссылка сработает как раньше */
+    e.preventDefault();
+    var httpsUrl=a.href, done=false;
+    function fallback(){ if(done) return; done=true; window.open(httpsUrl,'_blank','noopener'); cleanup(); }
+    function onHide(){ if(document.hidden){ done=true; clearTimeout(timer); cleanup(); } }
+    function cleanup(){ document.removeEventListener('visibilitychange', onHide); }
+    var timer=setTimeout(fallback, 1200);
+    document.addEventListener('visibilitychange', onHide);
+    window.location.href=tg;
+  }, true);
+})();
+</script>
+<script>
 /* Service Worker: офлайн + мгновенные повторные визиты (только https/localhost) */
 if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
   window.addEventListener('load', function(){
