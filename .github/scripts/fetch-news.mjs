@@ -8,6 +8,11 @@
 // картинки грузятся с самого macannews.ru и не зависят от того, доступен ли
 // Telegram у посетителя напрямую (в РФ его CDN часто режут/блокируют).
 
+// внутренний DNS-резолвер раннера GitHub Actions иногда не может найти t.me
+// (ENOTFOUND), хотя домен реально доступен — переключаемся на публичный DNS
+import dns from 'node:dns';
+dns.setServers(['1.1.1.1', '8.8.8.8']);
+
 const CHANNEL = 'macan777macan777macan777';
 const KEEP = 6;
 const IMG_DIR = 'assets/news';
