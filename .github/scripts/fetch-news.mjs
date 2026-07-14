@@ -36,12 +36,28 @@ function extract(re, html) {
   return m ? m[1] : null;
 }
 
+// сеть/DNS у раннера GitHub Actions иногда «икает» на секунду-две — пробуем
+// несколько раз с паузой, прежде чем считать это настоящим сбоем
+async function fetchWithRetry(url, options, attempts = 4, delayMs = 5000) {
+  let lastErr;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fetch(url, options);
+    } catch (e) {
+      lastErr = e;
+      console.warn(`Попытка ${i + 1}/${attempts} не удалась: ${e.cause ? e.cause.message : e.message}`);
+      if (i < attempts - 1) await new Promise(r => setTimeout(r, delayMs));
+    }
+  }
+  throw lastErr;
+}
+
 async function main() {
   const fs = await import('node:fs/promises');
 
   // обычный браузерный User-Agent + метка времени в URL — иначе кэширующий слой
   // перед t.me иногда отдаёт бот-подобным запросам старый снимок страницы
-  const res = await fetch(`https://t.me/s/${CHANNEL}?_=${Date.now()}`, {
+  const res = await fetchWithRetry(`https://t.me/s/${CHANNEL}?_=${Date.now()}`, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
       'Cache-Control': 'no-cache',
