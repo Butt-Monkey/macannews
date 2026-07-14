@@ -1,10 +1,10 @@
 name: Обновление ленты Telegram
 
-# Раз в ~15 минут читает ПУБЛИЧНУЮ страницу-превью канала (t.me/s/<канал>) —
-# обычный HTTP-запрос с серверов GitHub, без токенов и без браузера, поэтому
-# блокировка встраивания (X-Frame-Options), из-за которой сломался iframe,
-# тут вообще ни при чём — это просто чтение страницы, а не встраивание.
-# Результат кладёт в news.json в корне репозитория; сайт сам его подхватывает.
+# Читает новые посты канала через официальный Bot API Telegram
+# (api.telegram.org) — предыдущий способ (чтение t.me/s/<канал> напрямую)
+# упёрся в устойчивую DNS-блокировку домена t.me именно с сети GitHub Actions.
+# Бот должен быть администратором канала, токен лежит в секрете TG_BOT_TOKEN
+# (Settings → Secrets and variables → Actions).
 
 on:
   schedule:
@@ -26,15 +26,17 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Собрать news.json из публичной страницы канала
+      - name: Собрать news.json через Bot API
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
         run: node .github/scripts/fetch-news.mjs
 
       - name: Закоммитить, если лента изменилась
         run: |
-          if [ -n "$(git status --porcelain -- news.json assets/news)" ]; then
+          if [ -n "$(git status --porcelain -- news.json assets/news .github/state)" ]; then
             git config user.name "87-news-bot"
             git config user.email "actions@users.noreply.github.com"
-            git add news.json assets/news
+            git add news.json assets/news .github/state
             git commit -m "auto: обновление ленты Telegram"
             git push
           else
