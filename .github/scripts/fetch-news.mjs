@@ -7,11 +7,60 @@
 // попадает уже локальный путь, а не прямая ссылка на CDN Telegram — так
 // картинки грузятся с самого macannews.ru и не зависят от того, доступен ли
 // Telegram у посетителя напрямую (в РФ его CDN часто режут/блокируют).
+//
+// ВАЖНО про DNS: штатный резолвер раннера GitHub Actions иногда не может
+// найти t.me (getaddrinfo ENOTFOUND), хотя домен реально доступен. Обычный
+// dns.setServers() тут не спасает — fetch()/undici резолвит имена через
+// системный getaddrinfo в обход этой настройки. Поэтому ниже IP резолвится
+// вручную через публичный DNS (dns.promises.Resolver), а запрос идёт через
+// node:https с явным подключением по этому IP (Host/SNI остаются "t.me").
 
-// внутренний DNS-резолвер раннера GitHub Actions иногда не может найти t.me
-// (ENOTFOUND), хотя домен реально доступен — переключаемся на публичный DNS
+import https from 'node:https';
 import dns from 'node:dns';
-dns.setServers(['1.1.1.1', '8.8.8.8']);
+
+const resolver = new dns.promises.Resolver();
+resolver.setServers(['1.1.1.1', '8.8.8.8']);
+
+function customLookup(hostname, options, callback) {
+  resolver.resolve4(hostname)
+    .then(addrs => callback(null, addrs[0], 4))
+    .catch(err => callback(err));
+}
+
+function httpsGet(url, headers) {
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, { headers, lookup: customLookup, timeout: 15000 }, (res) => {
+      const chunks = [];
+      res.on('data', c => chunks.push(c));
+      res.on('end', () => {
+        resolve({
+          ok: res.statusCode >= 200 && res.statusCode < 300,
+          status: res.statusCode,
+          buffer: Buffer.concat(chunks)
+        });
+      });
+      res.on('error', reject);
+    });
+    req.on('timeout', () => req.destroy(new Error('timeout')));
+    req.on('error', reject);
+  });
+}
+
+// сеть иногда «икает» на секунду-две — пробуем несколько раз с паузой,
+// прежде чем считать это настоящим сбоем
+async function fetchWithRetry(url, headers, attempts = 4, delayMs = 5000) {
+  let lastErr;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await httpsGet(url, headers);
+    } catch (e) {
+      lastErr = e;
+      console.warn(`Попытка ${i + 1}/${attempts} не удалась: ${e.message}`);
+      if (i < attempts - 1) await new Promise(r => setTimeout(r, delayMs));
+    }
+  }
+  throw lastErr;
+}
 
 const CHANNEL = 'macan777macan777macan777';
 const KEEP = 6;
@@ -41,36 +90,18 @@ function extract(re, html) {
   return m ? m[1] : null;
 }
 
-// сеть/DNS у раннера GitHub Actions иногда «икает» на секунду-две — пробуем
-// несколько раз с паузой, прежде чем считать это настоящим сбоем
-async function fetchWithRetry(url, options, attempts = 4, delayMs = 5000) {
-  let lastErr;
-  for (let i = 0; i < attempts; i++) {
-    try {
-      return await fetch(url, options);
-    } catch (e) {
-      lastErr = e;
-      console.warn(`Попытка ${i + 1}/${attempts} не удалась: ${e.cause ? e.cause.message : e.message}`);
-      if (i < attempts - 1) await new Promise(r => setTimeout(r, delayMs));
-    }
-  }
-  throw lastErr;
-}
-
 async function main() {
   const fs = await import('node:fs/promises');
 
   // обычный браузерный User-Agent + метка времени в URL — иначе кэширующий слой
   // перед t.me иногда отдаёт бот-подобным запросам старый снимок страницы
   const res = await fetchWithRetry(`https://t.me/s/${CHANNEL}?_=${Date.now()}`, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-      'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache'
-    }
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache'
   });
   if (!res.ok) throw new Error('Telegram HTTP ' + res.status);
-  const html = await res.text();
+  const html = res.buffer.toString('utf8');
 
   const marker = '<div class="tgme_widget_message ';
   const parts = html.split(marker).slice(1);
@@ -102,11 +133,10 @@ async function main() {
   for (const post of latest) {
     if (!post.imageSrc) { post.image = null; continue; }
     try {
-      const imgRes = await fetch(post.imageSrc);
+      const imgRes = await fetchWithRetry(post.imageSrc, {}, 2, 3000);
       if (!imgRes.ok) throw new Error('HTTP ' + imgRes.status);
-      const buf = Buffer.from(await imgRes.arrayBuffer());
       const localPath = `${IMG_DIR}/${post.id}.jpg`;
-      await fs.writeFile(localPath, buf);
+      await fs.writeFile(localPath, imgRes.buffer);
       post.image = localPath;
     } catch (e) {
       console.warn(`Не удалось скачать картинку поста ${post.id}:`, e.message);
