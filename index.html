@@ -9,7 +9,7 @@
 <meta property="og:title" content="87 · Macan News — Макан Ньюс"/>
 <meta property="og:description" content="Официальный сайт новостного канала 87 (Macan News / Макан Ньюс). Мы не проверяем факты — мы их назначаем."/>
 <meta property="og:type" content="website"/>
-<meta name="theme-color" content="#F7F4EE"/>
+<meta name="theme-color" content="#050505"/>
 <script>(function(){
 /* читалка игровых цветов из CSS-переменных --game-* (канвас snake/pong) */
 window.MNhex2rgb=function(h){h=(h||'').trim().replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];var n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255];};
@@ -66,7 +66,9 @@ window.MNgc=function(name,fallback){try{var v=getComputedStyle(document.document
   --pink:#FDA4C2;        /* заливки: плитки, кнопки, акцентные плоскости */
   --pink-deep:#C4547E;   /* мелкий текст-акцент: даты, eyebrow, ссылки */
   --pink-wash:#FDEDF3;   /* очень светлый тинт: hover-строки, подложки */
-  --bg:#F7F4EE; --bg-soft:#EFEAE0; --bg-deep:#E4DDCE; --card:#FFFFFF; --card-2:#EFEAE0;
+  /* подложки под фото/плейсхолдеры — нейтрально-серые, без бежевой желтизны
+     старой шампанской палитры */
+  --bg:#F7F4EE; --bg-soft:#EFEDE7; --bg-deep:#DFDDD7; --card:#FFFFFF; --card-2:#EDEBE5;
   --ink:#050505; --ink-soft:rgba(5,5,5,.62); --ink-faint:rgba(5,5,5,.32);
   --line:rgba(5,5,5,.14); --card-edge:var(--ink);
   --rose:var(--pink); --nav-bg:var(--bg);
@@ -113,13 +115,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 @keyframes type{to{width:9.4em}}
 
 /* ===== ТИКЕР ===== */
-.ticker{overflow:hidden;white-space:nowrap;background:var(--bg-soft);border-block:1px solid var(--line);contain:content}
+/* тикер — чёрная полоса с офф-вайт текстом: газетный «хедер выпуска».
+   Раньше был бежевый var(--bg-soft) из старой шампанской палитры. */
+.ticker{overflow:hidden;white-space:nowrap;background:var(--ink);color:var(--bg);border-block:0;contain:content}
 .ticker.top{position:fixed;top:0;left:0;right:0;z-index:860;height:calc(var(--ticker-h) + var(--safe-top));padding-top:var(--safe-top);display:flex;align-items:center;border-top:0;transform:translateZ(0);will-change:transform;contain:layout paint}
 .ticker-track{display:inline-flex;align-items:center;will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
-.ticker.inline{padding:14px 0;border-block:1px solid var(--line)}
+.ticker.inline{padding:14px 0;border-block:0}
 .ticker-track span{font-family:'Schibsted Grotesk',sans-serif;font-weight:700;letter-spacing:.04em;padding-inline:26px;text-transform:uppercase;font-size:var(--t-body)}
 .ticker.inline .ticker-track span{font-size:var(--t-lead)}
-.ticker-track .st{color:var(--gold-solid)}
+.ticker-track .st{color:var(--pink)}
 
 /* ===== NAV — плоская полоса на всю ширину, без стекла/блюра ===== */
 .nav{position:fixed;top:calc(var(--ticker-h) + var(--safe-top));left:0;right:0;z-index:850;
@@ -481,7 +485,9 @@ body.nav-up .nav{transform:translateX(-50%) translateY(calc(-100% - var(--ticker
 .t100-row:hover .t100-n{color:var(--gold-solid)}
 .t100-rn{font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:var(--t-h5)}
 .t100-move{font-size:var(--t-small);font-weight:700;letter-spacing:.04em;justify-self:end}
-.t100-move.up{color:#5a9468}.t100-move.down{color:#c07d74}.t100-move.new{color:var(--gold-solid)}
+/* движение в рейтинге читается по стрелке, а не по цвету: землистые зелёный/
+   терракота были из старой палитры и выбивались из чёрно-розовой схемы */
+.t100-move.up{color:var(--ink)}.t100-move.down{color:var(--ink-faint)}.t100-move.new{color:var(--pink-deep)}
 .t100-rv{font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:var(--t-lead);justify-self:end;white-space:nowrap;color:var(--ink-soft)}
 .t100-more{text-align:center;padding:26px 6px;color:var(--ink-faint);font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase}
 @media (max-width:640px){
