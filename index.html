@@ -2720,8 +2720,8 @@ window.__arcadeWinFX = function(host){
    два значения, без правки остального кода. */
 (function(){
   "use strict";
-  var DISCORD_WEBHOOK_URL = '';   // вебхук канала заявок, напр. https://discord.com/api/webhooks/...
-  var DISCORD_INVITE_URL  = '';   // постоянная ссылка-приглашение, напр. https://discord.gg/xxxxxxx
+  var DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1550539796437405736/FH0ZlqgWI6td7oAEhaQwM5oEDgY47LklgUKeTlKR56xdhpku4Q36VmhVIqgx8lUnbRNu';
+  var DISCORD_INVITE_URL  = 'https://discord.gg/dhGdzAnNj5';
 
   var applyBtn=document.getElementById('craftApplyBtn');
   var form=document.getElementById('craftForm');
@@ -2754,12 +2754,15 @@ window.__arcadeWinFX = function(host){
       return code ? ('discord://discord.com/invite/'+code) : null;
     }catch(e){ return null; }
   }
+  /* переход идёт В ТЕКУЩЕЙ вкладке, а не через window.open: переход случается
+     через ~0.6с после ответа вебхука, то есть уже вне пользовательского жеста —
+     попап в этот момент блокируется браузером, а обычная навигация нет */
   function goToDiscord(){
     if(!DISCORD_INVITE_URL) return;
     var deep=toDiscordDeepLink(DISCORD_INVITE_URL);
-    if(!deep){ window.open(DISCORD_INVITE_URL,'_blank','noopener'); return; }
+    if(!deep){ window.location.href=DISCORD_INVITE_URL; return; }
     var done=false;
-    function fallback(){ if(done) return; done=true; window.open(DISCORD_INVITE_URL,'_blank','noopener'); cleanup(); }
+    function fallback(){ if(done) return; done=true; cleanup(); window.location.href=DISCORD_INVITE_URL; }
     function onHide(){ if(document.hidden){ done=true; clearTimeout(timer); cleanup(); } }
     function cleanup(){ document.removeEventListener('visibilitychange', onHide); }
     var timer=setTimeout(fallback, 1200);
@@ -2796,7 +2799,8 @@ window.__arcadeWinFX = function(host){
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({embeds:[{
         title:'Новая заявка на 87CRAFT',
-        color:16738979,
+        color:16622786,   /* #FDA4C2 — фирменный розовый */
+        timestamp:new Date().toISOString(),
         fields:[
           {name:'Никнейм', value:nickVal, inline:true},
           {name:'Обращение', value:callVal, inline:true},
