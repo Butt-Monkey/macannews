@@ -5,7 +5,7 @@
    - ассеты (шрифты/картинки/аудио/видео) — cache-first: мгновенные
      повторные визиты, файлы контент-хэшированы именами и не меняются.
    При изменении списка ниже поднимай VERSION — старый кэш удалится сам. */
-var VERSION = '87-v8';
+var VERSION = '87-v10';
 var ASSET_RE = /\/assets\//;
 
 self.addEventListener('install', function (e) {
@@ -17,9 +17,7 @@ self.addEventListener('install', function (e) {
         './',
         'index.html',
         'assets/fonts/schibsted-800.woff2',
-        'assets/fonts/schibsted-400.woff2',
-        'assets/fonts/bodoni-500.woff2',
-        'assets/fonts/playfair-500.woff2'
+        'assets/fonts/schibsted-400.woff2'
       ]).catch(function () {});
     })
   );

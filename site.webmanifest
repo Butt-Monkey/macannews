@@ -4,8 +4,8 @@
   "description": "Новостной канал 87. Мы не проверяем факты — мы их назначаем.",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#ece1cd",
-  "theme_color": "#ece1cd",
+  "background_color": "#F7F4EE",
+  "theme_color": "#F7F4EE",
   "lang": "ru",
   "icons": [
     { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
