@@ -301,7 +301,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .ye-toast .ye-ava{width:54px;height:54px}
 .ye-toast{display:flex;align-items:center;gap:14px;width:min(400px,calc(100vw - 32px));padding:15px 18px 15px 15px;text-align:left;
  background:var(--card);color:var(--ink);border:1.5px solid var(--ink);border-radius:16px;box-shadow:0 10px 30px -12px rgba(5,5,5,.35);
- position:relative;cursor:pointer;animation:yeIn .32s var(--ease-out) both}
+ position:relative;cursor:pointer;animation:yePush .5s cubic-bezier(.2,1.25,.4,1) both}
 .ye-toast:hover{background:#fff}
 .ye-t-body{min-width:0;flex:1}
 .ye-t-head{display:flex;align-items:baseline;gap:8px}
@@ -312,7 +312,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .ye-dot{position:absolute;top:12px;left:54px;width:14px;height:14px;border-radius:50%;background:var(--pink);border:2px solid var(--card)}
 .ye-x{position:absolute;top:6px;right:6px;width:30px;height:30px;display:grid;place-items:center;font-size:15px;color:var(--ink-soft);border-radius:50%}
 .ye-x:hover{color:var(--ink);background:var(--card-2)}
-.ye-fab{display:block;position:relative;width:58px;height:58px;border-radius:50%;padding:0;border:0;cursor:pointer;animation:yeIn .32s var(--ease-out) both}
+.ye-fab{display:block;position:relative;width:58px;height:58px;border-radius:50%;padding:0;border:0;cursor:pointer;animation:yePop .3s var(--ease-out) both}
 .ye-fab .ye-ava{width:58px;height:58px;border-width:2px}
 .ye-fab .ye-dot{top:0;left:auto;right:0}
 .ye-fab:hover .ye-ava{transform:scale(1.05)}
@@ -324,19 +324,22 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .ye-status{font-size:var(--t-caption);color:var(--ink-soft);display:flex;align-items:center;gap:6px}
 .ye-status::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--pink-deep)}
 .ye-c-body{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+/* без этого, когда переписка длиннее окна, флекс сжимает сообщения —
+   карточка-ссылка (у неё overflow:hidden) схлопывалась в тонкую полоску */
+.ye-c-body>*{flex-shrink:0}
 .ye-c-day{align-self:center;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px}
-.ye-msg{align-self:flex-start;max-width:86%;padding:10px 13px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--line);font-size:var(--t-body);line-height:1.45;animation:yeIn .25s var(--ease-out) both}
+.ye-msg{align-self:flex-start;max-width:86%;padding:10px 13px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--line);font-size:var(--t-body);line-height:1.45;animation:yeFromL .28s var(--ease-out) both}
 .ye-typing{align-self:flex-start;display:flex;gap:4px;padding:13px 14px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--line)}
 .ye-typing i{width:6px;height:6px;border-radius:50%;background:var(--ink-faint);animation:yeDot 1s infinite}
 .ye-typing i:nth-child(2){animation-delay:.15s}.ye-typing i:nth-child(3){animation-delay:.3s}
-.ye-link{align-self:flex-start;width:86%;display:block;border-radius:16px 16px 16px 4px;overflow:hidden;border:1.5px solid var(--ink);background:var(--pink);color:var(--ink);text-decoration:none;animation:yeIn .25s var(--ease-out) both;transition:transform .2s var(--ease)}
+.ye-link{align-self:flex-start;width:86%;display:block;border-radius:16px 16px 16px 4px;overflow:hidden;border:1.5px solid var(--ink);background:var(--pink);color:var(--ink);text-decoration:none;animation:yeFromL .28s var(--ease-out) both;transition:transform .2s var(--ease)}
 .ye-link:hover{transform:translateY(-2px)}
 .ye-link-top{padding:16px 14px 12px}
 .ye-link-name{font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-size:28px;line-height:1}
 .ye-link-sub{margin-top:6px;font-size:var(--t-small)}
 .ye-link-go{display:block;padding:10px 14px;background:var(--ink);color:var(--bg);font-size:var(--t-small);font-weight:700;letter-spacing:var(--ls-caps);text-transform:uppercase}
 .ye-t-text.is-typing{color:var(--pink-deep);font-style:italic}
-.ye-me{align-self:flex-end;max-width:80%;padding:10px 13px;border-radius:16px 16px 4px 16px;background:var(--ink);color:var(--bg);font-size:var(--t-body);line-height:1.45;animation:yeIn .2s var(--ease-out) both}
+.ye-me{align-self:flex-end;max-width:80%;padding:10px 13px;border-radius:16px 16px 4px 16px;background:var(--ink);color:var(--bg);font-size:var(--t-body);line-height:1.45;animation:yeFromR .24s var(--ease-out) both}
 /* подвал чата: пока диалог идёт — кнопки-вопросы, в конце — «Ye занят» */
 .ye-c-foot{padding:10px 12px;border-top:1px solid var(--line);background:var(--card);min-height:58px;display:flex;align-items:center}
 .ye-chips{display:flex;flex-wrap:wrap;gap:8px;width:100%}
@@ -347,11 +350,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .ye-chips[aria-busy="true"] .ye-chip{opacity:.4;pointer-events:none}
 .ye-ended{width:100%;text-align:center;padding:4px 0;font-size:var(--t-small);color:var(--ink-faint)}
 @keyframes yeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+/* уведомление выезжает из-за правого края экрана, как пуш на телефоне */
+@keyframes yePush{from{opacity:0;transform:translateX(calc(100% + 32px))}to{opacity:1;transform:none}}
+@keyframes yePop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes yeFromL{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+@keyframes yeFromR{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
 @keyframes yeDot{0%,60%,100%{opacity:.3;transform:none}30%{opacity:1;transform:translateY(-3px)}}
 @media (max-width:640px){
   .ye-chat{position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));width:auto;height:min(72dvh,560px)}
 }
-@media (prefers-reduced-motion:reduce){.ye-toast,.ye-fab,.ye-chat,.ye-msg,.ye-link{animation:none}.ye-typing i{animation:none;opacity:.6}}
+@media (prefers-reduced-motion:reduce){.ye-toast,.ye-fab,.ye-chat,.ye-msg,.ye-me,.ye-link{animation:none}.ye-typing i{animation:none;opacity:.6}}
 
 /* ===== 87CRAFT — раздел с заявкой ===== */
 #view-87craft .page-title{font-family:'Minecraft87','Schibsted Grotesk',sans-serif;letter-spacing:.01em}
@@ -2909,8 +2917,7 @@ window.__arcadeWinFX = function(host){
    Теперь при каждом заходе первым всегда приходит сообщение.
    Внутри чата — сценарий: сообщение → карточка 87CRAFT → кнопки-вопросы
    (SCRIPT) → ответы Ye → финал «Погнали» → «Ye сейчас занят…».
-   На разделах 87craft и games виджет спрятан: в первом он бессмысленен,
-   во втором перекрыл бы d-pad на телефоне. */
+   Виджет есть на всех разделах; скрывается только на время самой игры. */
 (function(){
   "use strict";
   var root=document.getElementById('ye'); if(!root) return;
@@ -2933,8 +2940,17 @@ window.__arcadeWinFX = function(host){
   var ENDED='Ye сейчас занят — ответит на сервере';
   var started=false, opened=false, busy=false, asked={};
 
-  function offView(){ var h=(location.hash||'').replace(/^#/,''); return h==='87craft'||h==='games'; }
-  function sync(){ if(started) root.hidden=offView(); }
+  /* виджет виден везде, в том числе на #87craft; прячется только пока
+     открыта сама игра (змейка/понг) — иначе на телефоне он лёг бы поверх
+     поля и d-pad. Раздел с карточками игр при этом не считается. */
+  var stages=[document.getElementById('arcadeStage'), document.getElementById('arcadeStagePong')].filter(Boolean);
+  function playing(){
+    var games=document.getElementById('view-games');
+    if(!games || !games.classList.contains('active')) return false;
+    return stages.some(function(s){ return !s.hidden; });
+  }
+  function sync(){ if(started) root.hidden=playing(); }
+  stages.forEach(function(s){ new MutationObserver(sync).observe(s,{attributes:true, attributeFilter:['hidden']}); });
   function scrollDown(){ chatBody.scrollTop=chatBody.scrollHeight; }
   function bubble(cls, text){
     var d=document.createElement('div'); d.className=cls; d.textContent=text;
