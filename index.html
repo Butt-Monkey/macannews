@@ -78,7 +78,7 @@ window.MNgc=function(name,fallback){try{var v=getComputedStyle(document.document
   --g1:var(--ink); --g2:var(--ink); --g3:var(--ink);
   --iri1:var(--bg); --iri2:var(--bg); --iri3:var(--bg); --iri4:var(--bg); --iri-op:0;
   /* игровой канвас живёт на тёмной доске — там пастельный розовый читается отлично */
-  --game-head:#F7F4EE; --game-tail:#7d7d7d; --game-food:#FDA4C2; --game-glow:253,164,194;
+  --game-head:#FDA4C2; --game-tail:#6E3A4E; --game-food:#F7F4EE; --game-glow:247,244,238;
   --game-p1:#F7F4EE; --game-p2:#FDA4C2; --game-win:#FDA4C2; --game-flash:253,164,194;
   --flash-you:247,244,238; --flash-ai:253,164,194;
 }
@@ -247,22 +247,19 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .soon .soon-cta{margin-top:var(--sp-m)}
 
 /* ===== NEWS — карточки из news.json (наполняет GitHub Action сам, без iframe) =====
-   Редакционный список: первая запись — крупная лид-карта (:first-child), остальные —
-   плотный список с тонкой линией-разделителем вместо коробок с тенями. Один и тот же
-   .news-feed используется и на главной (тизер, первые 3), и на странице NEWS (всё). */
-.news-feed{display:flex;flex-direction:column}
+   Ровный редакционный список: все записи одного размера, тонкая линия-разделитель
+   вместо коробок с тенями. Один и тот же .news-feed используется и на главной
+   (тизер, первые 3), и на странице NEWS (всё). */
+.news-feed{display:flex;flex-direction:column;border-bottom:1px solid var(--line)}
 .news-card{display:grid;grid-template-columns:132px 1fr;gap:var(--sp-s);align-items:start;padding:var(--sp-s) 0;border-top:1px solid var(--line);text-align:left;transition:opacity .3s var(--ease)}
-.news-feed>.news-card:first-child{grid-template-columns:1fr;border-top:0;padding-top:0}
 .news-card:not(.has-media){grid-template-columns:1fr}
 .news-card:hover{opacity:.6}
 .news-card-media{background-size:cover;background-position:center;background-color:var(--card-2);aspect-ratio:1/1}
-.news-feed>.news-card:first-child .news-card-media{aspect-ratio:16/9;width:100%}
 .news-card-media.noimg{display:flex;align-items:center;justify-content:center}
 .news-card-media.noimg::after{content:"⚡";font-size:26px;opacity:.32}
 .news-card-body{display:flex;flex-direction:column;justify-content:flex-start;min-width:0}
-.news-card-date{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--pink);font-weight:700}
-.news-card-text{margin-top:8px;color:var(--ink);font-size:var(--t-small);line-height:var(--lh-body);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.news-feed>.news-card:first-child .news-card-text{margin-top:14px;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:var(--t-h4);line-height:var(--lh-tight);color:var(--ink);-webkit-line-clamp:3}
+.news-card-date{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--pink-deep);font-weight:700}
+.news-card-text{margin-top:8px;color:var(--ink);font-size:var(--t-body);line-height:var(--lh-body);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .news-empty{text-align:center;padding:var(--sp-xl) 0;color:var(--ink-soft)}
 .news-empty a{color:var(--pink-deep)}
 .news-foot{text-align:center;margin-top:var(--sp-m)}
@@ -287,8 +284,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .np-date{font-size:var(--t-caption);letter-spacing:var(--ls-eyebrow);text-transform:uppercase;font-weight:700;color:var(--pink-deep)}
 .np-media{margin-top:var(--sp-s);width:100%;border:1.5px solid var(--ink);background:var(--card-2)}
 .np-text{margin-top:var(--sp-m);font-size:var(--t-lead);line-height:1.65;white-space:pre-wrap}
-.np-foot{margin-top:var(--sp-l);padding-top:var(--sp-s);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:var(--sp-xs);align-items:center}
-.np-hint{font-size:var(--t-small);color:var(--ink-soft)}
+.np-foot{margin-top:var(--sp-l);padding-top:var(--sp-m);border-top:1px solid var(--line);display:flex;justify-content:center}
 .news-card{cursor:pointer}
 
 /* ===== 87CRAFT — раздел с заявкой ===== */
@@ -299,6 +295,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .craft-form[hidden]{display:none}
 .craft-field{display:flex;flex-direction:column;gap:8px;position:relative}
 .craft-field span{font-size:var(--t-small);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
+.craft-opt{font-style:normal;font-weight:500;text-transform:none;letter-spacing:0;color:var(--ink-faint)}
+.craft-field input[type=number]{-moz-appearance:textfield}
+.craft-field input[type=number]::-webkit-inner-spin-button,.craft-field input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .craft-field input,.craft-field textarea{font-family:'Schibsted Grotesk',sans-serif;font-size:var(--t-body);padding:14px;border:1.5px solid var(--ink);background:var(--bg);color:var(--ink);border-radius:0;resize:vertical}
 .craft-field input:focus,.craft-field textarea:focus{outline:2px solid var(--pink);outline-offset:2px}
 .craft-honey{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;left:-9999px}
@@ -306,8 +305,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .craft-form-msg.is-error{color:#c0392b}
 @media (max-width:640px){
   .news-card{grid-template-columns:76px 1fr;gap:12px}
-  .news-card-text{-webkit-line-clamp:3}
-  .news-feed>.news-card:first-child .news-card-text{font-size:var(--t-h5)}
+  .news-card-text{-webkit-line-clamp:3;font-size:var(--t-small)}
 }
 
 /* ===== FOOTER ===== */
@@ -363,9 +361,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .media,.alley-media{background-repeat:no-repeat;background-position:center;transform:translateZ(0);backface-visibility:hidden}
 
 /* ===== Плитки разделов =====
-   Сетка 2 колонки. Первые две — .plate-big (87CRAFT и NEWS): выше остальных,
-   контент по центру, с тегом сверху и стрелкой снизу. 87CRAFT — единственная
-   розовая плоскость на главной, поэтому взгляд цепляется именно за неё. */
+   Сетка 2 колонки. .plate-big (87CRAFT и NEWS) — каждая на всю строку, контент
+   по центру; остальные разделы — по две в ряд. 87CRAFT — единственная розовая
+   плоскость на главной, поэтому взгляд цепляется именно за неё. */
 .plates{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--sp-xs)}
 .plate{margin:0;min-height:clamp(180px,18vw,240px);
  display:flex;flex-direction:column;justify-content:flex-end;
@@ -379,7 +377,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
  transition:color .25s var(--ease),transform .25s var(--ease)}
 .plate:hover .pname{transform:translateX(8px)}
 
-.plate-big{grid-column:span 1;min-height:clamp(300px,34vw,420px);
+.plate-big{grid-column:1/-1;min-height:clamp(240px,26vw,340px);
  align-items:center;justify-content:center;text-align:center;gap:var(--sp-xs)}
 .plate-big .pname{font-size:clamp(40px,6.4vw,92px);letter-spacing:var(--ls-tight)}
 .plate-big:hover .pname{transform:none}
@@ -391,9 +389,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .plate-craft .pname{font-family:'Minecraft87','Schibsted Grotesk',sans-serif;letter-spacing:.01em}
 .plate-craft:hover{border-color:var(--ink)}
 
-@media (max-width:860px){
-  .plate-big{grid-column:1/-1;min-height:clamp(220px,40vw,300px)}
-}
 @media (max-width:640px){
   .plates{grid-template-columns:repeat(2,1fr);gap:12px}
   .plate{min-height:clamp(128px,42vw,168px);padding:16px;justify-content:flex-end}
@@ -684,10 +679,12 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
 .sn-fs .sn-sfx:hover{ background:#F7F4EE; color:var(--ink) }
 
 /* ── Пинг-понг 87: игрок — офф-вайт, соперник — розовый ── */
-.pong-you{ color:rgba(247,244,238,.72) } .pong-you b{ color:#F7F4EE }
+/* HUD стоит на офф-вайт странице, а в полноэкранном режиме — на чёрном,
+   поэтому у каждой стороны два набора цветов */
+.pong-you{ color:var(--ink-soft) } .pong-you b{ color:var(--ink) }
 .pong-ai{ color:var(--pink-deep) } .pong-ai b{ color:var(--pink-deep) }
-.sn-fs .pong-you{ color:rgba(247,244,238,.72) } .sn-fs .pong-ai{ color:var(--pink) }
-.sn-fs .pong-ai b{ color:var(--pink) }
+.sn-fs .pong-you{ color:rgba(247,244,238,.72) } .sn-fs .pong-you b{ color:#F7F4EE }
+.sn-fs .pong-ai{ color:var(--pink) } .sn-fs .pong-ai b{ color:var(--pink) }
 .pong-art .arcade-card-head{ width:46px; height:46px }
 .pong-art .pong-bar{ position:absolute; left:50%; transform:translateX(-50%); width:56px; height:7px; border-radius:0; z-index:1 }
 .pong-art .pong-bar-top{ top:60px; background:var(--pink) }
@@ -815,10 +812,6 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
   <div class="nav-links">
     <a href="#87craft" data-view="87craft">87CRAFT</a>
     <a href="#news" data-view="news">NEWS</a>
-    <a href="#workers" data-view="workers">Работники месяца</a>
-    <a href="#merch" data-view="merch">Merch</a>
-    <a href="#top100" data-view="top100">ТОП 100</a>
-    <a href="#pamyat" data-view="pamyat">Светлая память</a>
     <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener">Telegram</a>
   </div>
   <div class="nav-tools">
@@ -872,7 +865,6 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
       <span class="pname">87CRAFT</span>
       <span class="pgo">Подать заявку →</span>
     </a><a class="plate plate-big reveal" href="#news" data-view="news">
-      <span class="ptag">Лента канала</span>
       <span class="pname">NEWS</span>
       <span class="pgo">Читать всё →</span>
     </a><a class="plate reveal" href="#workers" data-view="workers">
@@ -978,8 +970,16 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
       <input type="text" name="callname" id="craftCallname" placeholder="Имя или погоняло — как удобно" autocomplete="off" required maxlength="60"/>
     </label>
     <label class="craft-field">
+      <span>Сколько тебе лет</span>
+      <input type="number" name="age" id="craftAge" placeholder="15" inputmode="numeric" min="5" max="99" required/>
+    </label>
+    <label class="craft-field">
       <span>Чем планируешь заниматься на сервере</span>
       <textarea name="plans" id="craftPlans" placeholder="строю, фармлю, ивенты, просто тусуюсь…" rows="3" maxlength="300"></textarea>
+    </label>
+    <label class="craft-field">
+      <span>Из какого ты класса <em class="craft-opt">— необязательно</em></span>
+      <input type="text" name="grade" id="craftGrade" placeholder="например, 9Б" autocomplete="off" maxlength="20"/>
     </label>
     <label class="craft-field craft-honey" aria-hidden="true">
       <span>Сайт</span>
@@ -1072,7 +1072,6 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
       <button class="arcade-play" data-game="pong87">Играть</button>
     </article>
     <a class="arcade-card arcade-craft" href="#87craft" data-view="87craft">
-      <span class="arcade-craft-tag">Не игра, а сервер</span>
       <span class="arcade-craft-name">87CRAFT</span>
       <p>Minecraft-сервер 87. Вход по вайтлисту.</p>
       <span class="arcade-craft-go">Подать заявку →</span>
@@ -1229,9 +1228,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
       <a class="btn gold-btn" id="newsPostLink" href="#" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24"><path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.47-2.27 2.18c-.25.25-.46.46-.94.46l.34-4.8 8.73-7.9c.38-.34-.08-.53-.59-.19L6.99 13.2l-4.65-1.45c-1.01-.32-1.03-1.01.21-1.49L20.63 2.9c.84-.31 1.58.2 1.31 1.4z"/></svg>
         <span>Открыть пост в Telegram</span>
-      </a>
-      <span class="np-hint">Комментарии и полная версия — в канале</span>
-    </div>
+      </a>    </div>
   </article>
 </div>
 <footer class="footer"><div class="wrap">
@@ -2008,9 +2005,8 @@ window.__arcadeWinFX = function(host){
     if(food){
       var f=cc(food.x,food.y), pr=cell*0.92, p=1+0.07*Math.sin(now/210);
       ctx.save(); ctx.translate(f.cx,f.cy); ctx.scale(p,p);
-      ctx.shadowColor='rgba('+window.MNgc('glow','253,164,194')+',.7)'; ctx.shadowBlur=cell*0.5;
-      ctx.fillStyle=window.MNgc('food','#FDA4C2');
-      ctx.font='800 '+(cell*0.62).toFixed(0)+'px ui-monospace,Menlo,monospace';
+      ctx.fillStyle=window.MNgc('food','#F7F4EE');
+      ctx.font='800 '+(cell*0.62).toFixed(0)+"px 'Schibsted Grotesk',ui-monospace,monospace";
       ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillText('87',0,cell*0.03);
       ctx.restore();
@@ -2026,7 +2022,7 @@ window.__arcadeWinFX = function(host){
       var col = mixGold(ratio);
       var sz = cell*(0.86 - ratio*0.18);
       ctx.fillStyle=col;
-      roundRect(x-sz/2, y-sz/2, sz, sz, sz*0.32); ctx.fill();
+      ctx.fillRect(x-sz/2, y-sz/2, sz, sz);
     }
     // голова = Джиган
     var hp = prev[0] || snake[0], hc=snake[0];
@@ -2043,28 +2039,22 @@ window.__arcadeWinFX = function(host){
   }
   function mixGold(r){
     // r=0 голова(ярко) … r=1 хвост(темнее) — цвета из текущей темы
-    var c1=window.MNhex2rgb(window.MNgc('head','#f3dd87')), c2=window.MNhex2rgb(window.MNgc('tail','#8a6a1e'));
+    var c1=window.MNhex2rgb(window.MNgc('head','#FDA4C2')), c2=window.MNhex2rgb(window.MNgc('tail','#6E3A4E'));
     var R=Math.round(lerp(c1[0],c2[0],r)), G=Math.round(lerp(c1[1],c2[1],r)), B=Math.round(lerp(c1[2],c2[2],r));
     return 'rgb('+R+','+G+','+B+')';
   }
+  /* голова — квадратный аватар с розовой обводкой, как на карточке игры */
   function drawHead(px,py){
-    var d=cell*1.18, r=d/2;
-    ctx.save();
-    // подложка-кружок
-    ctx.beginPath(); ctx.arc(px,py,r,0,Math.PI*2);
-    ctx.fillStyle='#1a1118'; ctx.shadowColor='rgba(0,0,0,.5)'; ctx.shadowBlur=cell*0.3; ctx.fill();
-    ctx.shadowBlur=0;
-    // клип и фото
-    ctx.beginPath(); ctx.arc(px,py,r-1.5,0,Math.PI*2); ctx.clip();
+    var d=cell*1.18, x=px-d/2, y=py-d/2;
+    ctx.fillStyle='#050505'; ctx.fillRect(x,y,d,d);
     if(headImg.complete && headImg.naturalWidth){
-      ctx.drawImage(headImg, px-d/2, py-d/2, d, d);
+      ctx.drawImage(headImg, x, y, d, d);
     } else {
-      ctx.fillStyle='#e8c45a'; ctx.fillRect(px-d/2,py-d/2,d,d);
+      ctx.fillStyle=window.MNgc('head','#FDA4C2'); ctx.fillRect(x,y,d,d);
     }
-    ctx.restore();
-    // золотое кольцо
-    ctx.beginPath(); ctx.arc(px,py,r-1.5,0,Math.PI*2);
-    ctx.lineWidth=Math.max(1.5,cell*0.07); ctx.strokeStyle='#f3dd87'; ctx.stroke();
+    var lw=Math.max(1.5,cell*0.08);
+    ctx.lineWidth=lw; ctx.strokeStyle='#FDA4C2';
+    ctx.strokeRect(x+lw/2, y+lw/2, d-lw, d-lw);
   }
 
   /* ── цикл ── */
@@ -2387,7 +2377,7 @@ window.__arcadeWinFX = function(host){
     ctx.clearRect(0,0,S,S);
     // рамка корта
     ctx.strokeStyle='rgba(247,244,238,.22)'; ctx.lineWidth=Math.max(1.5,S*0.004);
-    roundRect(S*0.02, S*0.02, S*0.96, S*0.96, S*0.03); ctx.stroke();
+    ctx.strokeRect(S*0.02, S*0.02, S*0.96, S*0.96);
     // центральная сетка
     ctx.strokeStyle='rgba(247,244,238,.18)'; ctx.lineWidth=2; ctx.setLineDash([S*0.022,S*0.022]);
     ctx.beginPath(); ctx.moveTo(S*0.04,S*0.5); ctx.lineTo(S*0.96,S*0.5); ctx.stroke(); ctx.setLineDash([]);
@@ -2398,31 +2388,23 @@ window.__arcadeWinFX = function(host){
     var g2=ctx.createLinearGradient(0,S*0.95,0,S); g2.addColorStop(0,_you+',0)'); g2.addColorStop(1,_you+',.18)');
     ctx.fillStyle=g2; ctx.fillRect(0,S*0.95,S,S*0.05);
     // мяч
+    // мяч — плоский квадрат, без свечения
     if(ball){ var bx=ball.x*S, by=ball.y*S, br=ballR*S;
-      ctx.save(); ctx.shadowColor='rgba('+window.MNgc('glow','246,230,176')+',.9)'; ctx.shadowBlur=br*2.2; ctx.fillStyle='#fff';
-      roundRect(bx-br,by-br,br*2,br*2,br*0.45); ctx.fill();
-      ctx.shadowBlur=0; ctx.fillStyle=window.MNgc('food','#FDA4C2'); roundRect(bx-br*0.7,by-br*0.7,br*1.4,br*1.4,br*0.35); ctx.fill();
-      ctx.restore(); }
-    drawPaddle(ai, TOP, window.MNgc('p2','#e2554f'), headImg);
+      ctx.fillStyle='#F7F4EE'; ctx.fillRect(bx-br,by-br,br*2,br*2); }
+    drawPaddle(ai, TOP, window.MNgc('p2','#FDA4C2'), headImg);
     drawPaddle(you, BOT, window.MNgc('p1','#F7F4EE'), timImg);
   }
+  /* ракетка — плоский прямоугольник, аватар — квадрат с обводкой цвета игрока
+     (свечения shadowBlur убраны: и не в стиле, и дорого на каждом кадре) */
   function drawPaddle(cx, cy, color, img){
     var S=sizePx, w=padW*S, h=padH*S, x=cx*S, y=cy*S;
-    // яркая платформа с подсветкой
-    ctx.save(); ctx.shadowColor=color; ctx.shadowBlur=h*2.4; ctx.fillStyle=color;
-    roundRect(x-w/2,y-h/2,w,h,h/2); ctx.fill();
-    ctx.shadowBlur=0; ctx.fillStyle='rgba(255,255,255,.45)';
-    roundRect(x-w/2+h*0.4, y-h/2+h*0.16, w-h*0.8, h*0.28, h*0.14); ctx.fill();
-    ctx.restore();
-    // аватар игрока
-    var r=Math.min(S*0.062, w*0.4);
-    ctx.save();
-    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle='#160e14'; ctx.shadowColor='rgba(0,0,0,.55)'; ctx.shadowBlur=S*0.02; ctx.fill(); ctx.shadowBlur=0;
-    ctx.beginPath(); ctx.arc(x,y,r-1.5,0,Math.PI*2); ctx.clip();
-    if(img && img.complete && img.naturalWidth){ ctx.drawImage(img, x-r, y-r, r*2, r*2); }
-    else { ctx.fillStyle=color; ctx.fillRect(x-r,y-r,r*2,r*2); }
-    ctx.restore();
-    ctx.beginPath(); ctx.arc(x,y,r-1.5,0,Math.PI*2); ctx.lineWidth=Math.max(2,S*0.009); ctx.strokeStyle=color; ctx.stroke();
+    ctx.fillStyle=color; ctx.fillRect(x-w/2,y-h/2,w,h);
+    var r=Math.min(S*0.062, w*0.4), d=r*2;
+    ctx.fillStyle='#050505'; ctx.fillRect(x-r,y-r,d,d);
+    if(img && img.complete && img.naturalWidth){ ctx.drawImage(img, x-r, y-r, d, d); }
+    else { ctx.fillStyle=color; ctx.fillRect(x-r,y-r,d,d); }
+    var lw=Math.max(2,S*0.009);
+    ctx.lineWidth=lw; ctx.strokeStyle=color; ctx.strokeRect(x-r+lw/2, y-r+lw/2, d-lw, d-lw);
   }
 
   /* ── цикл ── */
@@ -2729,6 +2711,8 @@ window.__arcadeWinFX = function(host){
   var nick=document.getElementById('craftNick');
   var callname=document.getElementById('craftCallname');
   var plans=document.getElementById('craftPlans');
+  var age=document.getElementById('craftAge');
+  var grade=document.getElementById('craftGrade');
   var honey=document.getElementById('craftHoney');
   var msg=document.getElementById('craftFormMsg');
 
@@ -2784,6 +2768,9 @@ window.__arcadeWinFX = function(host){
     }
     var callVal=(callname.value||'').trim();
     if(!callVal){ setMsg('Напиши, как к тебе обращаться.', true); callname.focus(); return; }
+    var ageVal=parseInt((age.value||'').trim(),10);
+    if(!(ageVal>=5 && ageVal<=99)){ setMsg('Укажи возраст числом.', true); age.focus(); return; }
+    var gradeVal=(grade.value||'').trim();
 
     if(!DISCORD_WEBHOOK_URL){
       setMsg('Вайтлист открывается совсем скоро — загляни в Telegram-канал за анонсом, заявки пока не принимаем.');
@@ -2797,16 +2784,21 @@ window.__arcadeWinFX = function(host){
     fetch(DISCORD_WEBHOOK_URL, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({embeds:[{
-        title:'Новая заявка на 87CRAFT',
-        color:16622786,   /* #FDA4C2 — фирменный розовый */
-        timestamp:new Date().toISOString(),
-        fields:[
-          {name:'Никнейм', value:nickVal, inline:true},
-          {name:'Обращение', value:callVal, inline:true},
-          {name:'Планы на сервере', value:(plans.value||'').trim()||'—'}
-        ]
-      }]})
+      body: JSON.stringify({
+        allowed_mentions:{parse:[]},   /* текст из формы никого не пингует */
+        embeds:[{
+          title:'Новая заявка на 87CRAFT',
+          color:16622786,   /* #FDA4C2 — фирменный розовый */
+          timestamp:new Date().toISOString(),
+          fields:[
+            {name:'Никнейм', value:nickVal, inline:true},
+            {name:'Обращение', value:callVal, inline:true},
+            {name:'Возраст', value:String(ageVal), inline:true},
+            {name:'Планы на сервере', value:(plans.value||'').trim()||'—'},
+            {name:'Класс', value:gradeVal||'—', inline:true}
+          ]
+        }]
+      })
     }).then(function(r){
       if(!r.ok) throw 0;
       setMsg('Заявка отправлена! Переходим в Discord…');
