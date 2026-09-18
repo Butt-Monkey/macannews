@@ -177,7 +177,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .hero-eyebrow{margin-bottom:var(--sp-s)}
 .hero-eyebrow .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--pink);vertical-align:middle;margin:0 14px;animation:pulse 2.6s ease infinite}
 @keyframes pulse{50%{opacity:.3}}
-.hero .logo87{width:min(78vw,640px);height:auto;display:block}
+/* ширина логотипа ограничена и высотой экрана: на телефоне в горизонтальном
+   положении «87» иначе занимало весь экран и выталкивало название и кнопку.
+   1.59 — пропорция SVG (700/440), 300px — шапка + название + слоган + кнопка */
+.hero .logo87{width:min(78vw,640px,max(200px,calc((100svh - 300px)*1.59)));height:auto;display:block}
 .hero-name{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;text-transform:uppercase;font-size:var(--t-h2);letter-spacing:var(--ls-tight);margin-top:var(--sp-xs)}
 .hero-slogan{max-width:600px;font-family:'Schibsted Grotesk',sans-serif;font-weight:500;font-size:var(--t-lead);color:var(--ink-soft);margin-top:16px;line-height:var(--lh-body)}
 .hero-cta{display:flex;align-items:center;gap:26px;margin-top:var(--sp-m);flex-wrap:wrap;justify-content:center}
@@ -187,13 +190,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .btn svg{width:16px;height:16px;fill:currentColor}
 .btn.gold-btn{border-color:var(--pink);background:var(--pink);color:#050505}
 .btn.gold-btn:hover{color:var(--pink);background:transparent;border-color:var(--pink)}
-.qr-card{display:flex;align-items:center;gap:16px;padding:14px;border:1.5px solid var(--ink)}
-.qr-frame{width:88px;height:88px;background:#fff;padding:7px;flex:none;position:relative}
-.qr-frame::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1.5px var(--ink);pointer-events:none}
-.qr-frame img{width:100%;height:100%;image-rendering:pixelated}
-.qr-meta{text-align:left}
-.qr-meta b{font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:var(--t-body);display:block}
-.qr-meta span{font-size:var(--t-caption);color:var(--ink-soft);letter-spacing:.02em}
 
 /* ===== ПЛЫВУЩИЕ ПЛАШКИ ===== */
 .plates-sec{padding:var(--sp-xl) 0 var(--sp-m)}
@@ -266,7 +262,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .news-empty a{color:var(--pink-deep)}
 .news-foot{text-align:center;margin-top:var(--sp-m)}
 .news-teaser-sec{padding:var(--sp-xl) 0 var(--sp-m)}
-.news-teaser-link{font-size:var(--t-small);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;color:var(--ink);padding-bottom:5px;border-bottom:1.5px solid var(--ink);transition:color .3s,border-color .3s;white-space:nowrap}
+.news-teaser-link{display:inline-block;padding-top:12px;font-size:var(--t-small);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;color:var(--ink);padding-bottom:5px;border-bottom:1.5px solid var(--ink);transition:color .3s,border-color .3s;white-space:nowrap}
 .news-teaser-link:hover{color:var(--pink-deep);border-color:var(--pink-deep)}
 
 /* ===== Полноэкранное чтение новости =====
@@ -359,6 +355,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 @media (max-width:640px){
   .ye-chat{position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));width:auto;height:min(72dvh,560px)}
 }
+/* узкие телефоны (iPhone SE, компактные Android): кнопки-вопросы компактнее */
+@media (max-width:360px){
+  .ye-chip{font-size:13px;padding:8px 11px}
+  .ye-chips{gap:6px}
+}
+/* телефон в горизонтальном положении: высоты мало — чат на всю высоту экрана */
+@media (max-height:520px){
+  .ye-chat{height:calc(100dvh - 24px)}
+  .ye-c-head{padding:8px 12px}
+  .ye-c-head .ye-ava{width:36px;height:36px}
+}
 @media (prefers-reduced-motion:reduce){.ye-toast,.ye-fab,.ye-chat,.ye-msg,.ye-me,.ye-link{animation:none}.ye-typing i{animation:none;opacity:.6}}
 
 /* ===== 87CRAFT — раздел с заявкой ===== */
@@ -372,7 +379,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .craft-opt{font-style:normal;font-weight:500;text-transform:none;letter-spacing:0;color:var(--ink-faint)}
 .craft-field input[type=number]{-moz-appearance:textfield}
 .craft-field input[type=number]::-webkit-inner-spin-button,.craft-field input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
-.craft-field input,.craft-field textarea{font-family:'Schibsted Grotesk',sans-serif;font-size:var(--t-body);padding:14px;border:1.5px solid var(--ink);background:var(--bg);color:var(--ink);border-radius:0;resize:vertical}
+/* 16px — порог iOS Safari: при меньшем шрифте iPhone зумит страницу при тапе по полю */
+.craft-field input,.craft-field textarea{font-family:'Schibsted Grotesk',sans-serif;font-size:16px;padding:14px;border:1.5px solid var(--ink);background:var(--bg);color:var(--ink);border-radius:0;resize:vertical}
 .craft-field input:focus,.craft-field textarea:focus{outline:2px solid var(--pink);outline-offset:2px}
 .craft-honey{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;left:-9999px}
 .craft-form-msg{font-size:var(--t-small);color:var(--ink-soft);min-height:1.4em}
@@ -392,7 +400,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .fcol h5{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-faint);margin-bottom:18px}
 .fcol a{display:block;font-size:var(--t-body);color:var(--ink-soft);padding:7px 0;transition:color .35s,padding-left .35s}
 .fcol a:hover{color:var(--ink);padding-left:8px}
-.footer-qr{display:flex;align-items:center;gap:14px;margin-top:10px}
 .footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:var(--sp-l);padding-top:28px;border-top:1px solid var(--line);flex-wrap:wrap}
 .footer-bottom small{color:var(--ink-faint);font-size:var(--t-small);letter-spacing:.03em}
 .to-top{display:inline-flex;align-items:center;gap:10px;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-soft);transition:color .35s}
@@ -409,7 +416,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 @media (max-width:640px){
   .hero-cta{flex-direction:column}
-  .qr-card{order:2}
 }
 /* совсем узкие экраны (старые Android, iPhone SE): плотнее поля, мельче гиганты */
 @media (max-width:380px){
@@ -1008,7 +1014,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
     <p class="page-desc reveal">Ограниченные дропы 87. Носится как доказательство, что ты был в курсе раньше остальных.</p>
     <hr class="hairline page-rule reveal"/>
   </div></section><section><div class="wrap">
-  <div class="merch-film reveal"><video src="assets/mp4-030acbbbfc.mp4" autoplay loop muted playsinline preload="metadata"></video></div>
+  <div class="merch-film reveal"><video src="assets/mp4-030acbbbfc.mp4" loop muted playsinline preload="none"></video></div>
 </div></section></section><section class="view" id="view-news"><section class="page-head"><div class="wrap">
     
     <h1 class="page-title gold reveal">NEWS</h1>
@@ -1344,7 +1350,6 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
       <h5>Канал</h5>
       <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener">Telegram-канал</a>
       <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Добавить в Аллею</a>
-      <div class="footer-qr"><div class="qr-frame" style="width:74px;height:74px"><img src="assets/img-59e5004e09.png" alt="QR Telegram" width="396" height="396" loading="lazy" decoding="async"/></div><span class="eyebrow" style="font-size:10px;max-width:9em">Сканируй и подпишись</span></div>
     </div>
   </div>
   <div class="footer-bottom">
@@ -1407,7 +1412,9 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
    var links=document.querySelectorAll('[data-view]'); for(var j=0;j<links.length;j++){ links[j].classList.toggle('active', links[j].getAttribute('data-view')===s); }
    document.title=TITLES[s]||TITLES.home;
    window.scrollTo(0,0);
-   if(s==='merch'){ var v=el.querySelector('video'); if(v){ var pp=v.play(); if(pp&&pp.catch) pp.catch(function(){}); } }
+   /* видео Merch играет только пока открыт раздел — вне его стоит на паузе */
+   var mv=document.querySelector('#view-merch video');
+   if(mv){ if(s==='merch'){ var pp=mv.play(); if(pp&&pp.catch) pp.catch(function(){}); } else if(!mv.paused){ mv.pause(); } }
    if(reveal!==false){ routeFx(); revealInView(el); bindReveals(el); }
  }
  window.addEventListener('hashchange',function(){ if(menu&&menu.classList.contains('open')) toggleMenu(false); showView(slug()); });
@@ -1478,11 +1485,15 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
    if(p&&p.then){ p.then(function(){ stopRetry(); fadeIn(); }).catch(function(){}); }
    else { stopRetry(); fadeIn(); }
  }
- function doEnter(){
+ /* на тач-устройствах автоплей без жеста запрещён всегда, а попытка play() всё
+    равно начинала качать трек (~1.9 МБ мобильного трафика впустую). Поэтому при
+    автовходе по таймеру на телефонах трек не трогаем — его заведёт первое касание */
+ var _touch=matchMedia('(pointer:coarse)').matches;
+ function doEnter(auto){
    if(entered) return; entered=true;
    if(loaderEl) loaderEl.classList.add('done');
    revealInView(document); bindReveals(document);
-   tryStart();
+   if(!(auto===true && _touch)) tryStart();
  }
  if(loaderEl){
    loaderEl.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); doEnter(); });
@@ -1492,7 +1503,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
  /* заставка — вуаль, а не гейт: сайт открывается сам через 1.8с и сразу пытается
     завести трек; если браузер не доверяет автоплею — заведётся на первом же
     взаимодействии (клик по вуали тоже даёт мгновенный вход) */
- setTimeout(doEnter, 1800);
+ setTimeout(function(){ doEnter(true); }, 1800);
  /* сеть жестов: включаем звук на первом взаимодействии любого рода —
     тач, скролл-колесо (wheel), клик, клавиша; снимается сама, когда звук пошёл */
  var RG=['pointerdown','mousedown','touchstart','touchend','click','keydown','wheel'];
