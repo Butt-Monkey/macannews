@@ -146,6 +146,8 @@ async function buildMediaItem(msg, id, index, fs) {
   await fs.mkdir(IMG_DIR, { recursive: true });
   const base = index === 0 ? String(id) : `${id}_${index}`;
   const item = { mid: msg.message_id, uid: m.file.file_unique_id || null };
+  // размеры нужны сайту, чтобы сразу подогнать рамку под пропорции файла
+  if (m.file.width && m.file.height) { item.w = m.file.width; item.h = m.file.height; }
 
   if (m.kind === 'photo') {
     const src = `${IMG_DIR}/${base}.jpg`;
@@ -349,33 +351,53 @@ async function main() {
   // (например 301 или 301,302). Бот перечитывает эти посты из канала через
   // forwardMessage и обновляет их в ленте на месте — так можно дозагрузить видео
   // и полный текст постам, которые попали в ленту до этого обновления.
+  // Альбом при пересылке по одному сообщению теряет связь частей, поэтому
+  // соседние номера (±9 — в альбоме максимум 10 файлов) считаем частями того же
+  // альбома, если у них то же время публикации (части альбома выходят в одну
+  // секунду, а соседние посты — с разницей в часы) и в них есть медиа.
   const refetchIds = (process.env.REFETCH_IDS || '').split(/[\s,;]+/).filter(x => /^\d+$/.test(x));
+  const refetched = new Map();   // id поста -> [сообщения альбома по порядку]
+  async function forwardCopy(id) {
+    let res;
+    try {
+      res = await apiCallLenient('forwardMessage', {
+        chat_id: String(ownerChatId),
+        from_chat_id: '@' + CHANNEL_FALLBACK,
+        message_id: String(id),
+        disable_notification: 'true'
+      });
+    } catch (e) {
+      console.warn(`Сообщение ${id}: не удалось перечитать (сеть):`, e.message);
+      return null;
+    }
+    if (!res.ok) return null;
+    try {
+      await apiCallLenient('deleteMessage', { chat_id: String(ownerChatId), message_id: String(res.result.message_id) });
+    } catch (e) { /* не критично */ }
+    const msg = res.result;
+    const date = msg.forward_origin ? msg.forward_origin.date : (msg.forward_date || msg.date);
+    // у пересланной копии свой message_id — подставляем настоящий номер сообщения
+    return { ...msg, message_id: Number(id), _date: date };
+  }
   if (refetchIds.length && !ownerChatId) {
     console.log('Перезагрузка пропущена: бот ещё не знает личный чат (напиши ему что-нибудь в Telegram).');
   } else {
     for (const id of refetchIds) {
-      let res;
-      try {
-        res = await apiCallLenient('forwardMessage', {
-          chat_id: String(ownerChatId),
-          from_chat_id: '@' + CHANNEL_FALLBACK,
-          message_id: id,
-          disable_notification: 'true'
-        });
-      } catch (e) {
-        console.warn(`Пост ${id}: не удалось перечитать (сеть):`, e.message);
-        continue;
+      const head = await forwardCopy(id);
+      if (!head) { console.log(`Пост ${id}: Telegram не отдал его — пропускаю.`); continue; }
+      const parts = [head];
+      if (mediaOf(head)) {
+        for (const dir of [-1, 1]) {
+          for (let k = 1; k <= 9; k++) {
+            const nb = await forwardCopy(Number(id) + dir * k);
+            if (!nb || !mediaOf(nb) || Math.abs(nb._date - head._date) > 2) break;
+            parts.push(nb);
+          }
+        }
       }
-      if (!res.ok) {
-        console.log(`Пост ${id}: Telegram не отдал его (${res.description}) — пропускаю.`);
-        continue;
-      }
-      try {
-        await apiCallLenient('deleteMessage', { chat_id: String(ownerChatId), message_id: String(res.result.message_id) });
-      } catch (e) { /* не критично */ }
-      // у пересланной копии свой message_id — подставляем настоящий номер поста
-      edits.set(id, { ...res.result, message_id: Number(id) });
-      console.log(`Пост ${id}: перечитал из канала.`);
+      parts.sort((a, b) => a.message_id - b.message_id);
+      refetched.set(id, parts);
+      console.log(`Пост ${id}: перечитал из канала` + (parts.length > 1 ? ` (альбом, файлов: ${parts.length}).` : '.'));
     }
   }
 
@@ -445,6 +467,22 @@ async function main() {
       finalizeEntry(post, items);
     }
     console.log(`Пост ${post.id} отредактирован — обновил содержимое.`);
+  }
+
+  // перечитанные вручную посты собираем заново целиком: полный текст и все
+  // файлы альбома по порядку (номер записи остаётся прежним)
+  for (const [id, parts] of refetched) {
+    const post = merged.find(p => p.id === id || (Array.isArray(p.media) && p.media.some(i => String(i.mid) === id)));
+    if (!post) { console.log(`Пост ${id}: его нет в ленте — пропускаю.`); continue; }
+    const text = truncate(parts.map(m => m.text || m.caption || '').find(t => t.trim()) || '');
+    if (text) post.text = text;
+    const items = [];
+    for (const m of parts) {
+      const item = await buildMediaItem(m, post.id, items.length, fs);
+      if (item) items.push(item);
+    }
+    if (items.length) finalizeEntry(post, items);
+    console.log(`Пост ${post.id} обновлён: файлов ${items.length}.`);
   }
 
   // проверяем, не удалили ли из канала уже показанные посты (не трогаем то,
