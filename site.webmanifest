@@ -1,14 +1,20 @@
 {
+  "id": "/",
   "name": "87 · Macan News",
   "short_name": "87",
   "description": "Новостной канал 87. Мы определяем реальность.",
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#F7F4EE",
   "theme_color": "#050505",
   "lang": "ru",
+  "dir": "ltr",
+  "categories": ["news", "entertainment"],
   "icons": [
-    { "src": "assets/fav87-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "assets/fav87-512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "assets/fav87-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/fav87-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/fav87-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }

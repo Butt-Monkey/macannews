@@ -5,7 +5,7 @@
    - ассеты (шрифты/картинки/аудио/видео) — cache-first: мгновенные
      повторные визиты, файлы контент-хэшированы именами и не меняются.
    При изменении списка ниже поднимай VERSION — старый кэш удалится сам. */
-var VERSION = '87-v23';
+var VERSION = '87-v24';
 var ASSET_RE = /\/assets\//;
 
 self.addEventListener('install', function (e) {
@@ -16,8 +16,7 @@ self.addEventListener('install', function (e) {
       return c.addAll([
         './',
         'index.html',
-        'assets/fonts/schibsted-800.woff2',
-        'assets/fonts/schibsted-400.woff2'
+        'assets/fonts/schibsted-vf.woff2'
       ]).catch(function () {});
     })
   );
@@ -52,8 +51,12 @@ self.addEventListener('fetch', function (e) {
   if (req.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname === '/') {
     e.respondWith(
       fetch(req).then(function (res) {
-        var copy = res.clone();
-        caches.open(VERSION).then(function (c) { c.put(req, copy); });
+        /* в офлайн-копию кладём только удачные ответы — страница 404/ошибка
+           сервера не должна подменить сохранённую главную */
+        if (res && res.ok && res.type === 'basic') {
+          var copy = res.clone();
+          caches.open(VERSION).then(function (c) { c.put(req, copy); });
+        }
         return res;
       }).catch(function () {
         return caches.match(req).then(function (hit) { return hit || caches.match('index.html'); });

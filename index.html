@@ -10,19 +10,31 @@
 <meta property="og:description" content="Официальный сайт новостного канала 87 (Macan News / Макан Ньюс). Мы определяем реальность."/>
 <meta property="og:type" content="website"/>
 <meta name="theme-color" content="#050505"/>
+<meta name="color-scheme" content="only light"/>
+<!-- без JavaScript заставку никто не уберёт — прячем её сразу, главная видна как есть -->
+<noscript><style>.loader{display:none!important}.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script>(function(){
+/* режим уличного экрана: macannews.ru/?billboard — без чата Ye (его некому
+   закрыть) и без курсора; на обычных посетителей не влияет */
+if(/[?&]billboard(\b|=)/.test(location.search)) document.documentElement.classList.add('billboard');
 /* читалка игровых цветов из CSS-переменных --game-* (канвас snake/pong) */
 window.MNhex2rgb=function(h){h=(h||'').trim().replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];var n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255];};
+/* какой файл браузер выбрал в <picture> (webp/png) — ждём, пока он это решит:
+   раньше currentSrc читали сразу, он был ещё пуст, и спрайт качался дважды */
+window.MNpicSrc=function(img,cb){
+  if(img.complete && img.currentSrc){ cb(img.currentSrc); return; }
+  var done=false; function go(){ if(done) return; done=true; cb(img.currentSrc||img.src); }
+  img.addEventListener('load',go,{once:true}); img.addEventListener('error',go,{once:true});
+  setTimeout(go,4000);
+};
 window.MNgc=function(name,fallback){try{var v=getComputedStyle(document.documentElement).getPropertyValue('--game-'+name).trim();return v||fallback;}catch(e){return fallback;}};
 })();</script>
-<link rel="preload" href="assets/fonts/schibsted-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/schibsted-vf.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ═══ self-hosted шрифты: Schibsted Grotesk (латиница/цифры) + Minecraft87 (только 87craft); кириллица — системный шрифт ═══ */
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/schibsted-400.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/schibsted-500.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/schibsted-600.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/schibsted-700.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-800.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+/* Schibsted Grotesk — вариативный шрифт: ОДИН файл покрывает все начертания 400–800.
+   Раньше тот же файл был подключён пятью копиями под разными именами — браузер качал его до 5 раз. */
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/schibsted-vf.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 /* пиксельный шрифт — точечно, только в разделе 87craft (латиница, кириллицы нет — падает на Schibsted) */
 @font-face{font-family:'Minecraft87';font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/minecraft.ttf) format('truetype');unicode-range:U+0000-00FF}
 
@@ -64,7 +76,7 @@ window.MNgc=function(name,fallback){try{var v=getComputedStyle(document.document
      --gold-* / --g1..3 / --iri* — legacy-имена из прошлой золотой палитры:
      переименовывать не стали (десятки ссылок по файлу), значения теперь ink/pink. */
   --pink:#FDA4C2;        /* заливки: плитки, кнопки, акцентные плоскости */
-  --pink-deep:#C4547E;   /* мелкий текст-акцент: даты, eyebrow, ссылки */
+  --pink-deep:#B8466F;   /* мелкий текст-акцент: даты, eyebrow, ссылки. Углублён с #C4547E (аудит 2026-09-19): 3.9:1 → 4.6:1 — норма WCAG AA для мелкого текста */
   --pink-wash:#FDEDF3;   /* очень светлый тинт: hover-строки, подложки */
   /* подложки под фото/плейсхолдеры — нейтрально-серые, без бежевой желтизны
      старой шампанской палитры */
@@ -83,6 +95,23 @@ window.MNgc=function(name,fallback){try{var v=getComputedStyle(document.document
   --flash-you:247,244,238; --flash-ai:253,164,194;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* у сайта одна своя светлая палитра: запрещаем браузерам (Samsung Internet,
+   Chrome «Auto Dark») самим перекрашивать страницу в тёмную */
+:root{color-scheme:only light}
+/* атрибут hidden должен прятать ВСЕГДА: иначе его перебивали стили вида
+   .btn{display:inline-flex} — кнопка «Подать заявку» не исчезала, а пустая
+   картинка в открытом посте рисовалась чёрной полосой под датой */
+[hidden]{display:none!important}
+.billboard .ye{display:none!important}
+.billboard,.billboard *{cursor:none!important}
+/* доступность: текст только для экранных дикторов/поисковиков; ссылка
+   «К содержимому» видна лишь при навигации с клавиатуры; видимый фокус */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:fixed;left:12px;top:12px;z-index:10001;padding:12px 18px;background:var(--ink);color:var(--bg);
+ font-size:var(--t-small);font-weight:700;letter-spacing:var(--ls-caps);text-transform:uppercase;transform:translateY(-200%);transition:transform .2s var(--ease)}
+.skip-link:focus{transform:none}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+main:focus{outline:none}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
   background:var(--bg);color:var(--ink);
@@ -133,7 +162,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
  border:0;border-bottom:1px solid var(--line);
  transition:border-color .35s,background .35s}
 .nav.scrolled{border-bottom-color:var(--ink)}
-.nav-mark{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:26px;letter-spacing:var(--ls-tight)}
+.nav-mark{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:26px;letter-spacing:var(--ls-tight);
+ /* область нажатия шире самих цифр (норма для пальца — 44px), визуально ничего не сдвигается */
+ padding:4px 10px;margin:-4px -10px}
 /* три ссылки занимают всю середину полосы и разнесены широко — панель
    читается как газетная шапка, а не как прижатое к краю меню */
 .nav-links{flex:1;display:flex;align-items:center;justify-content:center;gap:clamp(40px,9vw,150px)}
@@ -200,7 +231,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 
 /* ===== ШАПКА СТРАНИЦЫ ===== */
 .page-head{padding:var(--sp-top) 0 var(--sp-m)}
-.page-head .eyebrow{color:var(--pink)}
+.page-head .eyebrow{color:var(--pink-deep)}   /* светлый --pink как ЦВЕТ ТЕКСТА почти не читается (1.7:1) — он для заливок */
 .page-title{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:var(--t-title);letter-spacing:var(--ls-tight);line-height:var(--lh-tight);margin-top:18px}
 .page-desc{max-width:520px;color:var(--ink-soft);font-size:var(--t-body);line-height:var(--lh-body);margin-top:26px}
 .page-rule{margin-top:var(--sp-m)}
@@ -232,7 +263,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .join{margin-top:var(--sp-xl);text-align:center;border-radius:0;padding:var(--sp-l) var(--pad);position:relative;overflow:hidden;background:var(--card);border:1.5px solid var(--ink)}
 .join>*{position:relative}
 .join h3{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:var(--t-h2);letter-spacing:var(--ls-tight);line-height:var(--lh-head)}
-.join .price{font-family:'Schibsted Grotesk',sans-serif;font-weight:700;color:var(--pink);font-size:var(--t-h4);margin-top:16px}
+.join .price{font-family:'Schibsted Grotesk',sans-serif;font-weight:700;color:var(--pink-deep);font-size:var(--t-h4);margin-top:16px}
 .join p{color:var(--ink-soft);max-width:460px;margin:16px auto 30px;font-size:var(--t-body)}
 
 /* ===== MERCH ===== */
@@ -288,7 +319,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
    Высота сцены — по самому высокому файлу, чтобы текст под ней не прыгал. */
 .np-gal{position:relative;margin-top:var(--sp-s);--iw:100%}
 .np-gal[hidden]{display:none}
-.np-stage{position:relative;height:var(--gal-h,min(70vh,640px));touch-action:pan-y;outline:none}
+.np-stage{position:relative;height:var(--gal-h,min(70vh,640px));touch-action:pan-y}
+.np-stage:focus:not(:focus-visible){outline:none}
 .np-item{position:absolute;inset:0;margin:auto;max-width:100%;max-height:100%;border:1.5px solid var(--ink);background:var(--card-2);
  overflow:hidden;visibility:hidden;opacity:0}
 .np-item.on,.np-item.out{visibility:visible;opacity:1}
@@ -326,7 +358,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 /* счётчик — только на тач-экранах (там стрелок нет): «01 ── 02» в духе дат сайта,
    линия между числами заполняется по мере листания */
 .np-count{display:none;align-items:center;justify-content:center;gap:12px;margin-top:14px;
- font-size:var(--t-caption);font-weight:700;letter-spacing:var(--ls-caps);font-variant-numeric:tabular-nums;color:var(--ink-faint)}
+ font-size:var(--t-caption);font-weight:700;letter-spacing:var(--ls-caps);font-variant-numeric:tabular-nums;color:var(--ink-soft)}
 .np-count b{color:var(--pink-deep);font-weight:700}
 .np-count i{position:relative;width:34px;height:1.5px;background:var(--line);overflow:hidden}
 .np-count i::after{content:"";position:absolute;inset:0;background:var(--ink);transform-origin:left;transform:scaleX(var(--p,0));transition:transform .45s var(--ease-out)}
@@ -365,7 +397,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .ye-t-head{display:flex;align-items:baseline;gap:8px}
 .ye-name{font-weight:800;font-size:15px}
 .ye-toast .ye-name{font-size:17px}
-.ye-time{font-size:var(--t-caption);color:var(--ink-faint)}
+.ye-time{font-size:var(--t-caption);color:var(--ink-soft)}
 .ye-t-text{margin-top:3px;font-size:15px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ye-dot{position:absolute;top:12px;left:54px;width:14px;height:14px;border-radius:50%;background:var(--pink);border:2px solid var(--card)}
 .ye-x{position:absolute;top:6px;right:6px;width:30px;height:30px;display:grid;place-items:center;font-size:15px;color:var(--ink-soft);border-radius:50%}
@@ -385,7 +417,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 /* без этого, когда переписка длиннее окна, флекс сжимает сообщения —
    карточка-ссылка (у неё overflow:hidden) схлопывалась в тонкую полоску */
 .ye-c-body>*{flex-shrink:0}
-.ye-c-day{align-self:center;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px}
+.ye-c-day{align-self:center;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px}
 .ye-msg{align-self:flex-start;max-width:86%;padding:10px 13px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--line);font-size:var(--t-body);line-height:1.45;animation:yeFromL .28s var(--ease-out) both}
 .ye-typing{align-self:flex-start;display:flex;gap:4px;padding:13px 14px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--line)}
 .ye-typing i{width:6px;height:6px;border-radius:50%;background:var(--ink-faint);animation:yeDot 1s infinite}
@@ -406,7 +438,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .ye-chip.is-final{background:var(--pink)}
 .ye-chip.is-final:hover{background:var(--ink)}
 .ye-chips[aria-busy="true"] .ye-chip{opacity:.4;pointer-events:none}
-.ye-ended{width:100%;text-align:center;padding:4px 0;font-size:var(--t-small);color:var(--ink-faint)}
+.ye-ended{width:100%;text-align:center;padding:4px 0;font-size:var(--t-small);color:var(--ink-soft)}
 @keyframes yeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 /* уведомление выезжает из-за правого края экрана, как пуш на телефоне */
 @keyframes yePush{from{opacity:0;transform:translateX(calc(100% + 32px))}to{opacity:1;transform:none}}
@@ -438,7 +470,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .craft-form[hidden]{display:none}
 .craft-field{display:flex;flex-direction:column;gap:8px;position:relative}
 .craft-field span{font-size:var(--t-small);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
-.craft-opt{font-style:normal;font-weight:500;text-transform:none;letter-spacing:0;color:var(--ink-faint)}
+.craft-opt{font-style:normal;font-weight:500;text-transform:none;letter-spacing:0;color:var(--ink-soft)}
 .craft-hint{font-size:var(--t-small);line-height:1.45;color:var(--ink-soft)}
 .craft-hint::before{content:"→ ";color:var(--pink-deep);font-weight:700}
 .craft-field input[type=number]{-moz-appearance:textfield}
@@ -462,11 +494,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
    место, где розовый работает крупным пятном */
 .footer-87{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:var(--t-display);letter-spacing:var(--ls-tight);line-height:var(--lh-num);color:var(--pink)}
 .footer-tag{font-family:'Schibsted Grotesk',sans-serif;font-weight:500;color:var(--ink-soft);font-size:16px;margin-top:8px;max-width:34ch}
-.fcol h5{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-faint);margin-bottom:18px}
+.fcol h5{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-soft);margin-bottom:18px}
 .fcol a{display:block;font-size:var(--t-body);color:var(--ink-soft);padding:7px 0;transition:color .35s,padding-left .35s}
 .fcol a:hover{color:var(--ink);padding-left:8px}
 .footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:var(--sp-l);padding-top:28px;border-top:1px solid var(--line);flex-wrap:wrap}
-.footer-bottom small{color:var(--ink-faint);font-size:var(--t-small);letter-spacing:.03em}
+.footer-bottom small{color:var(--ink-soft);font-size:var(--t-small);letter-spacing:.03em}
 .to-top{display:inline-flex;align-items:center;gap:10px;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-soft);transition:color .35s}
 .to-top:hover{color:var(--gold-solid)}
 .to-top svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6}
@@ -617,7 +649,7 @@ body.nav-up .nav{transform:translateX(-50%) translateY(calc(-100% - var(--ticker
 .t100-kicker{font-size:var(--t-caption);letter-spacing:var(--ls-eyebrow);text-transform:uppercase;color:var(--gold-solid);font-weight:600}
 .t100-name{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;text-transform:uppercase;font-size:var(--t-h2);line-height:var(--lh-tight);margin:10px 0 20px}
 .t100-metric{display:flex;flex-direction:column;gap:6px}
-.t100-label{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-faint)}
+.t100-label{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-soft)}
 .t100-val{font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:var(--t-h4)}
 .t100-list{list-style:none;margin:var(--sp-s) 0 0;padding:0;border-top:1px solid var(--line)}
 .t100-row{display:grid;grid-template-columns:clamp(44px,6vw,76px) 1fr auto auto;align-items:center;gap:var(--sp-xs);padding:var(--sp-xs) 6px;border-bottom:1px solid var(--line);transition:background .4s var(--ease),padding .4s var(--ease)}
@@ -628,9 +660,9 @@ body.nav-up .nav{transform:translateX(-50%) translateY(calc(-100% - var(--ticker
 .t100-move{font-size:var(--t-small);font-weight:700;letter-spacing:.04em;justify-self:end}
 /* движение в рейтинге читается по стрелке, а не по цвету: землистые зелёный/
    терракота были из старой палитры и выбивались из чёрно-розовой схемы */
-.t100-move.up{color:var(--ink)}.t100-move.down{color:var(--ink-faint)}.t100-move.new{color:var(--pink-deep)}
+.t100-move.up{color:var(--ink)}.t100-move.down{color:var(--ink-soft)}.t100-move.new{color:var(--pink-deep)}
 .t100-rv{font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:var(--t-lead);justify-self:end;white-space:nowrap;color:var(--ink-soft)}
-.t100-more{text-align:center;padding:26px 6px;color:var(--ink-faint);font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase}
+.t100-more{text-align:center;padding:26px 6px;color:var(--ink-soft);font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase}
 @media (max-width:640px){
   .t100-lead{grid-template-columns:1fr;text-align:left}
   /* стрелки движения остаются и на телефоне — просто компактнее */
@@ -644,7 +676,7 @@ body.nav-up .nav{transform:translateX(-50%) translateY(calc(-100% - var(--ticker
   .icon-btn{width:44px;height:44px}
   .burger{width:44px;height:44px}
   .fcol a{padding:11px 0}
-  .to-top{padding:11px 0}
+  .to-top{padding:13px 0}   /* 44px в высоту — удобно попасть пальцем */
 }
 
 /* ===== Доступность + детали ===== */
@@ -932,22 +964,24 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
 <meta property="og:site_name" content="87 · Macan News"/>
 <meta property="og:url" content="https://macannews.ru/"/>
 <meta property="og:locale" content="ru_RU"/>
-<meta property="og:image" content="https://macannews.ru/assets/og-87.png"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
+<meta property="og:image" content="https://macannews.ru/assets/og-87.png"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image:type" content="image/png"/><meta property="og:image:alt" content="87 · Macan News"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="87 · Macan News — Макан Ньюс"/>
 <meta name="twitter:description" content="Официальный сайт новостного канала 87 (Macan News / Макан Ньюс). Мы определяем реальность."/>
 <meta name="twitter:image" content="https://macannews.ru/assets/og-87.png"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"87 · Macan News","alternateName":["Macan News","MacanNews","Macan News 87","MacanNews87","Макан Ньюс","Макан Ньюс 87","макан ньюс","макан ньюс 87","87","News 87","News87","Новости 87","Новости87","новости 87","Macan 87","Macan87","Макан 87","макан 87","Macan","Макан","новостной канал 87","канал 87","восемь семь","восемьдесят семь"],"url":"https://macannews.ru/","inLanguage":"ru","description":"Официальный сайт новостного канала 87 (Macan News, Макан Ньюс). Мы определяем реальность."}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsMediaOrganization","name":"87 · Macan News","alternateName":"Macan News","url":"https://macannews.ru/","logo":{"@type":"ImageObject","url":"https://macannews.ru/assets/fav87-512.png","width":512,"height":512},"sameAs":["https://t.me/macan777macan777macan777"]}</script>
 </head>
 <body>
+<a class="skip-link" href="#main" id="skipLink">К содержимому</a>
 <div class="grain" aria-hidden="true"></div>
 <audio id="bgAudio" loop playsinline preload="none"><source src="assets/mp3-e3c1114de5.mp3" type="audio/mpeg"></audio>
 <div class="loader" id="loader" aria-hidden="true"><div><svg class="logo87" viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="87">
-  <defs><linearGradient id="g87" x1="0%" y1="0%" x2="100%" y2="100%">
+  <defs><linearGradient id="g87l" x1="0%" y1="0%" x2="100%" y2="100%">
     <stop offset="0%" stop-color="var(--g1)"/><stop offset="22%" stop-color="var(--g2)"/>
     <stop offset="46%" stop-color="var(--g3)"/><stop offset="64%" stop-color="var(--g2)"/>
     <stop offset="100%" stop-color="var(--g1)"/></linearGradient></defs>
-  <g fill="none" stroke="url(#g87)" stroke-width="32" stroke-linecap="butt" stroke-linejoin="miter">
+  <g fill="none" stroke="url(#g87l)" stroke-width="32" stroke-linecap="butt" stroke-linejoin="miter">
     <circle cx="175" cy="132" r="82"/><circle cx="175" cy="316" r="102"/>
     <path d="M360 78 H632 L488 416"/><path d="M430 268 H556"/>
   </g>
@@ -979,7 +1013,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
   <a href="#top100" data-view="top100">ТОП 100</a>
   <a href="#pamyat" data-view="pamyat">Светлая память</a>
   <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener">Telegram</a>
-</div><section class="view active" id="view-home"><header class="hero" id="top">
+</div><main id="main" tabindex="-1"><section class="view active" id="view-home"><header class="hero" id="top">
   <div class="hero-inner">
     <div class="reveal hero-logo-wrap"><span class="iri" aria-hidden="true"></span><svg class="logo87" viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="87">
   <defs><linearGradient id="g87" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -991,7 +1025,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
     <path d="M360 78 H632 L488 416"/><path d="M430 268 H556"/>
   </g>
 </svg></div>
-    <div class="hero-name reveal">Macan News</div>
+    <h1 class="hero-name reveal">Macan News</h1>
     <p class="hero-slogan reveal">Мы определяем реальность</p>
     <div class="hero-cta reveal">
       <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener" class="btn gold-btn">
@@ -1188,7 +1222,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
   <div class="memoriam-mark">✦</div>
   <h3 class="memoriam-name">Сивожелезов</h3>
   <p class="memoriam-bio">Сердце, которого нас лишила администрация</p>
-</div></div></section></section><section class="view" id="view-games"><div class="arcade-wrap">
+</div></div></section></section><section class="view" id="view-games"><h1 class="sr-only">Игры 87: змейка и пинг-понг</h1><div class="arcade-wrap">
   <picture style="display:none"><source type="image/webp" srcset="assets/img-c3125116b0.webp"/><img id="snHeadSrc" src="assets/img-c3125116b0.png" alt="" decoding="async"/></picture>
   <picture style="display:none"><source type="image/webp" srcset="assets/img-349d298e8e.webp"/><img id="pongTimSrc" src="assets/img-349d298e8e.png" alt="" decoding="async"/></picture>
 
@@ -1362,7 +1396,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
         </div>
       </div>
     </div>
-</div></section>
+</div></section></main>
 <div class="ye" id="ye" hidden>
   <div class="ye-toast" id="yeToast" role="button" tabindex="0" aria-label="Новое сообщение от Ye" hidden>
     <img class="ye-ava" src="assets/ye.jpg" alt="" width="44" height="44" loading="lazy" decoding="async"/>
@@ -1477,8 +1511,9 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
 
  /* ---------- разделы (SPA) ---------- */
  var VIEWS=['home','workers','merch','news','87craft','pamyat','top100','games'];
- var TITLES={home:'87 · Macan News — Макан Ньюс | Новости 87',workers:'Работники месяца — 87 · Macan News',merch:'Merch — 87 · Macan News',news:'NEWS — 87 · Macan News',pamyat:'Светлая память — 87 · Macan News',top100:'ТОП 100 — 87 · Macan News',games:'Игры — 87 · Macan News'};
- function slug(){var s=(location.hash||'').replace(/^#/,'');return VIEWS.indexOf(s)>=0?s:'home';}
+ var TITLES={home:'87 · Macan News — Макан Ньюс | Новости 87',workers:'Работники месяца — 87 · Macan News',merch:'Merch — 87 · Macan News',news:'NEWS — 87 · Macan News',pamyat:'Светлая память — 87 · Macan News',top100:'ТОП 100 — 87 · Macan News',games:'Игры — 87 · Macan News','87craft':'87CRAFT — Minecraft-сервер · 87 · Macan News'};
+ /* терпим к «грязным» ссылкам: #NEWS, #/news, #news?utm_source=… — всё ведёт в раздел */
+ function slug(){var s=(location.hash||'').replace(/^#\/?/,'').split(/[?&\/#]/)[0].toLowerCase();try{s=decodeURIComponent(s);}catch(e){}return VIEWS.indexOf(s)>=0?s:'home';}
  var _prevView='home';
  function showView(s, reveal){
    if(VIEWS.indexOf(s)<0) s='home';
@@ -1495,11 +1530,24 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
    if(reveal!==false){ routeFx(); revealInView(el); bindReveals(el); }
  }
  window.addEventListener('hashchange',function(){ if(menu&&menu.classList.contains('open')) toggleMenu(false); showView(slug()); });
+ /* «К содержимому» (первая клавиша Tab): фокус на заголовок открытого раздела,
+    без смены адреса — #main роутер принял бы за неизвестный раздел */
+ var skip=document.getElementById('skipLink');
+ if(skip) skip.addEventListener('click',function(e){
+   e.preventDefault();
+   var v=document.querySelector('.view.active'), h=v&&v.querySelector('h1');
+   var target=h||document.getElementById('main');
+   if(!target) return;
+   if(h && !h.hasAttribute('tabindex')) h.setAttribute('tabindex','-1');
+   target.focus();
+ });
  /* стрелки ← → листают разделы (кроме игр — там стрелки управляют змейкой) */
  var NAVSEQ=['home','workers','merch','news','top100','pamyat'];
  document.addEventListener('keydown',function(e){
    if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey) return;
    if(slug()==='games') return;
+   /* стрелки внутри поля ввода, плеера или ползунка — их собственные (курсор, перемотка) */
+   var tg=e.target; if(tg && (tg.isContentEditable || /^(INPUT|TEXTAREA|SELECT|VIDEO|AUDIO)$/.test(tg.tagName))) return;
    if(menu&&menu.classList.contains('open')) return;
    var post=document.getElementById('newsPost'); if(post&&!post.hidden) return;   /* открыт пост — стрелки его, а не разделов */
    var i=NAVSEQ.indexOf(slug()); if(i<0) return;
@@ -2033,11 +2081,11 @@ window.__arcadeWinFX = function(host){
 
   /* preload Jigan head into card + game (png-фолбэк, если webp не декодится) */
   var headImg = new Image();
-  if(headSrc){
-    var _hs=headSrc.currentSrc||headSrc.src, _png=headSrc.src||_hs;
+  if(headSrc) window.MNpicSrc(headSrc, function(_hs){
+    var _png=headSrc.src||_hs;
     headImg.onerror=function(){ if(_png && headImg.src!==_png){ headImg.onerror=null; headImg.src=_png; } };
     headImg.src = _hs; if(cardHead) cardHead.src = _hs;
-  }
+  });
 
   /* ── конфигурация ── */
   var GRID=16, WIN_LEN=87, START_LEN=3;
@@ -2469,12 +2517,12 @@ window.__arcadeWinFX = function(host){
      на onload перерисовываем корт, чтобы лицо гарантированно проявилось */
   function loadAvatar(pic, card){
     var img=new Image();
-    if(pic){
-      var pref=pic.currentSrc||pic.src, png=pic.src||pref;
+    if(pic) window.MNpicSrc(pic, function(pref){
+      var png=pic.src||pref;
       img.onload=function(){ try{ render(); }catch(e){} };
       img.onerror=function(){ if(png && img.src!==png){ img.onerror=null; img.src=png; } };
       img.src=pref; if(card) card.src=pref;
-    }
+    });
     return img;
   }
   var headImg=loadAvatar(headSrc, cardHead);   // Джиган (красные)
@@ -3066,11 +3114,26 @@ window.__arcadeWinFX = function(host){
       npGal.hidden=false;
       galShow(0, 0);
     }
-    np.hidden=false; np.scrollTop=0; lock(true);
+    lastFocus=document.activeElement;
+    np.hidden=false; np.scrollTop=0; lock(true); setInert(true);
     layoutGal();   /* после показа оверлея — чтобы ширина текста уже была известна */
     npClose.focus();
   }
-  function closePost(){ if(!np||np.hidden) return; resetGal(); np.hidden=true; lock(false); }
+  /* пока пост открыт, остальная страница «инертна»: Tab и экранные дикторы
+     не уходят за оверлей; после закрытия фокус возвращается на карточку */
+  var lastFocus=null;
+  function setInert(on){
+    ['main','nav','footer','#ye'].forEach(function(sel){
+      var el=document.querySelector(sel); if(!el) return;
+      if(on) el.setAttribute('inert',''); else el.removeAttribute('inert');
+    });
+  }
+  function closePost(){
+    if(!np||np.hidden) return;
+    resetGal(); np.hidden=true; lock(false); setInert(false);
+    if(lastFocus && lastFocus.focus && document.contains(lastFocus)){ try{ lastFocus.focus({preventScroll:true}); }catch(e){} }
+    lastFocus=null;
+  }
   if(npClose) npClose.addEventListener('click', closePost);
   document.addEventListener('keydown', function(e){
     if(e.key==='Escape'){ if(fullEl){ exitFull(); return; } closePost(); return; }
@@ -3090,12 +3153,23 @@ window.__arcadeWinFX = function(host){
   }
 
   var cache=null, lastLoad=0, MIN_GAP=15000;   /* защита от дребезга: не чаще раза в 15с */
+  /* последняя удачная лента хранится на устройстве: без сети (метро, самолёт)
+     и при сбое GitHub показываем её, а не пустоту. Запрос ограничен 12с —
+     на еле живом интернете лента не «грузится» бесконечно */
+  var LS_KEY='mn-news-v1';
+  function saved(){ try{ var s=localStorage.getItem(LS_KEY); var p=s&&JSON.parse(s); return Array.isArray(p)&&p.length?p:null; }catch(e){ return null; } }
   function load(cb){
     var now=Date.now();
     if(cache && now-lastLoad<MIN_GAP){ cb(cache); return; }
-    fetch('news.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json(); })
-      .then(function(posts){ cache=posts; lastLoad=Date.now(); cb(posts); })
-      .catch(function(){ cb(null); });
+    var ctl=window.AbortController?new AbortController():null, timer=ctl?setTimeout(function(){ ctl.abort(); },12000):0;
+    fetch('news.json',{cache:'no-store', signal:ctl?ctl.signal:undefined}).then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(posts){
+        clearTimeout(timer);
+        if(!Array.isArray(posts)) throw 0;
+        cache=posts; lastLoad=Date.now(); cb(posts);
+        try{ localStorage.setItem(LS_KEY, JSON.stringify(posts)); }catch(e){}
+      })
+      .catch(function(){ clearTimeout(timer); cb(cache||saved()); });
   }
   function refreshHome(){ load(function(posts){ if(posts) renderInto(feedHome,posts,3); else renderEmpty(feedHome,'Не получилось загрузить ленту.', true); }); }
   function refreshFull(){ load(function(posts){ if(posts) renderInto(feedFull,posts); else renderEmpty(feedFull,'Не получилось загрузить ленту.', true); }); }
