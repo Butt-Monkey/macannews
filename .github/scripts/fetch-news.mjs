@@ -145,12 +145,20 @@ async function buildMediaItem(msg, id, index, fs) {
   if (!m) return null;
   await fs.mkdir(IMG_DIR, { recursive: true });
   const base = index === 0 ? String(id) : `${id}_${index}`;
+  // к имени добавляем хвост уникального id файла Telegram: изменился файл —
+  // изменилось имя, и ни браузер, ни CDN не покажут старую копию из кэша
+  const tag = uid => {
+    if (!uid) return "";
+    let h = 5381;
+    for (const ch of String(uid)) h = ((h * 33) ^ ch.charCodeAt(0)) >>> 0;
+    return "-" + h.toString(36);
+  };
   const item = { mid: msg.message_id, uid: m.file.file_unique_id || null };
   // размеры нужны сайту, чтобы сразу подогнать рамку под пропорции файла
   if (m.file.width && m.file.height) { item.w = m.file.width; item.h = m.file.height; }
 
   if (m.kind === 'photo') {
-    const src = `${IMG_DIR}/${base}.jpg`;
+    const src = `${IMG_DIR}/${base}${tag(m.file.file_unique_id)}.jpg`;
     try {
       await downloadTelegramFile(m.file.file_id, src, fs);
     } catch (e) {
@@ -162,7 +170,7 @@ async function buildMediaItem(msg, id, index, fs) {
 
   item.type = 'video';
   if (m.thumb) {
-    const poster = `${IMG_DIR}/${base}.jpg`;
+    const poster = `${IMG_DIR}/${base}${tag(m.thumb.file_unique_id)}.jpg`;
     try {
       await downloadTelegramFile(m.thumb.file_id, poster, fs);
       item.poster = poster;
@@ -173,7 +181,7 @@ async function buildMediaItem(msg, id, index, fs) {
   if (m.file.file_size && m.file.file_size > MAX_VIDEO_BYTES) {
     console.log(`Видео ${base} весит ${(m.file.file_size / 1048576).toFixed(1)} МБ — больше лимита Bot API, оставляю только постер.`);
   } else {
-    const src = `${IMG_DIR}/${base}.mp4`;
+    const src = `${IMG_DIR}/${base}${tag(m.file.file_unique_id)}.mp4`;
     try {
       await downloadTelegramFile(m.file.file_id, src, fs);
       item.src = src;
