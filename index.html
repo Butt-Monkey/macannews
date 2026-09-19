@@ -293,6 +293,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
  overflow:hidden;visibility:hidden;opacity:0}
 .np-item.on,.np-item.out{visibility:visible;opacity:1}
 .np-item img,.np-item video{width:100%;height:100%;display:block;object-fit:contain}
+/* рамка уже ровно по пропорциям файла — заполняем её целиком (расхождение в
+   долю пикселя обрезается, а не превращается в полоску фона) */
+.np-item.sized img,.np-item.sized video{object-fit:cover}
 .np-item.in-next{animation:npItemIn .46s var(--ease-out) both}
 .np-item.in-prev{animation:npItemIn .46s var(--ease-out) both;--from:-26px}
 .np-item.out{animation:npItemOut .22s var(--ease) both;pointer-events:none}
@@ -322,7 +325,19 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .np-count b{color:var(--pink-deep);font-weight:700}
 .np-count i{position:relative;width:34px;height:1.5px;background:var(--line);overflow:hidden}
 .np-count i::after{content:"";position:absolute;inset:0;background:var(--ink);transform-origin:left;transform:scaleX(var(--p,0));transition:transform .45s var(--ease-out)}
-@media (hover:none){.np-arrow{display:none}.np-count:not([hidden]){display:flex}}
+/* тач-экраны и просто узкие окна: стрелок нет (им некуда встать снаружи фото), листают свайпом, виден счётчик */
+@media (hover:none),(max-width:700px){.np-arrow{display:none}.np-count:not([hidden]){display:flex}}
+.np-touch .np-arrow{display:none}
+.np-touch .np-count:not([hidden]){display:flex}
+/* своя кнопка «на весь экран» (Android) и сам режим — без системной плашки Chrome */
+.np-fs{position:absolute;top:8px;right:8px;z-index:2;width:40px;height:40px;display:grid;place-items:center;padding:0;border:0;
+ background:rgba(5,5,5,.55);color:#fff;cursor:pointer}
+.np-fs svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:square}
+.np-item.np-full{position:fixed;inset:0;z-index:9600;width:auto!important;height:auto!important;max-width:none;max-height:none;
+ margin:0;border:0;background:#000;animation:none;transform:none}
+.np-item.np-full video{object-fit:contain}
+.np-item.np-full .np-fs{top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right))}
+.np-has-full{overflow:hidden}
 .np-text{margin-top:var(--sp-m);font-size:var(--t-lead);line-height:1.65;white-space:pre-wrap}
 .np-foot{margin-top:var(--sp-l);padding-top:var(--sp-m);border-top:1px solid var(--line);display:flex;justify-content:center}
 .news-card{cursor:pointer}
@@ -2772,6 +2787,16 @@ window.__arcadeWinFX = function(host){
       npCount=document.getElementById('newsPostCount');
   var galIdx=0, galN=0, galEls=[];
   var reduceMotion=window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
+  /* телефон/планшет: не только по медиазапросу — часть мобильных браузеров
+     (например, Adblock Browser) выдаёт себя за устройство с мышкой, и там
+     показывались компьютерные стрелки поверх фото вместо свайпа и счётчика */
+  var IS_TOUCH=(function(){
+    try{
+      if(matchMedia('(hover:none)').matches || matchMedia('(pointer:coarse)').matches) return true;
+      return navigator.maxTouchPoints>0 && Math.min(screen.width, screen.height)<820;
+    }catch(e){ return false; }
+  })();
+  if(npGal && IS_TOUCH) npGal.classList.add('np-touch');
 
   /* ---------- размер рамки под пропорции медиа ----------
      ratios[i] — ширина/высота i-го файла: из news.json (w/h), а если их нет —
@@ -2780,24 +2805,46 @@ window.__arcadeWinFX = function(host){
      сцена — высоту самого высокого файла. */
   var ratios=[];
   function setRatio(i, w, h, exact){
-    if(!(w>0 && h>0) || (ratios[i] && !exact)) return;   /* exact — размеры самого видео точнее превью */
-    ratios[i]=w/h; layoutGal();
+    if(!(w>0 && h>0)) return;
+    var r=w/h;
+    /* уже знаем пропорции: неточный источник (превью) не трогает их, а точный
+       (метаданные видео) меняет только при заметной разнице — иначе на
+       телефоне рамка «вздрагивала» на пару пикселей при загрузке видео */
+    if(ratios[i] && (!exact || Math.abs(r/ratios[i]-1)<0.02)) return;
+    ratios[i]=r; layoutGal();
   }
+  /* высоту экрана запоминаем при открытии поста: на телефоне она «гуляет», когда
+     прячется/появляется адресная строка, и видео от этого дёргалось */
+  var galVH=0, galW=0;
   function layoutGal(){
     if(!npGal || npGal.hidden || !galN) return;
-    var W=npText.clientWidth || npGal.parentNode.clientWidth;
-    var maxH=Math.min(window.innerHeight*0.7, 640), H=0, i;
-    for(i=0;i<galN;i++){ if(ratios[i]) H=Math.max(H, Math.min(maxH, W/ratios[i])); }
-    if(!H) H=maxH;
-    npTrack.style.setProperty('--gal-h', Math.round(H+3)+'px');   /* +3 — рамка 1.5px с двух сторон */
+    var W=Math.floor(npText.clientWidth || npGal.parentNode.clientWidth);
+    if(!galVH) galVH=Math.max(window.innerHeight, document.documentElement.clientHeight);
+    galW=W;
+    var maxH=Math.floor(Math.min(galVH*0.7, 640)), H=0, i, sz=[];
     for(i=0;i<galN;i++){
-      var r=ratios[i], el=galEls[i];
-      if(r){ var h=Math.min(maxH, W/r); el.style.width=Math.round(h*r+3)+'px'; el.style.height=Math.round(h+3)+'px'; }
-      else { el.style.width=''; el.style.height=''; }   /* размер ещё неизвестен — занимает всю сцену */
+      var r=ratios[i];
+      if(!r){ sz[i]=null; continue; }
+      /* целые пиксели: высота по месту, ширина из неё — без дробей, из-за которых
+         между рамкой и картинкой оставались тонкие полоски */
+      var h=Math.floor(Math.min(maxH, W/r)), w=Math.min(W, Math.round(h*r));
+      sz[i]=[w,h]; H=Math.max(H,h);
+    }
+    if(!H) H=maxH;
+    npTrack.style.setProperty('--gal-h', (H+3)+'px');   /* +3 — рамка 1.5px с двух сторон */
+    for(i=0;i<galN;i++){
+      var el=galEls[i];
+      if(sz[i]){ el.style.width=(sz[i][0]+3)+'px'; el.style.height=(sz[i][1]+3)+'px'; el.classList.add('sized'); }
+      else { el.style.width=''; el.style.height=''; el.classList.remove('sized'); }   /* размер ещё неизвестен — занимает всю сцену */
     }
     galChrome();
   }
-  window.addEventListener('resize', function(){ if(np && !np.hidden) layoutGal(); });
+  window.addEventListener('resize', function(){
+    if(!np || np.hidden) return;
+    var W=Math.floor(npText.clientWidth || 0);
+    if(W===galW) return;   /* поменялась только высота (адресная строка) — ничего не трогаем */
+    galVH=0; layoutGal();  /* поворот экрана / другая ширина окна — пересчёт */
+  });
 
   /* ---------- фоновая музыка: на время видео поста — полная тишина ----------
      Раньше только плавно убавляли громкость, но её одновременно крутят и другие
@@ -2841,12 +2888,40 @@ window.__arcadeWinFX = function(host){
     s.appendChild(a);
   }
 
+  /* ---------- «на весь экран» на телефонах ----------
+     Системный полноэкранный режим Chrome на Android всегда показывает плашку
+     «чтобы выйти, проведите по экрану…» — сайт не может её отключить. Поэтому на
+     Android прячем системную кнопку и даём свою: видео растягивается на весь
+     экран внутри страницы, без плашки. Поворот телефона работает как обычно.
+     На iPhone остаётся родной плеер (там плашки нет), на компьютере — тоже. */
+  var isIOS=/iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.maxTouchPoints>1 && /Macintosh/i.test(navigator.userAgent));
+  var ownFull=IS_TOUCH && !isIOS, fullEl=null;
+  var ICON_EXPAND='<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
+      ICON_SHRINK='<svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+  function setFullBtn(b, on){ b.innerHTML=on?ICON_SHRINK:ICON_EXPAND; b.setAttribute('aria-label', on?'Свернуть':'На весь экран'); }
+  function enterFull(s){
+    if(fullEl) exitFull();
+    fullEl=s; s.classList.add('np-full'); np.classList.add('np-has-full');
+    var b=s.querySelector('.np-fs'); if(b) setFullBtn(b, true);
+  }
+  function exitFull(){
+    if(!fullEl) return;
+    var s=fullEl; fullEl=null; s.classList.remove('np-full'); if(np) np.classList.remove('np-has-full');
+    var b=s.querySelector('.np-fs'); if(b) setFullBtn(b, false);
+  }
+
   function slideEl(it, i){
     var s=document.createElement('div'); s.className='np-item';
     if(it.w && it.h) setRatio(i, it.w, it.h);
     if(it.type==='video' && it.src){
       var v=document.createElement('video');
       v.controls=true; v.setAttribute('playsinline',''); v.playsInline=true;
+      if(ownFull){
+        v.setAttribute('controlsList','nofullscreen'); v.disablePictureInPicture=true;
+        var fb=document.createElement('button'); fb.type='button'; fb.className='np-fs'; setFullBtn(fb, false);
+        fb.addEventListener('click', function(e){ e.stopPropagation(); if(fullEl===s) exitFull(); else enterFull(s); });
+        s.appendChild(fb);
+      }
       /* качаем только заголовок файла и первый кадр — он чётче крошечного превью
          Telegram; как только кадр готов, превью убираем. Само видео — по ▶ */
       v.preload='metadata';
@@ -2859,9 +2934,16 @@ window.__arcadeWinFX = function(host){
       v.addEventListener('play', musicDuck);
       v.addEventListener('pause', musicRestore);
       v.addEventListener('ended', musicRestore);
-      v.addEventListener('error', function(){ tgFallback(s, it.poster); musicRestore(); });
+      /* не загрузилось — один раз пробуем «по-простому» (без подгрузки первого
+         кадра: некоторые браузеры с блокировщиками спотыкаются именно на ней),
+         и только потом показываем кадр + «Смотреть в Telegram» */
+      var retried=false;
+      v.addEventListener('error', function(){
+        if(!retried){ retried=true; v.preload='auto'; v.src=it.src; v.load(); return; }
+        exitFull(); tgFallback(s, it.poster); musicRestore();
+      });
       v.src=it.src+'#t=0.001';
-      s.appendChild(v);
+      s.insertBefore(v, s.firstChild);
     } else {
       if(it.src||it.poster){
         var img=new Image(); img.alt=''; img.decoding='async';
@@ -2908,7 +2990,8 @@ window.__arcadeWinFX = function(host){
   function resetGal(){
     pauseVideos(-1);
     while(npTrack && npTrack.firstChild) npTrack.removeChild(npTrack.firstChild);   /* снимаем <video> — обрывает докачку */
-    galIdx=0; galN=0; galEls=[]; ratios=[];
+    galIdx=0; galN=0; galEls=[]; ratios=[]; galVH=0; galW=0;
+    exitFull();
     if(npGal){ npGal.hidden=true; npGal.style.removeProperty('--iw'); }
     if(npTrack) npTrack.style.removeProperty('--gal-h');
     musicRestore();   /* пост закрыли посреди видео — музыка возвращается */
@@ -2921,7 +3004,7 @@ window.__arcadeWinFX = function(host){
     var tx=0, ty=0, tOn=false;
     npTrack.addEventListener('touchstart', function(e){
       tOn=false;
-      if(e.touches.length!==1 || galN<2) return;
+      if(e.touches.length!==1 || galN<2 || fullEl) return;
       var t=e.touches[0], tg=e.target;
       if(tg && tg.tagName==='VIDEO' && t.clientY > tg.getBoundingClientRect().bottom-60) return;
       tOn=true; tx=t.clientX; ty=t.clientY;
@@ -2961,7 +3044,7 @@ window.__arcadeWinFX = function(host){
   function closePost(){ if(!np||np.hidden) return; resetGal(); np.hidden=true; lock(false); }
   if(npClose) npClose.addEventListener('click', closePost);
   document.addEventListener('keydown', function(e){
-    if(e.key==='Escape'){ closePost(); return; }
+    if(e.key==='Escape'){ if(fullEl){ exitFull(); return; } closePost(); return; }
     /* стрелки листают галерею; внутри видеоплеера оставляем их плееру (перемотка/громкость) */
     if((e.key==='ArrowLeft'||e.key==='ArrowRight') && np && !np.hidden && npGal && !npGal.hidden && galN>1
        && !(e.target && e.target.tagName==='VIDEO')){
