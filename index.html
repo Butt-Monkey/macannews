@@ -288,9 +288,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .np-gal[hidden]{display:none}
 .np-gal-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;outline-offset:3px}
 .np-gal-track::-webkit-scrollbar{display:none}
-.np-slide{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;height:min(70vh,640px);display:grid;grid-template:minmax(0,1fr)/minmax(0,1fr);place-items:center;position:relative;overflow:hidden}
-.np-slide img,.np-slide video{max-width:100%;max-height:100%;display:block;object-fit:contain;background:#000}
-.np-slide img{background:transparent}
+/* высоту (--gal-h) и ширину рамки подгоняет JS под пропорции медиа — рамка
+   обнимает видео/фото без серых полей; до расчёта — безопасный дефолт */
+.np-slide{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;height:var(--gal-h,min(70vh,640px));display:grid;grid-template:minmax(0,1fr)/minmax(0,1fr);place-items:center;position:relative;overflow:hidden}
+.np-slide img,.np-slide video{width:100%;height:100%;display:block;object-fit:contain;background:transparent}
 .np-slide-tg{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);white-space:nowrap;background:var(--bg)}
 .np-slide-nopic{background:#000}
 .np-slide-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:76px;height:76px;display:grid;place-items:center;
@@ -2766,19 +2767,65 @@ window.__arcadeWinFX = function(host){
   var galIdx=0, galN=0, galRaf=0;
   var reduceMotion=window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
 
+  /* ---------- размер рамки под пропорции медиа ----------
+     ratios[i] — ширина/высота i-го файла: из news.json (w/h), а если их нет —
+     узнаём, когда загрузится картинка/превью/метаданные видео. Высота галереи —
+     по самому «высокому» файлу (в пределах 70% экрана), а если файл один —
+     ещё и ширина рамки сжимается ровно под него: без серых полей по бокам. */
+  var ratios=[];
+  function setRatio(i, w, h, exact){
+    if(!(w>0 && h>0) || (ratios[i] && !exact)) return;   /* exact — размеры самого видео точнее превью */
+    ratios[i]=w/h; layoutGal();
+  }
+  function layoutGal(){
+    if(!npGal || npGal.hidden || !galN) return;
+    var W=npText.clientWidth || npGal.parentNode.clientWidth;
+    var maxH=Math.min(window.innerHeight*0.7, 640), H=0;
+    for(var i=0;i<galN;i++){ if(ratios[i]) H=Math.max(H, Math.min(maxH, W/ratios[i])); }
+    if(!H) H=maxH;
+    npTrack.style.setProperty('--gal-h', Math.round(H)+'px');
+    if(galN===1 && ratios[0]){
+      npGal.style.width=Math.round(Math.min(W, H*ratios[0])+3)+'px';   /* +3 — рамка 1.5px с двух сторон */
+      npGal.style.marginInline='auto';
+    } else { npGal.style.width=''; npGal.style.marginInline=''; }
+    if(galN>1) npTrack.scrollLeft=galIdx*npTrack.clientWidth;
+  }
+  window.addEventListener('resize', function(){ if(np && !np.hidden) layoutGal(); });
+
+  /* ---------- фоновая музыка сайта: глушим, пока играет видео поста ---------- */
+  function anyVideoPlaying(){
+    var vs=npTrack?npTrack.querySelectorAll('video'):[];
+    for(var i=0;i<vs.length;i++) if(!vs[i].paused && !vs[i].ended) return true;
+    return false;
+  }
+  function musicDuck(){ if(window.__arcadeMusic) window.__arcadeMusic.duck(); }
+  function musicRestore(){ if(window.__arcadeMusic && !anyVideoPlaying()) window.__arcadeMusic.restore(); }
+
   function slideEl(it, i){
     var s=document.createElement('div'); s.className='np-slide';
+    if(it.w && it.h) setRatio(i, it.w, it.h);
     if(it.type==='video' && it.src){
       var v=document.createElement('video');
       v.controls=true; v.setAttribute('playsinline',''); v.playsInline=true;
-      v.preload=it.poster?'none':'metadata';   /* ничего не качаем, пока не нажали ▶ */
-      if(it.poster) v.poster=it.poster;
-      v.src=it.src;
+      /* качаем только заголовок файла и первый кадр — он чётче крошечного превью
+         Telegram; как только кадр готов, превью убираем. Само видео — по ▶ */
+      v.preload='metadata';
+      if(it.poster){
+        v.poster=it.poster;
+        var pi=new Image(); pi.onload=function(){ setRatio(i, pi.naturalWidth, pi.naturalHeight); }; pi.src=it.poster;
+      }
+      v.addEventListener('loadedmetadata', function(){ setRatio(i, v.videoWidth, v.videoHeight, true); });
+      v.addEventListener('loadeddata', function(){ v.removeAttribute('poster'); });
+      v.addEventListener('play', musicDuck);
+      v.addEventListener('pause', musicRestore);
+      v.addEventListener('ended', musicRestore);
+      v.src=it.src+'#t=0.001';
       s.appendChild(v);
     } else {
       if(it.src||it.poster){
         var img=new Image(); img.alt=''; img.decoding='async';
         if(i>1) img.loading='lazy';
+        img.onload=function(){ setRatio(i, img.naturalWidth, img.naturalHeight); };
         img.src=it.src||it.poster;
         s.appendChild(img);
       }
@@ -2816,8 +2863,10 @@ window.__arcadeWinFX = function(host){
   function resetGal(){
     pauseVideos(-1);
     while(npTrack && npTrack.firstChild) npTrack.removeChild(npTrack.firstChild);   /* снимаем <video> — обрывает докачку */
-    galIdx=0; galN=0;
-    if(npGal) npGal.hidden=true;
+    galIdx=0; galN=0; ratios=[];
+    if(npGal){ npGal.hidden=true; npGal.style.width=''; npGal.style.marginInline=''; }
+    if(npTrack) npTrack.style.removeProperty('--gal-h');
+    musicRestore();   /* пост закрыли посреди видео — музыка возвращается */
   }
   if(npTrack){
     npTrack.addEventListener('scroll', function(){
@@ -2842,8 +2891,8 @@ window.__arcadeWinFX = function(host){
       if(p.image){ npImg.src=p.image; npImg.hidden=false; } else { npImg.removeAttribute('src'); npImg.hidden=true; }
     } else {
       npImg.removeAttribute('src'); npImg.hidden=true;
-      for(var i=0;i<items.length;i++) npTrack.appendChild(slideEl(items[i], i));
       galN=items.length;
+      for(var i=0;i<items.length;i++) npTrack.appendChild(slideEl(items[i], i));
       var many=galN>1;
       npPrev.hidden=npNext.hidden=npCount.hidden=!many;
       npGal.hidden=false;
@@ -2851,6 +2900,7 @@ window.__arcadeWinFX = function(host){
       galSync();
     }
     np.hidden=false; np.scrollTop=0; lock(true);
+    layoutGal();   /* после показа оверлея — чтобы ширина текста уже была известна */
     npClose.focus();
   }
   function closePost(){ if(!np||np.hidden) return; resetGal(); np.hidden=true; lock(false); }
