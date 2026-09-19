@@ -383,6 +383,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .craft-field input,.craft-field textarea{font-family:'Schibsted Grotesk',sans-serif;font-size:16px;padding:14px;border:1.5px solid var(--ink);background:var(--bg);color:var(--ink);border-radius:0;resize:vertical}
 .craft-field input:focus,.craft-field textarea:focus{outline:2px solid var(--pink);outline-offset:2px}
 .craft-honey{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;left:-9999px}
+.craft-note{font-size:var(--t-small);line-height:1.5;color:var(--ink);padding:10px 14px;border-left:3px solid var(--pink);background:var(--pink-wash)}
 .craft-form-msg{font-size:var(--t-small);color:var(--ink-soft);min-height:1.4em}
 .craft-form-msg.is-error{color:#c0392b}
 @media (max-width:640px){
@@ -1062,6 +1063,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
       <span>Сайт</span>
       <input type="text" name="site" id="craftHoney" tabindex="-1" autocomplete="off"/>
     </label>
+    <p class="craft-note">Заявка уходит в Discord. Включи VPN (или любой другой способ обхода) перед отправкой — иначе заявка не дойдёт.</p>
     <button type="submit" class="btn gold-btn">Отправить и перейти в Discord →</button>
     <p class="craft-form-msg" id="craftFormMsg" aria-live="polite"></p>
   </form>
@@ -2910,7 +2912,7 @@ window.__arcadeWinFX = function(host){
       form.reset();
       setTimeout(goToDiscord, 600);
     }).catch(function(){
-      setMsg('Не получилось отправить — попробуй ещё раз или напиши нам в Telegram.', true);
+      setMsg('Не получилось отправить — скорее всего, не включён VPN. Включи VPN и нажми «Отправить» ещё раз.', true);
     }).finally(function(){
       if(submitBtn) submitBtn.disabled=false;
     });
