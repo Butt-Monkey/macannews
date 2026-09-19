@@ -5,7 +5,7 @@
    - ассеты (шрифты/картинки/аудио/видео) — cache-first: мгновенные
      повторные визиты, файлы контент-хэшированы именами и не меняются.
    При изменении списка ниже поднимай VERSION — старый кэш удалится сам. */
-var VERSION = '87-v21';
+var VERSION = '87-v22';
 var ASSET_RE = /\/assets\//;
 
 self.addEventListener('install', function (e) {
@@ -38,6 +38,10 @@ self.addEventListener('fetch', function (e) {
   if (req.method !== 'GET') return;
   var url = new URL(req.url);
   if (url.origin !== location.origin) return;   /* внешнее не трогаем */
+
+  /* видео не трогаем: браузер тянет его кусками (Range → ответ 206), такие
+     ответы нельзя положить в Cache API, а кэшировать целиком тяжело */
+  if (/\.(mp4|webm|mov|m4v)$/i.test(url.pathname) || req.headers.has('range')) return;
 
   /* навигация / HTML — сеть в приоритете, кэш как офлайн-фолбэк */
   if (req.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname === '/') {
