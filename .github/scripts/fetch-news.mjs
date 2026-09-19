@@ -104,7 +104,11 @@ async function apiCallLenient(method, params, attempts = 2) {
   throw lastErr;
 }
 
-function truncate(s, max = 480) {
+// Полный текст поста: 4096 — максимум, который вообще бывает в сообщении Telegram
+// (раньше здесь было 480 — длинные новости обрезались с «…» уже в news.json;
+// карточки в ленте всё равно показывают только первые 4 строки, а полный текст
+// читается в открытом посте).
+function truncate(s, max = 4096) {
   s = (s || '').trim();
   return s.length > max ? s.slice(0, max).trim() + '…' : s;
 }
@@ -338,6 +342,40 @@ async function main() {
       await fs.mkdir('.github/state', { recursive: true });
       await fs.writeFile(OWNER_FILE, JSON.stringify({ chatId: ownerChatId }, null, 2) + '\n', 'utf8');
       console.log('Запомнил личный чат для проверки удалений:', ownerChatId);
+    }
+  }
+
+  // ПЕРЕЗАГРУЗКА ПОСТОВ ВРУЧНУЮ: Actions → Run workflow → поле «refetch»
+  // (например 301 или 301,302). Бот перечитывает эти посты из канала через
+  // forwardMessage и обновляет их в ленте на месте — так можно дозагрузить видео
+  // и полный текст постам, которые попали в ленту до этого обновления.
+  const refetchIds = (process.env.REFETCH_IDS || '').split(/[\s,;]+/).filter(x => /^\d+$/.test(x));
+  if (refetchIds.length && !ownerChatId) {
+    console.log('Перезагрузка пропущена: бот ещё не знает личный чат (напиши ему что-нибудь в Telegram).');
+  } else {
+    for (const id of refetchIds) {
+      let res;
+      try {
+        res = await apiCallLenient('forwardMessage', {
+          chat_id: String(ownerChatId),
+          from_chat_id: '@' + CHANNEL_FALLBACK,
+          message_id: id,
+          disable_notification: 'true'
+        });
+      } catch (e) {
+        console.warn(`Пост ${id}: не удалось перечитать (сеть):`, e.message);
+        continue;
+      }
+      if (!res.ok) {
+        console.log(`Пост ${id}: Telegram не отдал его (${res.description}) — пропускаю.`);
+        continue;
+      }
+      try {
+        await apiCallLenient('deleteMessage', { chat_id: String(ownerChatId), message_id: String(res.result.message_id) });
+      } catch (e) { /* не критично */ }
+      // у пересланной копии свой message_id — подставляем настоящий номер поста
+      edits.set(id, { ...res.result, message_id: Number(id) });
+      console.log(`Пост ${id}: перечитал из канала.`);
     }
   }
 
