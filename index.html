@@ -1603,7 +1603,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
    if(window.__arcadeMusic && window.__arcadeMusic.isDucked && window.__arcadeMusic.isDucked()) return;
    try{
      window.__bgVol.set(0); var t0=performance.now();
-     (function st(ts){ var k=Math.min(1,(ts-t0)/1200); window.__bgVol.set(k*0.8); if(k<1) requestAnimationFrame(st); })(t0);   /* потолок 0.8 = FULL аркадного модуля */
+     (function st(ts){ if(window.__arcadeMusic && window.__arcadeMusic.isDucked()) return;   /* вошли в игру посреди нарастания — не перебиваем приглушение */ var k=Math.min(1,(ts-t0)/1200); window.__bgVol.set(k*0.8); if(k<1) requestAnimationFrame(st); })(t0);   /* потолок 0.8 = FULL аркадного модуля */
    }catch(e){}
  }
  function stopRetry(){ if(typeof RG!=='undefined'){ RG.forEach(function(ev){ document.removeEventListener(ev, retry, true); }); } }
@@ -1637,15 +1637,16 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
  /* сеть жестов: включаем звук на первом взаимодействии любого рода —
     тач, скролл-колесо (wheel), клик, клавиша; снимается сама, когда звук пошёл */
  var RG=['pointerdown','mousedown','touchstart','touchend','click','keydown','wheel'];
- function retry(){ if(window.__musicHold) return; tryStart(); }   /* __musicHold — играет видео в посте */
+ function musicBusy(){ return window.__musicHold || (window.__arcadeMusic && window.__arcadeMusic.isDucked()); }   /* играет видео в посте или открыта игра */
+ function retry(){ if(musicBusy()) return; tryStart(); }
  RG.forEach(function(ev){ document.addEventListener(ev, retry, true); });
  if(sb) sb.addEventListener('click',function(e){
    e.preventDefault(); e.stopPropagation();
-   if(audio && audio.paused){ intendOn=true; tryStart(); } else if(audio){ intendOn=false; audio.pause(); }
+   if(audio && audio.paused){ intendOn=true; if(window.__arcadeMusic) window.__arcadeMusic.release(); tryStart(); } else if(audio){ intendOn=false; audio.pause(); }
  });
  document.addEventListener('visibilitychange', function(){
    if(document.hidden){ if(audio) audio.pause(); }
-   else if(intendOn && entered && !window.__musicHold){ tryStart(); }
+   else if(intendOn && entered && !musicBusy()){ tryStart(); }
  });
  window.addEventListener('pagehide', function(){ if(audio) audio.pause(); });
 
@@ -1933,10 +1934,40 @@ window.__arcadeMusic = (function(){
       if(p<1){ raf=requestAnimationFrame(step); } else { raf=null; if(done) done(); }
     })(t0);
   }
-  // ВАЖНО: глушим только ГРОМКОСТЬ (не паузу), чтобы не конфликтовать с кнопкой звука.
-  // Воспроизведением/паузой трека и значком mute полностью управляет сама кнопка сайта.
-  function duck(){ if(ducked||!bg) return; ducked=true; fade(0, 600); }
-  function restore(){ if(!ducked||!bg) return; ducked=false; fade(FULL, 800); }
+  /* На время игры (и видео в посте) трек плавно затихает и СТАВИТСЯ НА ПАУЗУ,
+     а после — продолжает с того же места. Раньше глушили только громкостью, но
+     iPhone не даёт сайту менять громкость <audio> напрямую (только через
+     WebAudio-мост, который не всегда успевал собраться), и музыка в игре
+     продолжала играть. Пауза работает везде одинаково.
+     Звуки самих игр — отдельные синтезированные сигналы со своей кнопкой,
+     этот трек их не касается. */
+  var heldOn=false, resumeArmed=false, RES_EVS=['touchend','pointerup','click','keydown'];
+  function wanted(){ return window.__musicWanted ? window.__musicWanted() : true; }
+  function setVol(v){ if(window.__bgVol) window.__bgVol.set(v); else { try{ bg.volume=v; }catch(e){} } }
+  function duck(){
+    if(ducked||!bg) return; ducked=true; disarm();
+    heldOn = !bg.paused || wanted();           /* играла ли музыка / хотел ли её человек */
+    if(!bg.paused) fade(0, 400, function(){ if(ducked){ try{ bg.pause(); }catch(e){} } });
+  }
+  function playBack(){
+    if(ducked||!wanted()) return;               /* пока ждали — снова вошли в игру или выключили звук */
+    setVol(0);
+    var p; try{ p=bg.play(); }catch(e){}
+    var go=function(){ disarm(); fade(FULL, 800); };
+    if(p && p.then) p.then(go, arm); else go();
+  }
+  /* iPhone запускает звук только в ответ на касание: не вышло сразу — вернём
+     трек на первом же касании экрана */
+  function onGesture(){ disarm(); playBack(); }
+  function arm(){ if(resumeArmed) return; resumeArmed=true; RES_EVS.forEach(function(ev){ document.addEventListener(ev, onGesture, true); }); }
+  function disarm(){ if(!resumeArmed) return; resumeArmed=false; RES_EVS.forEach(function(ev){ document.removeEventListener(ev, onGesture, true); }); }
+  function restore(){
+    if(!ducked||!bg) return; ducked=false;
+    var back=heldOn; heldOn=false;
+    if(back) playBack();
+  }
+  /* человек сам нажал кнопку звука во время игры — снимаем приглушение */
+  function release(){ if(!ducked) return; ducked=false; heldOn=false; disarm(); }
   function anyGameOpen(){
     var v=document.getElementById('view-games');
     var s1=document.getElementById('arcadeStage'), s2=document.getElementById('arcadeStagePong');
@@ -1946,7 +1977,7 @@ window.__arcadeMusic = (function(){
   window.addEventListener('hashchange', function(){
     setTimeout(function(){ if(anyGameOpen()) duck(); else restore(); }, 0);
   });
-  return { duck:duck, restore:restore, isDucked:function(){return ducked;} };
+  return { duck:duck, restore:restore, release:release, isDucked:function(){return ducked;} };
 })();
 
 window.__arcadeFS = (function(){
