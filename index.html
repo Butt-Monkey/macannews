@@ -272,7 +272,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
  animation:npIn .22s var(--ease-out)}
 .np[hidden]{display:none}
 @keyframes npIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.np-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px;
+.np-bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;
  padding:14px var(--pad);background:var(--bg);border-bottom:1.5px solid var(--ink)}
 .np-brand{font-weight:800;font-size:20px;letter-spacing:var(--ls-tight)}
 .np-close{display:inline-flex;align-items:center;gap:9px;font-size:var(--t-small);letter-spacing:var(--ls-caps);
@@ -296,6 +296,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 /* рамка уже ровно по пропорциям файла — заполняем её целиком (расхождение в
    долю пикселя обрезается, а не превращается в полоску фона) */
 .np-item.sized img,.np-item.sized video{object-fit:cover}
+/* системный полноэкранный режим (компьютер, iPhone): видео целиком, без обрезки —
+   иначе «cover» растягивал кадр на весь монитор и он сильно мылился.
+   Правила раздельные: неизвестный браузеру селектор ломает всё правило целиком */
+.np-item video:fullscreen{object-fit:contain!important;background:#000}
+.np-item video:-webkit-full-screen{object-fit:contain!important;background:#000}
 .np-item.in-next{animation:npItemIn .46s var(--ease-out) both}
 .np-item.in-prev{animation:npItemIn .46s var(--ease-out) both;--from:-26px}
 .np-item.out{animation:npItemOut .22s var(--ease) both;pointer-events:none}
@@ -330,7 +335,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .np-touch .np-arrow{display:none}
 .np-touch .np-count:not([hidden]){display:flex}
 /* своя кнопка «на весь экран» (Android) и сам режим — без системной плашки Chrome */
-.np-fs{position:absolute;top:8px;right:8px;z-index:2;width:40px;height:40px;display:grid;place-items:center;padding:0;border:0;
+.np-fs{position:absolute;top:8px;right:8px;z-index:1;width:40px;height:40px;display:grid;place-items:center;padding:0;border:0;
  background:rgba(5,5,5,.55);color:#fff;cursor:pointer}
 .np-fs svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:square}
 .np-item.np-full{position:fixed;inset:0;z-index:9600;width:auto!important;height:auto!important;max-width:none;max-height:none;
@@ -434,6 +439,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .craft-field{display:flex;flex-direction:column;gap:8px;position:relative}
 .craft-field span{font-size:var(--t-small);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
 .craft-opt{font-style:normal;font-weight:500;text-transform:none;letter-spacing:0;color:var(--ink-faint)}
+.craft-hint{font-size:var(--t-small);line-height:1.45;color:var(--ink-soft)}
+.craft-hint::before{content:"→ ";color:var(--pink-deep);font-weight:700}
 .craft-field input[type=number]{-moz-appearance:textfield}
 .craft-field input[type=number]::-webkit-inner-spin-button,.craft-field input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 /* 16px — порог iOS Safari: при меньшем шрифте iPhone зумит страницу при тапе по полю */
@@ -1116,6 +1123,11 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
       <span>Из какого ты класса <em class="craft-opt">— необязательно</em></span>
       <input type="text" name="grade" id="craftGrade" placeholder="9Б" autocomplete="off" maxlength="20"/>
     </label>
+    <label class="craft-field">
+      <span>Ник в Discord <em class="craft-opt">— необязательно</em></span>
+      <input type="text" name="discord" id="craftDiscord" placeholder="steve87" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40"/>
+      <small class="craft-hint">Если укажешь — быстрее выдадим роль в Discord и добавим в вайтлист.</small>
+    </label>
     <label class="craft-field craft-honey" aria-hidden="true">
       <span>Сайт</span>
       <input type="text" name="site" id="craftHoney" tabindex="-1" autocomplete="off"/>
@@ -1504,6 +1516,10 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
  /* ---------- вход (заставка) + звук ---------- */
  var audio=document.getElementById('bgAudio'), sb=document.getElementById('soundBtn'), loaderEl=document.getElementById('loader');
  var intendOn=true, entered=false;
+ /* хочет ли человек музыку (кнопка звука), а не «играет ли трек прямо сейчас»:
+    видео в постах глушит трек и по этому флагу решает, возвращать ли его —
+    на iPhone трек останавливает сама система, и по audio.paused это не понять */
+ window.__musicWanted=function(){ return intendOn && entered; };
  if(audio){
    audio.addEventListener('play', function(){ if(sb) sb.classList.remove('muted'); });
    audio.addEventListener('pause',function(){ if(sb) sb.classList.add('muted'); });
@@ -2861,17 +2877,30 @@ window.__arcadeWinFX = function(host){
   function musicDuck(){
     if(musicHeld) return;
     musicHeld=true; window.__musicHold=true;
-    var bg=bgTrack(); musicWasOn=!!(bg && !bg.paused);
-    if(musicWasOn){ if(window.__arcadeMusic) window.__arcadeMusic.duck(); try{ bg.pause(); }catch(e){} }
+    var bg=bgTrack();
+    musicWasOn=!!bg && (window.__musicWanted ? window.__musicWanted() : !bg.paused);
+    if(musicWasOn){ if(window.__arcadeMusic) window.__arcadeMusic.duck(); try{ if(!bg.paused) bg.pause(); }catch(e){} }
   }
+  /* iPhone запускает звук только в ответ на касание, а видео ещё и «усыпляет»
+     аудиосистему страницы. Если вернуть трек сразу не вышло — вернём его на
+     первом же касании экрана (закрытие поста кнопкой — уже такое касание). */
+  var resumeArmed=false, RESUME_EVS=['touchend','pointerup','click','keydown'];
+  function resumeNow(){
+    var bg=bgTrack(); if(!bg) return;
+    if(!(window.__musicWanted ? window.__musicWanted() : true)) return;   /* пока смотрел видео, звук выключили кнопкой */
+    try{ var ac=window.__arcadeAC && window.__arcadeAC(); if(ac && ac.state!=='running' && ac.resume) ac.resume(); }catch(e){}
+    var pr; try{ pr=bg.play(); }catch(e){}
+    if(window.__arcadeMusic) window.__arcadeMusic.restore();   /* трек мягко набирает громкость */
+    var ok=function(){ disarm(); }, fail=function(){ arm(); };
+    if(pr && pr.then) pr.then(function(){ var ac2=window.__arcadeAC && window.__arcadeAC(); if(ac2 && ac2.state!=='running') arm(); else ok(); }, fail);
+  }
+  function onGesture(){ if(musicHeld) return; disarm(); resumeNow(); }
+  function arm(){ if(resumeArmed) return; resumeArmed=true; RESUME_EVS.forEach(function(ev){ document.addEventListener(ev, onGesture, true); }); }
+  function disarm(){ if(!resumeArmed) return; resumeArmed=false; RESUME_EVS.forEach(function(ev){ document.removeEventListener(ev, onGesture, true); }); }
   function musicRestore(){
     if(!musicHeld || anyVideoPlaying()) return;
     musicHeld=false; window.__musicHold=false;
-    var bg=bgTrack();
-    if(musicWasOn && bg){
-      try{ var pr=bg.play(); if(pr&&pr.catch) pr.catch(function(){}); }catch(e){}
-      if(window.__arcadeMusic) window.__arcadeMusic.restore();   /* трек мягко набирает громкость */
-    }
+    if(musicWasOn) resumeNow();
     musicWasOn=false;
   }
 
@@ -3161,6 +3190,7 @@ window.__arcadeWinFX = function(host){
   var plans=document.getElementById('craftPlans');
   var age=document.getElementById('craftAge');
   var grade=document.getElementById('craftGrade');
+  var discordNick=document.getElementById('craftDiscord');
   var honey=document.getElementById('craftHoney');
   var msg=document.getElementById('craftFormMsg');
 
@@ -3219,6 +3249,7 @@ window.__arcadeWinFX = function(host){
     var ageVal=parseInt((age.value||'').trim(),10);
     if(!(ageVal>=5 && ageVal<=99)){ setMsg('Укажи возраст числом.', true); age.focus(); return; }
     var gradeVal=(grade.value||'').trim();
+    var discordVal=((discordNick && discordNick.value)||'').trim().replace(/^@+/,'');
 
     if(!DISCORD_WEBHOOK_URL){
       setMsg('Вайтлист открывается совсем скоро — загляни в Telegram-канал за анонсом, заявки пока не принимаем.');
@@ -3243,7 +3274,8 @@ window.__arcadeWinFX = function(host){
             {name:'Обращение', value:callVal, inline:true},
             {name:'Возраст', value:String(ageVal), inline:true},
             {name:'Планы на сервере', value:(plans.value||'').trim()||'—'},
-            {name:'Класс', value:gradeVal||'—', inline:true}
+            {name:'Класс', value:gradeVal||'—', inline:true},
+            {name:'Discord', value:discordVal||'—', inline:true}
           ]
         }]
       })

@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>404 — 87 · Macan News</title>
 <meta name="robots" content="noindex"/>
-<link rel="icon" type="image/x-icon" href="assets/fav87.ico"/><link rel="icon" type="image/png" sizes="32x32" href="assets/fav87-32.png"/><link rel="apple-touch-icon" sizes="180x180" href="assets/fav87-apple.png"/>
+<!-- все пути только от корня (/...): эта страница отдаётся на любом несуществующем адресе, в т.ч. вложенном вроде /a/b/ — относительные ./ и assets/ там ведут в никуда -->
+<link rel="icon" type="image/x-icon" href="/assets/fav87.ico"/><link rel="icon" type="image/png" sizes="32x32" href="/assets/fav87-32.png"/><link rel="apple-touch-icon" sizes="180x180" href="/assets/fav87-apple.png"/>
 <style>
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-800.woff2) format('woff2')}
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/schibsted-800.woff2) format('woff2')}
 :root{--bg:#F7F4EE;--ink:#050505;--soft:rgba(5,5,5,.62);--pink:#FDA4C2}
 *{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;min-height:100svh;display:grid;place-items:center;background:var(--bg);color:var(--ink);
@@ -23,8 +24,8 @@ a:hover{background:var(--ink);color:var(--bg)}
 <body>
 <div>
   <div class="n">404</div>
-  <p>Такой страницы нет. Мы проверили. Впрочем, мы можем её назначить — но не будем.</p>
-  <a href="./">На главную</a>
+  <p>Такой страницы нет. Мы определяем реальность — и в ней этой страницы нет.</p>
+  <a href="/">На главную</a>
 </div>
 </body>
 </html>
