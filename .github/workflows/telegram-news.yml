@@ -23,7 +23,12 @@ on:
     - cron: '4,19,34 5,17 * * *'
     # остальное время — каждые 30 минут
     - cron: '12,42 * * * *'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      refetch:
+        description: 'Перезагрузить посты по номеру (через запятую), например 301 или 301,302. Обычно пусто.'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -49,6 +54,7 @@ jobs:
       - name: Собрать news.json через Bot API
         env:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          REFETCH_IDS: ${{ github.event.inputs.refetch }}
         run: node .github/scripts/fetch-news.mjs
 
       - name: Закоммитить, если лента изменилась
