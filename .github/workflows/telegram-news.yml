@@ -5,18 +5,38 @@ name: Обновление ленты Telegram
 # упёрся в устойчивую DNS-блокировку домена t.me именно с сети GitHub Actions.
 # Бот должен быть администратором канала, токен лежит в секрете TG_BOT_TOKEN
 # (Settings → Secrets and variables → Actions).
+#
+# Про расписание: GitHub не гарантирует, что cron сработает вовремя — при
+# нагрузке запуски «*/15» приходят раз в 2–5 часов (замерено: средний
+# интервал ~134 мин, максимум 12 часов). Поэтому:
+#  - расписание разложено по НЕкруглым минутам (круглые — самые загруженные);
+#  - вокруг 8:07 и 20:07 МСК (05:07 и 17:07 UTC) стоит несколько запусков
+#    подряд — хватит, чтобы хотя бы один дошёл;
+#  - прогон, стартовавший в «золотом окне», сам ждёт появления свежего поста
+#    (см. fetch-news.mjs), а не уходит сразу.
+# Время в cron — UTC (МСК = UTC+3, без перехода на летнее время).
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    # золотые окна: 07:52, 08:04, 08:19, 08:34 МСК и 19:52, 20:04, 20:19, 20:34 МСК
+    - cron: '52 4,16 * * *'
+    - cron: '4,19,34 5,17 * * *'
+    # остальное время — каждые 30 минут
+    - cron: '12,42 * * * *'
   workflow_dispatch: {}
 
 permissions:
   contents: write
 
+# запуски не должны идти одновременно: они пишут в один и тот же news.json
+concurrency:
+  group: telegram-news
+  cancel-in-progress: false
+
 jobs:
   update-news:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,7 +58,13 @@ jobs:
             git config user.email "actions@users.noreply.github.com"
             git add news.json assets/news .github/state
             git commit -m "auto: обновление ленты Telegram"
-            git push
+            # пока шёл прогон, в main мог попасть чужой коммит (например, зип с сайтом)
+            pushed=0
+            for i in 1 2 3; do
+              if git pull --rebase origin main && git push; then pushed=1; break; fi
+              sleep 5
+            done
+            [ "$pushed" = 1 ] || { echo "Не удалось запушить после 3 попыток"; exit 1; }
           else
             echo "Без изменений — новых постов нет"
           fi
