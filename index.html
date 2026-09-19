@@ -292,6 +292,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .np-slide img,.np-slide video{max-width:100%;max-height:100%;display:block;object-fit:contain;background:#000}
 .np-slide img{background:transparent}
 .np-slide-tg{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);white-space:nowrap;background:var(--bg)}
+.np-slide-nopic{background:#000}
+.np-slide-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:76px;height:76px;display:grid;place-items:center;
+ font-size:28px;padding-left:5px;background:var(--bg);color:var(--ink);border:1.5px solid var(--ink);transition:background .25s,color .25s}
+.np-slide-play:hover{background:var(--ink);color:var(--bg)}
 .np-gal-btn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;display:grid;place-items:center;font-size:26px;line-height:1;
  background:var(--bg);color:var(--ink);border:1.5px solid var(--ink);transition:background .25s,color .25s,opacity .25s}
 .np-gal-btn:hover{background:var(--ink);color:var(--bg)}
@@ -2707,7 +2711,7 @@ window.__arcadeWinFX = function(host){
   /* p.media есть только у постов с видео или несколькими файлами; у обычного
      поста с одним фото его нет — он работает по-старому, через p.image */
   function mediaItems(p){
-    return (p && Array.isArray(p.media) ? p.media : []).filter(function(i){ return i && (i.src||i.poster); });
+    return (p && Array.isArray(p.media) ? p.media : []).filter(function(i){ return i && (i.src||i.poster||i.type==='video'); });
   }
   function isSimple(items){ return items.length===0 || (items.length===1 && items[0].type==='photo'); }
   function badgeOf(p){
@@ -2778,9 +2782,13 @@ window.__arcadeWinFX = function(host){
         img.src=it.src||it.poster;
         s.appendChild(img);
       }
-      if(it.type==='video'){   /* видео не влезло в лимит бота — отправляем смотреть в Telegram */
+      if(it.type==='video'){   /* видео не влезло в лимит бота — кадр-превью + переход смотреть в Telegram */
+        if(!it.poster) s.classList.add('np-slide-nopic');
+        var pl=document.createElement('a'); pl.className='np-slide-play'; pl.href=curUrl; pl.target='_blank'; pl.rel='noopener';
+        pl.setAttribute('aria-label','Смотреть видео в Telegram'); pl.textContent='▶';
+        s.appendChild(pl);
         var a=document.createElement('a'); a.className='btn np-slide-tg'; a.href=curUrl; a.target='_blank'; a.rel='noopener';
-        a.textContent='▶ Смотреть в Telegram';
+        a.textContent='Смотреть в Telegram';
         s.appendChild(a);
       }
     }
