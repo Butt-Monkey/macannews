@@ -1795,52 +1795,6 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
    document.body.classList.toggle('tab-hidden', document.hidden);
  });
 
- /* ---------- ховер-звуки: duck (Джиган) и throw it (Артём Андреевич) ---------- */
- var SFX={
-   duck:'assets/mp3-b891688a69.mp3',
-   throw_it:'assets/mp3-560aa913da.mp3'
- };
- var _duckRaf=null;
- function tweenBg(target,ms){
-   if(!audio) return;
-   cancelAnimationFrame(_duckRaf);
-   var from=window.__bgVol.get(), t0=performance.now();
-   (function step(ts){
-     var p=Math.min(1,(ts-t0)/ms), e=1-Math.pow(1-p,2);
-     window.__bgVol.set(from+(target-from)*e);
-     if(p<1) _duckRaf=requestAnimationFrame(step);
-   })(t0);
- }
- var _sfxLast=0, _sfxLive=0, _safety=null;
- function _sfxBack(){
-   _sfxLive--;
-   if(_sfxLive<=0){ _sfxLive=0; clearTimeout(_safety); if(audio && !audio.paused) tweenBg(0.8,700); }
- }
- function playSfx(key){
-   if(!entered) return;
-   var now=Date.now(); if(now-_sfxLast<500) return;
-   _sfxLast=now;
-   var a=new Audio(SFX[key]); a.volume=0.8;
-   if(audio && !audio.paused){
-     _sfxLive++;
-     tweenBg(0.12,140);
-     clearTimeout(_safety);
-     _safety=setTimeout(function(){ _sfxLive=0; if(audio && !audio.paused) tweenBg(0.8,700); },5000);
-     a.addEventListener('ended', _sfxBack);
-     a.addEventListener('error', _sfxBack);
-     var p=a.play(); if(p&&p.catch) p.catch(_sfxBack);
-   } else {
-     var p2=a.play(); if(p2&&p2.catch) p2.catch(function(){});
-   }
- }
- function bindSfx(label,key){
-   var m=document.querySelector('[aria-label="'+label+'"]'); if(!m) return;
-   var card=m.closest('.star-card,.alley-row')||m;
-   card.addEventListener('pointerenter', function(){ playSfx(key); });
- }
- bindSfx('Джиган','duck');
- bindSfx('Артём Андреевич','throw_it');
-
  /* (паузу частиц и ири-градиента вне вьюпорта ведут IO-блоки выше — здесь были дубли) */
 
  /* ---------- бегущие ленты ----------
@@ -2912,7 +2866,7 @@ window.__arcadeWinFX = function(host){
 
   /* ---------- фоновая музыка: на время видео поста — полная тишина ----------
      Раньше только плавно убавляли громкость, но её одновременно крутят и другие
-     эффекты сайта (вход трека, звуки при наведении) — и они её «поднимали».
+     эффекты сайта (плавный вход трека) — и они её «поднимали».
      Поэтому трек ставим на паузу, а когда все видео поста остановились или пост
      закрыт — продолжаем с того же места (если он играл до этого). */
   var musicHeld=false, musicWasOn=false;
