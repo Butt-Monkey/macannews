@@ -13,6 +13,15 @@
 //   .github/state/telegram-offset.json и с каждым запуском продолжаем оттуда.
 // - Новые посты добавляются в начало news.json, старые вытесняются за пределы
 //   KEEP.
+// - МЕДИА: у записи всегда есть поле image (первая картинка или постер видео) —
+//   по нему рисуются карточки, как раньше. Если в посте видео или больше одного
+//   файла (альбом), добавляется массив media: [{type:'photo', src} |
+//   {type:'video', src, poster}] — по нему страница показывает плеер/галерею.
+//   Альбом Telegram присылает россыпью отдельных сообщений с общим
+//   media_group_id — бот склеивает их в одну запись (поле group нужно, чтобы
+//   дописать «опоздавшие» части альбома в следующем прогоне).
+//   Видео скачивается в assets/news/, если влезает в лимит Bot API (20 МБ);
+//   если не влезает — остаётся только постер и кнопка «Смотреть в Telegram».
 // - РЕДАКТИРОВАНИЕ: Telegram присылает отдельный тип апдейта
 //   edited_channel_post — если пост, который уже есть в ленте, отредактировали
 //   (текст и/или картинку), бот обновляет его на месте, не двигая позицию.
@@ -38,10 +47,28 @@ if (!TOKEN) throw new Error('Нет TG_BOT_TOKEN — секрет репозит
 const CHANNEL_FALLBACK = 'macan777macan777macan777';
 const KEEP = 6;
 const BACKFILL_MAX_ATTEMPTS = 25;   // сколько номеров назад пробовать, прежде чем сдаться
+const MAX_VIDEO_BYTES = 20 * 1024 * 1024;   // потолок Bot API на скачивание файлов (getFile)
 const IMG_DIR = 'assets/news';
 const NEWS_FILE = 'news.json';
 const STATE_FILE = '.github/state/telegram-offset.json';
 const OWNER_FILE = '.github/state/owner-chat.json';
+
+// «Золотые окна»: посты обычно выходят в 8:07 и 20:07 МСК (05:07 и 17:07 UTC).
+// GitHub запускает расписание с большими задержками (в среднем раз в ~2 часа),
+// поэтому прогон, попавший в окно, не уходит сразу, а ждёт появления свежего
+// поста — так даже запуск за 10 минут до публикации подхватит её.
+const PEAK_WINDOWS_UTC = [[4 * 60 + 50, 5 * 60 + 40], [16 * 60 + 50, 17 * 60 + 40]];   // минуты суток UTC
+const PEAK_POLL_MS = 30000;
+
+function currentPeakWindow(now = new Date()) {
+  const minutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+  const w = PEAK_WINDOWS_UTC.find(([from, to]) => minutes >= from && minutes < to);
+  if (!w) return null;
+  const dayStart = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  return { start: dayStart + w[0] * 60000, end: dayStart + w[1] * 60000 };
+}
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 async function fetchWithRetry(url, attempts = 3, delayMs = 4000) {
   let lastErr;
@@ -53,7 +80,7 @@ async function fetchWithRetry(url, attempts = 3, delayMs = 4000) {
     } catch (e) {
       lastErr = e;
       console.warn(`Попытка ${i + 1}/${attempts} не удалась: ${e.message}`);
-      if (i < attempts - 1) await new Promise(r => setTimeout(r, delayMs));
+      if (i < attempts - 1) await sleep(delayMs);
     }
   }
   throw lastErr;
@@ -71,7 +98,7 @@ async function apiCallLenient(method, params, attempts = 2) {
       return await res.json();
     } catch (e) {
       lastErr = e;
-      if (i < attempts - 1) await new Promise(r => setTimeout(r, 3000));
+      if (i < attempts - 1) await sleep(3000);
     }
   }
   throw lastErr;
@@ -94,6 +121,78 @@ async function downloadTelegramFile(fileId, destPath, fs) {
   const fileRes = await fetchWithRetry(`https://api.telegram.org/file/bot${TOKEN}/${info.result.file_path}`);
   const buf = Buffer.from(await fileRes.arrayBuffer());
   await fs.writeFile(destPath, buf);
+}
+
+// что за медиа в сообщении: фото, видео или GIF-анимация (её Telegram тоже
+// хранит как mp4). Прочее (документы, аудио, кружки) на сайте не показываем.
+function mediaOf(msg) {
+  const photo = bestPhoto(msg.photo);
+  if (photo) return { kind: 'photo', file: photo, thumb: null };
+  const video = msg.video || msg.animation;
+  if (video) return { kind: 'video', file: video, thumb: video.thumbnail || video.thumb || null };
+  return null;
+}
+
+// Скачивает медиа одного сообщения в assets/news/ и возвращает элемент для
+// news.json. index — порядковый номер в посте: 0 → <id>.jpg (как всегда),
+// дальше <id>_1.jpg, <id>_2.mp4 и т.д. Если скачать нечего — null.
+async function buildMediaItem(msg, id, index, fs) {
+  const m = mediaOf(msg);
+  if (!m) return null;
+  await fs.mkdir(IMG_DIR, { recursive: true });
+  const base = index === 0 ? String(id) : `${id}_${index}`;
+  const item = { mid: msg.message_id, uid: m.file.file_unique_id || null };
+
+  if (m.kind === 'photo') {
+    const src = `${IMG_DIR}/${base}.jpg`;
+    try {
+      await downloadTelegramFile(m.file.file_id, src, fs);
+    } catch (e) {
+      console.warn(`Не удалось скачать картинку ${base}:`, e.message);
+      return null;
+    }
+    return { ...item, type: 'photo', src };
+  }
+
+  item.type = 'video';
+  if (m.thumb) {
+    const poster = `${IMG_DIR}/${base}.jpg`;
+    try {
+      await downloadTelegramFile(m.thumb.file_id, poster, fs);
+      item.poster = poster;
+    } catch (e) {
+      console.warn(`Не удалось скачать постер видео ${base}:`, e.message);
+    }
+  }
+  if (m.file.file_size && m.file.file_size > MAX_VIDEO_BYTES) {
+    console.log(`Видео ${base} весит ${(m.file.file_size / 1048576).toFixed(1)} МБ — больше лимита Bot API, оставляю только постер.`);
+  } else {
+    const src = `${IMG_DIR}/${base}.mp4`;
+    try {
+      await downloadTelegramFile(m.file.file_id, src, fs);
+      item.src = src;
+    } catch (e) {
+      console.warn(`Не удалось скачать видео ${base}:`, e.message);
+    }
+  }
+  return item;
+}
+
+// список медиа записи в единообразном виде (у обычного поста с одним фото
+// массива media нет — восстанавливаем его из image)
+function mediaListOf(entry) {
+  if (Array.isArray(entry.media)) return entry.media;
+  return entry.image ? [{ mid: Number(entry.id), uid: null, type: 'photo', src: entry.image }] : [];
+}
+
+// приводит запись к каноническому виду: image = первая картинка/постер,
+// media — только если в посте видео или больше одного файла
+function finalizeEntry(entry, items) {
+  items = items.filter(Boolean);
+  const first = items[0];
+  entry.image = first ? (first.type === 'photo' ? first.src : (first.poster || null)) : null;
+  if (items.length > 1 || items.some(i => i.type === 'video')) entry.media = items;
+  else delete entry.media;
 }
 
 // пробуем скопировать пост владельцу в личку и сразу стереть копию —
@@ -158,18 +257,7 @@ async function backfillOlder(startId, need, ownerChatId, fs) {
           text,
           image: null
         };
-        let photoSize = bestPhoto(msg.photo);
-        if (!photoSize && msg.video) photoSize = msg.video.thumbnail || msg.video.thumb;
-        if (photoSize) {
-          try {
-            await fs.mkdir(IMG_DIR, { recursive: true });
-            const localPath = `${IMG_DIR}/${candidate}.jpg`;
-            await downloadTelegramFile(photoSize.file_id, localPath, fs);
-            entry.image = localPath;
-          } catch (e) {
-            console.warn(`Не удалось скачать картинку добора ${candidate}:`, e.message);
-          }
-        }
+        finalizeEntry(entry, [await buildMediaItem(msg, candidate, 0, fs)]);
         filled.push(entry);
         console.log(`Добрал более старый пост ${candidate}.`);
       }
@@ -178,6 +266,13 @@ async function backfillOlder(startId, need, ownerChatId, fs) {
     candidate--;
   }
   return filled;
+}
+
+async function getUpdatesOnce(url) {
+  const res = await fetchWithRetry(url);
+  const data = await res.json();
+  if (!data.ok) throw new Error('getUpdates failed: ' + JSON.stringify(data));
+  return data.result;
 }
 
 async function main() {
@@ -200,52 +295,43 @@ async function main() {
 
   const allowed = encodeURIComponent(JSON.stringify(['channel_post', 'edited_channel_post', 'message']));
   const url = `https://api.telegram.org/bot${TOKEN}/getUpdates?offset=${offset}&timeout=0&allowed_updates=${allowed}`;
-  const res = await fetchWithRetry(url);
-  const data = await res.json();
-  if (!data.ok) throw new Error('getUpdates failed: ' + JSON.stringify(data));
 
-  const updates = data.result;
+  // getUpdates без подтверждения offset ничего не «съедает» — можно спокойно
+  // переспрашивать, пока в золотом окне не появится свежий пост
+  const peak = currentPeakWindow();
+  let updates;
+  for (;;) {
+    updates = await getUpdatesOnce(url);
+    const hasFresh = updates.some(u => u.channel_post && u.channel_post.date * 1000 >= peak?.start);
+    if (!peak || hasFresh || Date.now() + PEAK_POLL_MS >= peak.end) break;
+    console.log('Золотое окно: свежего поста ещё нет — жду ' + PEAK_POLL_MS / 1000 + ' с…');
+    await sleep(PEAK_POLL_MS);
+  }
 
-  const newPosts = [];
-  const edits = new Map();   // id -> { text, photoSize }
+  // альбом прилетает россыпью сообщений — даём остальным частям долететь
+  if (updates.some(u => u.channel_post && u.channel_post.media_group_id)) {
+    await sleep(5000);
+    updates = await getUpdatesOnce(url);
+  }
+
+  // раскладываем апдейты: сообщения одного альбома собираем в одну группу
+  const groups = [];                 // от старых к новым
+  const groupByKey = new Map();
+  const edits = new Map();           // id сообщения -> само отредактированное сообщение
 
   for (const upd of updates) {
     if (upd.channel_post) {
       const post = upd.channel_post;
-      const text = truncate(post.text || post.caption || '');
-      if (!text) continue;
-
-      const id = String(post.message_id);
-      const channel = (post.chat && post.chat.username) || CHANNEL_FALLBACK;
-      const entry = {
-        id,
-        url: `https://t.me/${channel}/${id}`,
-        date: new Date(post.date * 1000).toISOString(),
-        text,
-        image: null
-      };
-
-      let photoSize = bestPhoto(post.photo);
-      if (!photoSize && post.video) photoSize = post.video.thumbnail || post.video.thumb;
-      if (photoSize) {
-        try {
-          await fs.mkdir(IMG_DIR, { recursive: true });
-          const localPath = `${IMG_DIR}/${id}.jpg`;
-          await downloadTelegramFile(photoSize.file_id, localPath, fs);
-          entry.image = localPath;
-        } catch (e) {
-          console.warn(`Не удалось скачать картинку поста ${id}:`, e.message);
-        }
+      const key = post.media_group_id ? 'g' + post.media_group_id : 'm' + post.message_id;
+      let g = groupByKey.get(key);
+      if (!g) {
+        g = { groupId: post.media_group_id ? String(post.media_group_id) : null, msgs: [] };
+        groupByKey.set(key, g);
+        groups.push(g);
       }
-
-      newPosts.push(entry);
+      g.msgs.push(post);
     } else if (upd.edited_channel_post) {
-      const post = upd.edited_channel_post;
-      const id = String(post.message_id);
-      const text = truncate(post.text || post.caption || '');
-      let photoSize = bestPhoto(post.photo);
-      if (!photoSize && post.video) photoSize = post.video.thumbnail || post.video.thumb;
-      edits.set(id, { text, photoSize });
+      edits.set(String(upd.edited_channel_post.message_id), upd.edited_channel_post);
     } else if (upd.message && upd.message.chat && upd.message.chat.type === 'private' && !ownerChatId) {
       // любое личное сообщение боту — запоминаем chat_id для проверки удалений и добора
       ownerChatId = upd.message.chat.id;
@@ -255,23 +341,70 @@ async function main() {
     }
   }
 
+  const newPosts = [];
+  for (const g of groups) {
+    g.msgs.sort((a, b) => a.message_id - b.message_id);
+    const first = g.msgs[0];
+    const text = truncate(g.msgs.map(m => m.text || m.caption || '').find(t => t.trim()) || '');
+
+    // альбом мог начаться в предыдущий прогон — тогда дописываем в готовую запись
+    const owner = g.groupId && existing.find(p => p.group === g.groupId);
+    if (owner) {
+      const items = mediaListOf(owner);
+      for (const m of g.msgs) {
+        if (items.some(i => i.mid === m.message_id)) continue;
+        const item = await buildMediaItem(m, owner.id, items.length, fs);
+        if (item) items.push(item);
+      }
+      finalizeEntry(owner, items);
+      console.log(`Дописал части альбома в пост ${owner.id}.`);
+      continue;
+    }
+
+    if (!text) continue;
+
+    const id = String(first.message_id);
+    const channel = (first.chat && first.chat.username) || CHANNEL_FALLBACK;
+    const entry = {
+      id,
+      url: `https://t.me/${channel}/${id}`,
+      date: new Date(first.date * 1000).toISOString(),
+      text,
+      image: null
+    };
+    if (g.groupId) entry.group = g.groupId;
+
+    const items = [];
+    for (const m of g.msgs) {
+      const item = await buildMediaItem(m, id, items.length, fs);
+      if (item) items.push(item);
+    }
+    finalizeEntry(entry, items);
+    newPosts.push(entry);
+  }
+
   // апдейты приходят от старых к новым; в ленте нужен обратный порядок (новые сверху)
   let merged = [...newPosts.reverse(), ...existing];
 
   // применяем правки к уже показанным постам (не двигая их позицию в ленте)
-  for (const post of merged) {
-    if (!edits.has(post.id)) continue;
-    const edit = edits.get(post.id);
-    if (edit.text) post.text = edit.text;
-    if (edit.photoSize) {
-      try {
-        await fs.mkdir(IMG_DIR, { recursive: true });
-        const localPath = `${IMG_DIR}/${post.id}.jpg`;
-        await downloadTelegramFile(edit.photoSize.file_id, localPath, fs);
-        post.image = localPath;
-      } catch (e) {
-        console.warn(`Не удалось обновить картинку поста ${post.id}:`, e.message);
+  for (const [id, msg] of edits) {
+    const post = merged.find(p => p.id === id || (Array.isArray(p.media) && p.media.some(i => String(i.mid) === id)));
+    if (!post) continue;
+
+    const text = truncate(msg.text || msg.caption || '');
+    if (text) post.text = text;
+
+    const m = mediaOf(msg);
+    if (m) {
+      const items = mediaListOf(post);
+      let idx = items.findIndex(i => String(i.mid) === id);
+      if (idx < 0) idx = 0;
+      // файл не менялся (правили только подпись) — не перекачиваем
+      if (!items[idx] || !items[idx].uid || items[idx].uid !== m.file.file_unique_id) {
+        const item = await buildMediaItem(msg, post.id, idx, fs);
+        if (item) items[idx] = item;
       }
+      finalizeEntry(post, items);
     }
     console.log(`Пост ${post.id} отредактирован — обновил содержимое.`);
   }
@@ -303,8 +436,13 @@ async function main() {
 
   merged = merged.slice(0, KEEP);
 
-  // подчищаем картинки постов, которых больше нет в окне KEEP
-  const keepFiles = new Set(merged.filter(p => p.image).map(p => `${p.id}.jpg`));
+  // подчищаем файлы (картинки, постеры, видео) постов, которых больше нет в окне KEEP
+  const keepFiles = new Set();
+  const addKeep = p => { if (typeof p === 'string' && p.startsWith(IMG_DIR + '/')) keepFiles.add(p.slice(IMG_DIR.length + 1)); };
+  for (const p of merged) {
+    addKeep(p.image);
+    for (const i of (p.media || [])) { addKeep(i.src); addKeep(i.poster); }
+  }
   try {
     const files = await fs.readdir(IMG_DIR);
     for (const file of files) {
