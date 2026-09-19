@@ -10,7 +10,7 @@
   assets/fonts/       — шрифты самохостом: Schibsted Grotesk (латиница/цифры,
                         woff2) + minecraft.ttf (только раздел 87CRAFT).
                         Кириллица — системный шрифт, внешних запросов нет.
-  assets/og-cover.jpg — баннер для шаринга в TG/соцсетях (1200×630)
+  assets/og-87.png — картинка превью ссылки в TG/соцсетях (1200×630)
   site.webmanifest    — манифест PWA (иконка на телефоне)
   robots.txt          — для поисковиков
   sitemap.xml         — карта сайта

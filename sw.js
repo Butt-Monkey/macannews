@@ -5,7 +5,7 @@
    - ассеты (шрифты/картинки/аудио/видео) — cache-first: мгновенные
      повторные визиты, файлы контент-хэшированы именами и не меняются.
    При изменении списка ниже поднимай VERSION — старый кэш удалится сам. */
-var VERSION = '87-v22';
+var VERSION = '87-v23';
 var ASSET_RE = /\/assets\//;
 
 self.addEventListener('install', function (e) {
@@ -42,6 +42,11 @@ self.addEventListener('fetch', function (e) {
   /* видео не трогаем: браузер тянет его кусками (Range → ответ 206), такие
      ответы нельзя положить в Cache API, а кэшировать целиком тяжело */
   if (/\.(mp4|webm|mov|m4v)$/i.test(url.pathname) || req.headers.has('range')) return;
+
+  /* медиа постов из Telegram не кэшируем «навсегда»: бот может перезаписать файл
+     под тем же именем (правка поста, перезагрузка альбома), и cache-first потом
+     показывал бы старую картинку. Обычный HTTP-кэш браузера справится сам. */
+  if (url.pathname.indexOf('/assets/news/') !== -1) return;
 
   /* навигация / HTML — сеть в приоритете, кэш как офлайн-фолбэк */
   if (req.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname === '/') {
