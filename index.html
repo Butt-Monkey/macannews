@@ -482,6 +482,19 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .craft-note{font-size:var(--t-small);line-height:1.5;color:var(--ink);padding:10px 14px;border-left:3px solid var(--pink);background:var(--pink-wash)}
 .craft-form-msg{font-size:var(--t-small);color:var(--ink-soft);min-height:1.4em}
 .craft-form-msg.is-error{color:#c0392b}
+/* экран после отправки заявки: три шага вместо мгновенного редиректа —
+   иначе человека выбрасывало в Discord раньше, чем он успевал что-то понять */
+.craft-done{max-width:520px;margin-top:var(--sp-m);border:1.5px solid var(--ink);padding:var(--sp-s)}
+.craft-done-title{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;text-transform:uppercase;font-size:var(--t-h5);letter-spacing:var(--ls-tight);line-height:var(--lh-head)}
+.craft-done-sub{font-size:var(--t-small);line-height:1.5;color:var(--ink-soft);margin-top:8px}
+.craft-steps{list-style:none;counter-reset:cstep;margin-top:var(--sp-s);display:flex;flex-direction:column;gap:14px}
+/* номер — абсолютом, а не grid-колонкой: в grid каждый текстовый узел после
+   <b> становился отдельным элементом сетки и текст вставал по слову в строку */
+.craft-steps li{position:relative;padding-left:46px;min-height:32px;font-size:var(--t-small);line-height:1.5}
+.craft-steps li::before{counter-increment:cstep;content:counter(cstep);position:absolute;left:0;top:0;font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-size:var(--t-small);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--ink);background:var(--pink)}
+.craft-steps b{font-weight:800}
+.craft-done .btn{margin-top:var(--sp-s)}
+.craft-done-timer{margin-top:10px;font-variant-numeric:tabular-nums;color:var(--ink-faint)}
 @media (max-width:640px){
   .news-card{grid-template-columns:76px 1fr;gap:12px}
   .news-card-text{-webkit-line-clamp:3;font-size:var(--t-small)}
@@ -1026,7 +1039,6 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
   </g>
 </svg></div>
     <h1 class="hero-name reveal">Macan News</h1>
-    <p class="hero-slogan reveal">Мы определяем реальность</p>
     <div class="hero-cta reveal">
       <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener" class="btn gold-btn">
         <svg viewBox="0 0 24 24"><path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.47-2.27 2.18c-.25.25-.46.46-.94.46l.34-4.8 8.73-7.9c.38-.34-.08-.53-.59-.19L6.99 13.2l-4.65-1.45c-1.01-.32-1.03-1.01.21-1.49L20.63 2.9c.84-.31 1.58.2 1.31 1.4z"/></svg>
@@ -1170,6 +1182,17 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
     <button type="submit" class="btn gold-btn">Отправить и перейти в Discord →</button>
     <p class="craft-form-msg" id="craftFormMsg" aria-live="polite"></p>
   </form>
+  <div class="craft-done" id="craftDone" hidden>
+    <p class="craft-done-title">Заявка принята</p>
+    <p class="craft-done-sub">Модеры посмотрят её и внесут тебя в вайтлист. А пока — три шага, чтобы не ждать впустую.</p>
+    <ol class="craft-steps">
+      <li><b>Заходи в Discord</b> по кнопке ниже и ответь на один вопрос — откроются все каналы.</li>
+      <li><b>Поставь там ник как в Minecraft.</b> Название сервера сверху слева → «Изменить профиль сервера» → «Никнейм». По нему тебя найдут по заявке.</li>
+      <li><b>Открой канал «сервер»</b> — там IP, версия и как подключиться.</li>
+    </ol>
+    <button type="button" class="btn gold-btn" id="craftGoBtn"><span>Перейти в Discord →</span></button>
+    <p class="craft-form-msg craft-done-timer" id="craftTimer"></p>
+  </div>
 </div></section></section><section class="view" id="view-top100"><section class="page-head"><div class="wrap">
     <div class="eyebrow reveal">Индекс влияния</div>
     <h1 class="page-title gold reveal">ТОП 100</h1>
@@ -3252,6 +3275,9 @@ window.__arcadeWinFX = function(host){
   var discordNick=document.getElementById('craftDiscord');
   var honey=document.getElementById('craftHoney');
   var msg=document.getElementById('craftFormMsg');
+  var doneBox=document.getElementById('craftDone');
+  var goBtn=document.getElementById('craftGoBtn');
+  var timerEl=document.getElementById('craftTimer');
 
   applyBtn.addEventListener('click', function(){
     form.hidden=false;
@@ -3289,6 +3315,35 @@ window.__arcadeWinFX = function(host){
     var timer=setTimeout(fallback, 1200);
     document.addEventListener('visibilitychange', onHide);
     window.location.href=deep;
+  }
+
+  /* после успешной отправки показываем три шага ВМЕСТО формы и даём 20 секунд
+     прочитать их: раньше редирект срабатывал через 0.6 с и человек попадал в
+     Discord, не понимая, что делать. Кнопка переносит сразу. */
+  var goTimer=null;
+  function stopGoTimer(){
+    if(goTimer){ clearInterval(goTimer); goTimer=null; }
+    if(timerEl) timerEl.textContent='';
+  }
+  function startGoTimer(){
+    var left=20;
+    function tick(){
+      if(left<=0){ stopGoTimer(); goToDiscord(); return; }
+      if(timerEl) timerEl.textContent='Перенесём автоматически через '+left+' с';
+      left--;
+    }
+    tick();
+    goTimer=setInterval(tick, 1000);
+  }
+  if(goBtn) goBtn.addEventListener('click', function(){ stopGoTimer(); goToDiscord(); });
+
+  function showDone(){
+    form.reset();
+    if(!doneBox){ setTimeout(goToDiscord, 600); return; }
+    form.hidden=true;
+    doneBox.hidden=false;
+    doneBox.scrollIntoView({behavior:'smooth', block:'center'});
+    startGoTimer();
   }
 
   form.addEventListener('submit', function(e){
@@ -3340,9 +3395,8 @@ window.__arcadeWinFX = function(host){
       })
     }).then(function(r){
       if(!r.ok) throw 0;
-      setMsg('Заявка отправлена! Переходим в Discord…');
-      form.reset();
-      setTimeout(goToDiscord, 600);
+      setMsg('');
+      showDone();
     }).catch(function(){
       setMsg('Не получилось отправить — скорее всего, не включён VPN. Включи VPN и нажми «Отправить» ещё раз.', true);
     }).finally(function(){
