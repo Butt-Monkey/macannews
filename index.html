@@ -610,6 +610,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .memoriam-mark{font-size:20px;margin-top:26px;color:var(--gold-solid);line-height:1}
 .memoriam-name{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;text-transform:uppercase;font-size:var(--t-h3);margin-top:14px;line-height:var(--lh-tight)}
 .memoriam-bio{font-family:'Schibsted Grotesk',sans-serif;font-weight:500;color:var(--ink-soft);font-size:var(--t-lead);margin-top:14px;max-width:32ch;line-height:var(--lh-body)}
+/* вымаранные слова: пустая плашка, а не закрашенный текст. Под ней физически
+   ничего нет — ни в разметке, ни в выделении, ни в поиске по странице */
+.redacted{display:inline-block;width:calc(var(--w,6) * 1ch);height:.9em;vertical-align:-.1em;background:var(--ink);user-select:none;-webkit-user-select:none}
 
 /* «переливающийся» блик за лого убран в редизайне 2026-09 (плоский brutalist-стиль,
    плюс вращающийся blur() 18с крутился даже невидимым — лишняя нагрузка на GPU) */
@@ -1245,7 +1248,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
   <div class="memoriam-photo" role="img" aria-label="Сивожелезов" style="background-image:url(assets/img-dccb894f4c.jpg);background-image:-webkit-image-set(url(assets/img-dccb894f4c.webp) 1x);background-image:image-set(url(assets/img-dccb894f4c.webp) type('image/webp'),url(assets/img-dccb894f4c.jpg) type('image/jpeg'));background-size:cover;background-position:center"></div>
   <div class="memoriam-mark">✦</div>
   <h3 class="memoriam-name">Сивожелезов</h3>
-  <p class="memoriam-bio">Сердце, которого нас лишила администрация</p>
+  <p class="memoriam-bio">Сердце, которого нас <span class="redacted" style="--w:7" role="img" aria-label="вымарано"></span> <span class="redacted" style="--w:13" role="img" aria-label="вымарано"></span></p>
 </div></div></section></section><section class="view" id="view-games"><h1 class="sr-only">Игры 87: змейка и пинг-понг</h1><div class="arcade-wrap">
   <picture style="display:none"><source type="image/webp" srcset="assets/img-c3125116b0.webp"/><img id="snHeadSrc" src="assets/img-c3125116b0.png" alt="" decoding="async"/></picture>
   <picture style="display:none"><source type="image/webp" srcset="assets/img-349d298e8e.webp"/><img id="pongTimSrc" src="assets/img-349d298e8e.png" alt="" decoding="async"/></picture>
