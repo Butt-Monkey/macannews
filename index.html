@@ -1173,7 +1173,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
     <label class="craft-field">
       <span>Ник в Discord <em class="craft-opt">— необязательно</em></span>
       <input type="text" name="discord" id="craftDiscord" placeholder="steve87" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40"/>
-      <small class="craft-hint">Если укажешь — быстрее выдадим роль в Discord и добавим в вайтлист.</small>
+      <small class="craft-hint">Если укажешь — быстрее найдём тебя и добавим в вайтлист.</small>
     </label>
     <label class="craft-field craft-honey" aria-hidden="true">
       <span>Сайт</span>
@@ -1186,11 +1186,11 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
     <p class="craft-done-title">Заявка принята</p>
     <p class="craft-done-sub">Модеры посмотрят её и внесут тебя в вайтлист. А пока — три шага, чтобы не ждать впустую.</p>
     <ol class="craft-steps">
-      <li><b>Заходи в Discord</b> по кнопке ниже и ответь на один вопрос — откроются все каналы.</li>
-      <li><b>Поставь там ник как в Minecraft.</b> Название сервера сверху слева → «Изменить профиль сервера» → «Никнейм». По нему тебя найдут по заявке.</li>
+      <li><b>Заходи в Discord</b> по кнопке ниже и ответь на вопрос при входе — каналы откроются сами.</li>
+      <li><b>Поставь там ник как в Minecraft.</b> Нажми на название сервера сверху слева → «Редактировать личный профиль сервера» → поле «Никнейм». По нему тебя найдут по заявке.</li>
       <li><b>Открой канал «сервер»</b> — там IP, версия и как подключиться.</li>
     </ol>
-    <p class="craft-note">Сам Discord в России без VPN не открывается — включи его перед переходом. На заявку это уже не влияет: она принята и никуда не денется.</p>
+    <p class="craft-note">Discord без VPN или другого обхода просто не загрузится — включи перед переходом. Заявка уже отправлена и никуда не пропадёт.</p>
     <button type="button" class="btn gold-btn" id="craftGoBtn"><span>Перейти в Discord →</span></button>
     <p class="craft-form-msg craft-done-timer" id="craftTimer"></p>
   </div>
@@ -3335,7 +3335,7 @@ window.__arcadeWinFX = function(host){
     window.location.href=deep;
   }
 
-  /* после успешной отправки показываем три шага ВМЕСТО формы и даём 40 секунд
+  /* после успешной отправки показываем три шага ВМЕСТО формы и даём минуту
      прочитать их: раньше редирект срабатывал через 0.6 с и человек попадал в
      Discord, не понимая, что делать. Кнопка переносит сразу. */
   var goTimer=null;
@@ -3344,7 +3344,7 @@ window.__arcadeWinFX = function(host){
     if(timerEl) timerEl.textContent='';
   }
   function startGoTimer(){
-    var left=40;
+    var left=60;
     function tick(){
       if(left<=0){ stopGoTimer(); goToDiscord(); return; }
       if(timerEl) timerEl.textContent='Перенесём автоматически через '+left+' с';
