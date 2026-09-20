@@ -493,6 +493,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .craft-steps li{position:relative;padding-left:46px;min-height:32px;font-size:var(--t-small);line-height:1.5}
 .craft-steps li::before{counter-increment:cstep;content:counter(cstep);position:absolute;left:0;top:0;font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-size:var(--t-small);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--ink);background:var(--pink)}
 .craft-steps b{font-weight:800}
+.craft-done .craft-note{margin-top:var(--sp-s)}
 .craft-done .btn{margin-top:var(--sp-s)}
 .craft-done-timer{margin-top:10px;font-variant-numeric:tabular-nums;color:var(--ink-faint)}
 @media (max-width:640px){
@@ -1178,7 +1179,6 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
       <span>Сайт</span>
       <input type="text" name="site" id="craftHoney" tabindex="-1" autocomplete="off"/>
     </label>
-    <p class="craft-note">Заявка уходит в Discord. Включи VPN (или любой другой способ обхода) перед отправкой — иначе заявка не дойдёт.</p>
     <button type="submit" class="btn gold-btn">Отправить и перейти в Discord →</button>
     <p class="craft-form-msg" id="craftFormMsg" aria-live="polite"></p>
   </form>
@@ -1190,6 +1190,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
       <li><b>Поставь там ник как в Minecraft.</b> Название сервера сверху слева → «Изменить профиль сервера» → «Никнейм». По нему тебя найдут по заявке.</li>
       <li><b>Открой канал «сервер»</b> — там IP, версия и как подключиться.</li>
     </ol>
+    <p class="craft-note">Сам Discord в России без VPN не открывается — включи его перед переходом. На заявку это уже не влияет: она принята и никуда не денется.</p>
     <button type="button" class="btn gold-btn" id="craftGoBtn"><span>Перейти в Discord →</span></button>
     <p class="craft-form-msg craft-done-timer" id="craftTimer"></p>
   </div>
@@ -3261,8 +3262,23 @@ window.__arcadeWinFX = function(host){
    два значения, без правки остального кода. */
 (function(){
   "use strict";
+  /* ── КАК ЗАЯВКА ДОХОДИТ ДО DISCORD ────────────────────────────────────────
+     discord.com из России не открывается, а сайт — открывается. Поэтому заявка
+     идёт НЕ напрямую в вебхук, а в «релей»: крошечный сервер вне РФ, который
+     принимает поля формы и сам кладёт их в Discord (ровно тем же приёмом живёт
+     лента новостей — посты тянет GitHub Actions, а не браузер посетителя).
+     RELAY_URLS перебираются по порядку, пока какой-нибудь не ответит: если один
+     провайдер начнут резать, достаточно дописать сюда адрес другого.
+     Прямой вебхук остаётся последней попыткой — он срабатывает только с VPN.
+     Когда релей будет проверен, DISCORD_WEBHOOK_URL можно очистить (''), а сам
+     вебхук в Discord пересоздать: сейчас он виден в исходнике страницы. */
+  var RELAY_URLS = [
+    /* 'https://87craft-relay.ИМЯ.workers.dev', */
+    /* 'https://87craft-relay.deno.dev' */
+  ];
   var DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1550539796437405736/FH0ZlqgWI6td7oAEhaQwM5oEDgY47LklgUKeTlKR56xdhpku4Q36VmhVIqgx8lUnbRNu';
   var DISCORD_INVITE_URL  = 'https://discord.gg/dhGdzAnNj5';
+  var RELAY_KEY = 'mn-craft-relay';   /* какой релей сработал в прошлый раз */
 
   var applyBtn=document.getElementById('craftApplyBtn');
   var form=document.getElementById('craftForm');
@@ -3317,7 +3333,7 @@ window.__arcadeWinFX = function(host){
     window.location.href=deep;
   }
 
-  /* после успешной отправки показываем три шага ВМЕСТО формы и даём 20 секунд
+  /* после успешной отправки показываем три шага ВМЕСТО формы и даём 40 секунд
      прочитать их: раньше редирект срабатывал через 0.6 с и человек попадал в
      Discord, не понимая, что делать. Кнопка переносит сразу. */
   var goTimer=null;
@@ -3326,7 +3342,7 @@ window.__arcadeWinFX = function(host){
     if(timerEl) timerEl.textContent='';
   }
   function startGoTimer(){
-    var left=20;
+    var left=40;
     function tick(){
       if(left<=0){ stopGoTimer(); goToDiscord(); return; }
       if(timerEl) timerEl.textContent='Перенесём автоматически через '+left+' с';
@@ -3336,6 +3352,50 @@ window.__arcadeWinFX = function(host){
     goTimer=setInterval(tick, 1000);
   }
   if(goBtn) goBtn.addEventListener('click', function(){ stopGoTimer(); goToDiscord(); });
+
+  /* сработавший в прошлый раз релей пробуем первым — на мобильном интернете
+     это экономит десяток секунд ожидания на заведомо мёртвом адресе */
+  function relayOrder(){
+    var list=RELAY_URLS.slice(), last=null;
+    try{ last=localStorage.getItem(RELAY_KEY); }catch(e){}
+    var i=last?list.indexOf(last):-1;
+    if(i>0){ list.splice(i,1); list.unshift(last); }
+    return list;
+  }
+  function postJSON(url, data, plainText){
+    var ctrl=window.AbortController ? new AbortController() : null;
+    var timer=setTimeout(function(){ if(ctrl) ctrl.abort(); }, 9000);
+    var opts={
+      method:'POST',
+      /* text/plain делает запрос «простым»: браузер не шлёт предварительный
+         OPTIONS, а это лишний round-trip на медленной мобильной сети */
+      headers:{'Content-Type': plainText ? 'text/plain;charset=UTF-8' : 'application/json'},
+      body: JSON.stringify(data)
+    };
+    if(ctrl) opts.signal=ctrl.signal;
+    return fetch(url, opts).then(function(r){
+      clearTimeout(timer);
+      if(!r.ok) throw new Error('http '+r.status);
+      return r;
+    }, function(err){ clearTimeout(timer); throw err; });
+  }
+  /* plain — поля формы как есть (релей сам соберёт сообщение и проверит их
+     заново); webhookBody — готовый embed для прямой отправки в Discord */
+  function sendApplication(plain, webhookBody){
+    var queue=relayOrder();
+    function attempt(i){
+      if(i<queue.length){
+        var url=queue[i];
+        return postJSON(url, plain, true).then(function(r){
+          try{ localStorage.setItem(RELAY_KEY, url); }catch(e){}
+          return r;
+        }, function(){ return attempt(i+1); });
+      }
+      if(!DISCORD_WEBHOOK_URL) return Promise.reject(new Error('no route'));
+      return postJSON(DISCORD_WEBHOOK_URL, webhookBody, false);
+    }
+    return attempt(0);
+  }
 
   function showDone(){
     form.reset();
@@ -3365,40 +3425,39 @@ window.__arcadeWinFX = function(host){
     var gradeVal=(grade.value||'').trim();
     var discordVal=((discordNick && discordNick.value)||'').trim().replace(/^@+/,'');
 
-    if(!DISCORD_WEBHOOK_URL){
+    if(!RELAY_URLS.length && !DISCORD_WEBHOOK_URL){
       setMsg('Вайтлист открывается совсем скоро — загляни в Telegram-канал за анонсом, заявки пока не принимаем.');
       return;
     }
 
+    var plansVal=(plans.value||'').trim();
     var submitBtn=form.querySelector('button[type="submit"]');
     if(submitBtn) submitBtn.disabled=true;
     setMsg('Отправляем…');
 
-    fetch(DISCORD_WEBHOOK_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        allowed_mentions:{parse:[]},   /* текст из формы никого не пингует */
-        embeds:[{
-          title:'Новая заявка на 87CRAFT',
-          color:16622786,   /* #FDA4C2 — фирменный розовый */
-          timestamp:new Date().toISOString(),
-          fields:[
-            {name:'Никнейм', value:nickVal, inline:true},
-            {name:'Обращение', value:callVal, inline:true},
-            {name:'Возраст', value:String(ageVal), inline:true},
-            {name:'Планы на сервере', value:(plans.value||'').trim()||'—'},
-            {name:'Класс', value:gradeVal||'—', inline:true},
-            {name:'Discord', value:discordVal||'—', inline:true}
-          ]
-        }]
-      })
-    }).then(function(r){
-      if(!r.ok) throw 0;
+    sendApplication({
+      nickname:nickVal, callname:callVal, age:ageVal,
+      plans:plansVal, grade:gradeVal, discord:discordVal
+    }, {
+      allowed_mentions:{parse:[]},   /* текст из формы никого не пингует */
+      embeds:[{
+        title:'Новая заявка на 87CRAFT',
+        color:16622786,   /* #FDA4C2 — фирменный розовый */
+        timestamp:new Date().toISOString(),
+        fields:[
+          {name:'Никнейм', value:nickVal, inline:true},
+          {name:'Обращение', value:callVal, inline:true},
+          {name:'Возраст', value:String(ageVal), inline:true},
+          {name:'Планы на сервере', value:plansVal||'—'},
+          {name:'Класс', value:gradeVal||'—', inline:true},
+          {name:'Discord', value:discordVal||'—', inline:true}
+        ]
+      }]
+    }).then(function(){
       setMsg('');
       showDone();
     }).catch(function(){
-      setMsg('Не получилось отправить — скорее всего, не включён VPN. Включи VPN и нажми «Отправить» ещё раз.', true);
+      setMsg('Заявка не ушла — сеть режет запрос. Включи VPN и нажми «Отправить» ещё раз, поля уже заполнены.', true);
     }).finally(function(){
       if(submitBtn) submitBtn.disabled=false;
     });
