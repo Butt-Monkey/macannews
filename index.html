@@ -463,6 +463,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 @media (prefers-reduced-motion:reduce){.ye-toast,.ye-fab,.ye-chat,.ye-msg,.ye-me,.ye-link{animation:none}.ye-typing i{animation:none;opacity:.6}}
 
 /* ===== 87CRAFT — раздел с заявкой ===== */
+/* плашка старта: до 25.09 18:07 МСК — обратный отсчёт, после — «Сервер открыт» (переключает скрипт отсчёта) */
+.craft-launch{border:1.5px solid var(--ink);background:var(--pink);padding:var(--sp-s);margin-bottom:var(--sp-m)}
+.craft-launch-eyebrow{font-size:var(--t-small);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700}
+.craft-launch-date{font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-size:var(--t-h3);line-height:1.05;margin-top:10px}
+.craft-launch-date small{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:.5em;letter-spacing:.02em;vertical-align:.25em;margin-left:.3em}
+.craft-count{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:var(--sp-s);border:1.5px solid var(--ink);background:var(--bg)}
+.craft-count[hidden]{display:none}
+.craft-count div{padding:14px 6px;text-align:center;border-left:1.5px solid var(--ink)}
+.craft-count div:first-child{border-left:0}
+.craft-count b{display:block;font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-weight:400;font-size:var(--t-h4);line-height:1;font-variant-numeric:tabular-nums}
+.craft-count span{display:block;margin-top:8px;font-size:var(--t-caption);letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
+.craft-launch-sub{font-size:var(--t-small);line-height:1.5;margin-top:var(--sp-xs);max-width:560px}
 #view-87craft .page-title{font-family:'Minecraft87','Schibsted Grotesk',sans-serif;letter-spacing:.01em}
 .craft-panel{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-s);padding-bottom:var(--sp-m);border-bottom:1px solid var(--line)}
 .craft-tag{font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-size:var(--t-small);letter-spacing:.02em;color:var(--ink-soft)}
@@ -1053,7 +1065,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
 
 </header><div class="ticker inline" aria-hidden="true"><div class="ticker-track"><span class="">Macan News</span><span class="st">✦</span><span class="">87</span><span class="st">✦</span><span class="">Breaking</span><span class="st">✦</span><span class="">Eight-Seven</span><span class="st">✦</span><span class="">Exclusive</span><span class="st">✦</span><span class="">Macan News</span><span class="st">✦</span><span class="">87</span><span class="st">✦</span><span class="">Breaking</span><span class="st">✦</span><span class="">Eight-Seven</span><span class="st">✦</span><span class="">Exclusive</span><span class="st">✦</span></div></div><section class="plates-sec"><div class="wrap">
   <div class="plates"><a class="plate plate-big plate-craft reveal" href="#87craft" data-view="87craft">
-      <span class="ptag">Minecraft-сервер · вайтлист</span>
+      <span class="ptag" id="craftPlateTag">Minecraft-сервер · старт 25.09 в 18:07</span>
       <span class="pname">87CRAFT</span>
       <span class="pgo">Подать заявку →</span>
     </a><a class="plate plate-big reveal" href="#news" data-view="news">
@@ -1148,6 +1160,17 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
     <p class="page-desc reveal">Строй, фарми, устраивай ивенты без броуков и сничей. Вход по вайтлисту: оставляешь заявку ниже, дальше всё в Discord.</p>
     <hr class="hairline page-rule reveal"/>
   </div></section><section><div class="wrap">
+  <div class="craft-launch reveal">
+    <div class="craft-launch-eyebrow" id="craftLaunchEyebrow">Старт сервера</div>
+    <div class="craft-launch-date">25.09 · 18:07<small>МСК</small></div>
+    <div class="craft-count" id="craftCount" aria-hidden="true">
+      <div><b data-u="d">00</b><span>дней</span></div>
+      <div><b data-u="h">00</b><span>часов</span></div>
+      <div><b data-u="m">00</b><span>минут</span></div>
+      <div><b data-u="s">00</b><span>секунд</span></div>
+    </div>
+    <p class="craft-launch-sub" id="craftLaunchSub">В пятницу открываем основной мир для всех, чья заявка одобрена. Спавн уже работает — подай заявку сейчас, чтобы к старту быть в вайтлисте.</p>
+  </div>
   <div class="craft-panel reveal">
     <div class="craft-tag">JAVA · WHITELIST</div>
     <button class="btn gold-btn" id="craftApplyBtn" type="button">Подать заявку</button>
@@ -3472,6 +3495,40 @@ window.__arcadeWinFX = function(host){
 })();
 </script>
 <script>
+/* ═══════════ Старт 87CRAFT: обратный отсчёт до 25.09.2026 18:07 МСК ═══════════
+   Время задано в UTC (МСК = UTC+3), поэтому отсчёт верный в любом поясе.
+   После старта плашка и тег на главной сами меняются на «Сервер открыт» —
+   перезаливать сайт не нужно. */
+(function(){
+  "use strict";
+  var START=Date.UTC(2026,8,25,15,7,0);
+  var count=document.getElementById('craftCount'), plateTag=document.getElementById('craftPlateTag');
+  var eyebrow=document.getElementById('craftLaunchEyebrow'), sub=document.getElementById('craftLaunchSub');
+  if(!count) return;
+  var cells={};
+  [].forEach.call(count.querySelectorAll('b[data-u]'), function(b){ cells[b.getAttribute('data-u')]=b; });
+  function pad(n){ return (n<10?'0':'')+n; }
+  var timer=null;
+  function tick(){
+    var left=Math.floor((START-Date.now())/1000);
+    if(left<=0){
+      if(timer) clearInterval(timer);
+      count.hidden=true;
+      eyebrow.textContent='Сервер открыт';
+      sub.textContent='Основной мир открыт. Подай заявку — модеры внесут тебя в вайтлист, дальше всё в Discord.';
+      if(plateTag) plateTag.textContent='Minecraft-сервер · открыт';
+      return;
+    }
+    cells.d.textContent=pad(Math.floor(left/86400));
+    cells.h.textContent=pad(Math.floor(left%86400/3600));
+    cells.m.textContent=pad(Math.floor(left%3600/60));
+    cells.s.textContent=pad(left%60);
+  }
+  tick();
+  if(Date.now()<START) timer=setInterval(tick,1000);
+})();
+</script>
+<script>
 /* ═══════════ «Консультант» Ye → 87CRAFT (сценарный чат) ═══════════
    Через DELAY после ухода заставки справа снизу всплывает уведомление от Ye:
    сначала «печатает…», потом обрезанное превью сообщения. Закрыть его нельзя
@@ -3490,13 +3547,14 @@ window.__arcadeWinFX = function(host){
       fab=document.getElementById('yeFab'), fabDot=document.getElementById('yeFabDot'),
       chat=document.getElementById('yeChat'), chatBody=document.getElementById('yeChatBody'),
       chatFoot=document.getElementById('yeChatFoot'), chatClose=document.getElementById('yeChatClose');
-  var MSG='Здарова, в последнее время зависаю тут по страшному, заходи на 87craft и поиграй со мной';
+  var MSG='Здарова, в последнее время залипаю тут по страшному, заходи на 87craft и поиграй со мной';
   var DELAY=3000, TOAST_TYPING=1300;
   /* сценарий: q — кнопка пользователя, a — реплики Ye по очереди, final — завершает диалог */
   var SCRIPT=[
     {q:'А что там делать?', a:['Строить, фармить, устраивать ивенты. Без броуков и сничей — только свои.',
                               'Я вот третий день строю себе особняк из обсидиана. Скромно, по-моему.']},
     {q:'Как попасть?', a:['Изи. Жмёшь «Подать заявку», пишешь ник и возраст — тебя добавляют в вайтлист.',
+                         'Старт — в пятницу, 25.09 в 18:07 по Москве. Успей до старта.',
                          'Дальше всё в Discord: там IP, правила и я.']},
     {q:'Ты правда там играешь?', a:['Каждый день, bro. Увидишь ник Ye — это я.',
                                     'Не увидишь — значит я на невидимости. Это тоже я.']},
