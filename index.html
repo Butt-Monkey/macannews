@@ -28,6 +28,21 @@ window.MNpicSrc=function(img,cb){
   setTimeout(go,4000);
 };
 window.MNgc=function(name,fallback){try{var v=getComputedStyle(document.documentElement).getPropertyValue('--game-'+name).trim();return v||fallback;}catch(e){return fallback;}};
+/* Яндекс Метрика — посещаемость, источники (utm с афиш/QR), устройства,
+   Вебвизор (записи визитов). Смотреть с телефона — приложение «Яндекс Метрика».
+   trackHash: разделы сайта живут в #hash — каждый переход считается просмотром.
+   Форма 87CRAFT в Вебвизоре скрыта (ym-hide-content / ym-disable-keys): там
+   возраст и класс детей. Уличный экран (?billboard) не считаем.
+   Цели («JavaScript-событие» в настройках счётчика):
+     craft_form_open · craft_submit_ok · craft_submit_fail · craft_discord */
+var YM_ID=112939024;   /* счётчик «87 Macan News», metrika.yandex.ru */
+window.mnGoal=function(name){ try{ if(YM_ID && window.ym) window.ym(YM_ID,'reachGoal',name); }catch(e){} };
+if(YM_ID && !document.documentElement.classList.contains('billboard')){
+  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();
+   k=e.createElement(t);a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a);})
+  (window,document,'script','https://mc.yandex.ru/metrika/tag.js?id='+YM_ID,'ym');
+  window.ym(YM_ID,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true,trackHash:true});
+}
 })();</script>
 <link rel="preload" href="assets/fonts/schibsted-vf.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -1015,6 +1030,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsMediaOrganization","name":"87 · Macan News","alternateName":"Macan News","url":"https://macannews.ru/","logo":{"@type":"ImageObject","url":"https://macannews.ru/assets/fav87-512.png","width":512,"height":512},"sameAs":["https://t.me/macan777macan777macan777"]}</script>
 </head>
 <body>
+<noscript><div><img src="https://mc.yandex.ru/watch/112939024" style="position:absolute;left:-9999px" alt=""/></div></noscript>
 <a class="skip-link" href="#main" id="skipLink">К содержимому</a>
 <div class="grain" aria-hidden="true"></div>
 <audio id="bgAudio" loop playsinline preload="none"><source src="assets/mp3-e3c1114de5.mp3" type="audio/mpeg"></audio>
@@ -1198,7 +1214,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
       </a>
     </div>
   </div>
-  <form class="craft-form" id="craftForm" hidden>
+  <form class="craft-form ym-hide-content ym-disable-keys" id="craftForm" hidden>
     <label class="craft-field">
       <span>Никнейм в Minecraft</span>
       <input type="text" name="nickname" id="craftNick" placeholder="Steve_87" autocomplete="off" required maxlength="16"/>
@@ -3349,8 +3365,10 @@ window.__arcadeWinFX = function(host){
   /* кнопка «Discord» рядом с заявкой берёт тот же инвайт, что и экран «Заявка принята» */
   var discordLink=document.getElementById('craftDiscordLink');
   if(discordLink && DISCORD_INVITE_URL) discordLink.href=DISCORD_INVITE_URL;
+  if(discordLink) discordLink.addEventListener('click', function(){ if(window.mnGoal) window.mnGoal('craft_discord'); });
 
   applyBtn.addEventListener('click', function(){
+    if(window.mnGoal) window.mnGoal('craft_form_open');
     form.hidden=false;
     applyBtn.hidden=true;
     nick.focus();
@@ -3376,6 +3394,7 @@ window.__arcadeWinFX = function(host){
      через ~0.6с после ответа вебхука, то есть уже вне пользовательского жеста —
      попап в этот момент блокируется браузером, а обычная навигация нет */
   function goToDiscord(){
+    if(window.mnGoal) window.mnGoal('craft_discord');
     if(!DISCORD_INVITE_URL) return;
     var deep=toDiscordDeepLink(DISCORD_INVITE_URL);
     if(!deep){ window.location.href=DISCORD_INVITE_URL; return; }
@@ -3511,9 +3530,11 @@ window.__arcadeWinFX = function(host){
         ]
       }]
     }).then(function(){
+      if(window.mnGoal) window.mnGoal('craft_submit_ok');
       setMsg('');
       showDone();
     }).catch(function(){
+      if(window.mnGoal) window.mnGoal('craft_submit_fail');
       setMsg('Заявка не ушла — сеть режет запрос. Включи VPN и нажми «Отправить» ещё раз, поля уже заполнены.', true);
     }).finally(function(){
       if(submitBtn) submitBtn.disabled=false;
