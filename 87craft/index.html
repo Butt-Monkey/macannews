@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<!-- 87CRAFT — отдельная страница Minecraft-сервера (с 2026-09-27).
+     Живёт по адресу macannews.ru/87craft/, вкладки — в #hash (#join, #apply,
+     #status, #mods, #guides, #rules). Старые ссылки macannews.ru/#87craft
+     главная сама перенаправляет сюда. Стили — те же токены, что у главной
+     (Minimalist Editorial Brutalism: #050505 / #F7F4EE / пастельный розовый),
+     скопированы сюда, чтобы страница не тянула 260 КБ главной.
+     Заявка и статус идут через ту же Yandex-функцию, что и раньше (relay/). -->
+<title>87CRAFT — Minecraft-сервер · IP 87craft.ru</title>
+<meta name="description" content="87CRAFT — Minecraft-сервер от Macan News. Java 1.21.11, лицензия и пиратка. IP 87craft.ru: спавн открыт всем, основной мир — по заявке. Моды, гайды и правила."/>
+<link rel="canonical" href="https://macannews.ru/87craft/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="87 · Macan News"/>
+<meta property="og:title" content="87CRAFT — Minecraft-сервер"/>
+<meta property="og:description" content="IP 87craft.ru · Java 1.21.11 · лицензия и пиратка. Спавн открыт всем, основной мир — по заявке."/>
+<meta property="og:url" content="https://macannews.ru/87craft/"/>
+<meta property="og:locale" content="ru_RU"/>
+<meta property="og:image" content="https://macannews.ru/assets/og-87craft-2.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:type" content="image/png"/>
+<meta property="og:image:alt" content="87CRAFT — Minecraft-сервер, IP 87craft.ru"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://macannews.ru/assets/og-87craft-2.png"/>
+<meta name="theme-color" content="#050505"/>
+<meta name="color-scheme" content="only light"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/craft87-32.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/craft87-180.png"/>
+<script>(function(){
+/* Яндекс Метрика — тот же счётчик, что у главной. trackHash: каждая вкладка
+   (#join, #rules…) считается просмотром. Форма заявки и результат проверки
+   статуса скрыты от Вебвизора (ym-hide-content): там возраст/класс детей.
+   Цели («JavaScript-событие»): craft_form_open · craft_submit_ok ·
+   craft_submit_fail · craft_discord · craft_ip_copy · craft_status_check */
+var YM_ID=112939024;
+window.mnGoal=function(name){ try{ if(YM_ID && window.ym) window.ym(YM_ID,'reachGoal',name); }catch(e){} };
+if(YM_ID){
+  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();
+   k=e.createElement(t);a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a);})
+  (window,document,'script','https://mc.yandex.ru/metrika/tag.js?id='+YM_ID,'ym');
+  window.ym(YM_ID,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true,trackHash:true});
+}
+})();</script>
+<!-- без JavaScript вкладки не переключаются — показываем все разделы подряд -->
+<noscript><style>.view{display:block!important}.srv{display:none!important}</style></noscript>
+<link rel="preload" href="../assets/fonts/schibsted-vf.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:400 800;font-display:swap;src:url(../assets/fonts/schibsted-vf.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+/* пиксельный шрифт — только латиница и цифры (кириллица падает на Schibsted/системный) */
+@font-face{font-family:'Minecraft87';font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/minecraft.ttf) format('truetype');unicode-range:U+0000-00FF}
+
+:root{
+  color-scheme:only light;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --maxw:1240px;
+  --pad:clamp(16px,5vw,72px);
+  --safe-top:env(safe-area-inset-top,0px);
+  --t-title:clamp(56px,13vw,164px);
+  --t-h2:clamp(34px,6.4vw,72px);
+  --t-h3:clamp(22px,3vw,32px);
+  --t-h4:clamp(18px,2.2vw,23px);
+  --t-lead:clamp(16px,2vw,20px);
+  --t-body:16px; --t-small:14px; --t-caption:12px;
+  --ls-tight:-.035em; --ls-caps:.16em;
+  --sp-xs:clamp(14px,1.8vw,22px);
+  --sp-s:clamp(20px,2.6vw,34px);
+  --sp-m:clamp(30px,4.2vw,54px);
+  --sp-l:clamp(48px,7vw,96px);
+  /* палитра — как на главной; розовый только заливкой, мелкий розовый текст — --pink-deep */
+  --pink:#FDA4C2; --pink-deep:#B8466F; --pink-wash:#FDEDF3;
+  --bg:#F7F4EE; --bg-soft:#EFEDE7; --card:#FFFFFF;
+  --ink:#050505; --ink-soft:rgba(5,5,5,.64); --line:rgba(5,5,5,.14);
+  --ok:#1F7A45; --ok-wash:#E3F2E8; --bad:#B3261E; --bad-wash:#FBE7E5;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:130px}
+body{background:var(--bg);color:var(--ink);font-family:'Schibsted Grotesk',sans-serif;font-size:var(--t-body);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a,button,summary{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+img{display:block;max-width:100%;height:auto}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:var(--pink);color:var(--ink)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
+.px{font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-weight:400;letter-spacing:.01em}
+.eyebrow{font-size:var(--t-caption);letter-spacing:.28em;text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
+.muted{color:var(--ink-soft)}
+code,kbd{font-family:ui-monospace,Consolas,monospace;font-size:.92em;background:var(--card);border:1px solid var(--line);padding:1px 6px;white-space:nowrap}
+
+/* ── кнопки ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:14px 26px;font-size:var(--t-small);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;border:1.5px solid var(--ink);color:var(--ink);background:transparent;text-decoration:none;transition:background .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease)}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn-pink{background:var(--pink);border-color:var(--pink);color:#050505}
+.btn-pink:hover{background:var(--ink);border-color:var(--ink);color:var(--pink)}
+.btn-ink{background:var(--ink);color:var(--bg)}
+.btn-ink:hover{background:var(--pink);border-color:var(--pink);color:var(--ink)}
+.btn svg{width:18px;height:18px;fill:currentColor;flex-shrink:0}
+.btn[disabled]{opacity:.5;pointer-events:none}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+@media (max-width:560px){.btns .btn{flex:1 1 100%}}
+
+/* ── шапка: марка + вкладки (липкая) ── */
+.top{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1.5px solid var(--ink);padding-top:var(--safe-top)}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:22px;line-height:1}
+.brand img{width:34px;height:34px;border:1.5px solid var(--ink);background:var(--pink)}
+.top-tools{display:flex;align-items:center;gap:18px}
+.back{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;text-decoration:none;color:var(--ink-soft);white-space:nowrap}
+.back:hover{color:var(--ink)}
+.top .btn{min-height:40px;padding:9px 18px}
+@media (max-width:520px){.back span{display:none}}
+.tabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-inline:calc(var(--pad) * -1);padding-inline:var(--pad);scroll-padding-inline:var(--pad)}
+.tabs::-webkit-scrollbar{display:none}
+.tabs a{flex:0 0 auto;padding:10px 10px 12px;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;text-decoration:none;color:var(--ink-soft);position:relative;white-space:nowrap}
+.tabs a::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:4px;background:var(--pink);transform:scaleY(0);transform-origin:bottom;transition:transform .2s var(--ease)}
+.tabs a:hover{color:var(--ink)}
+.tabs a[aria-current="page"]{color:var(--ink)}
+.tabs a[aria-current="page"]::after{transform:none}
+
+/* ── вкладки-разделы ── */
+.view{display:none;padding-block:var(--sp-m) var(--sp-l)}
+.view.active{display:block}
+.head{margin-bottom:var(--sp-m);max-width:820px}
+.head h2{font-weight:800;font-size:var(--t-h2);line-height:1;letter-spacing:var(--ls-tight);margin-top:10px;text-transform:uppercase}
+.head p{font-size:var(--t-lead);color:var(--ink-soft);margin-top:14px;max-width:680px}
+.block{margin-top:var(--sp-l)}
+.block>h3{font-weight:800;font-size:var(--t-h3);line-height:1.1;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:var(--sp-s);padding-bottom:12px;border-bottom:1.5px solid var(--ink)}
+.block>h3+.steps,.block>h3+.acc,.block>h3+.facts{border-top:0}
+
+/* ── О сервере: герой ── */
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:var(--sp-m);align-items:center}
+@media (max-width:900px){.hero{grid-template-columns:1fr}.hero-art{order:-1;max-width:260px}}
+/* «87CRAFT» пиксельным шрифтом ≈ 5.3em в ширину: размер считаем от ширины
+   колонки (cqw), чтобы слово всегда помещалось в одну строку */
+.hero>div:first-child{container-type:inline-size;min-width:0}
+.hero h1{font-size:clamp(40px,18cqw,150px);line-height:.95;margin-top:14px;white-space:nowrap}
+.hero .lead{font-size:var(--t-lead);max-width:560px;margin-top:var(--sp-s)}
+.hero-art{border:1.5px solid var(--ink);background:var(--pink);aspect-ratio:1}
+.hero-art img{width:100%;height:100%;object-fit:contain}
+.srv{display:inline-flex;align-items:center;gap:10px;margin-top:var(--sp-s);padding:8px 14px;border:1.5px solid var(--ink);font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;background:var(--card)}
+.srv i{width:10px;height:10px;background:var(--ok);display:block}
+.srv.off i{background:var(--ink-soft)}
+
+/* карточка IP — главное действие страницы */
+.ip{margin-top:var(--sp-s);border:1.5px solid var(--ink);background:var(--card);display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;max-width:560px}
+.ip-label{display:flex;align-items:center;padding:0 16px;background:var(--ink);color:var(--bg);font-size:var(--t-caption);letter-spacing:var(--ls-caps);font-weight:800}
+.ip-value{display:flex;align-items:center;padding:12px 16px;font-size:clamp(22px,3.6vw,34px);line-height:1.1;overflow-wrap:anywhere}
+.ip-copy{border-left:1.5px solid var(--ink);padding:0 18px;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800;background:var(--pink);min-height:56px;transition:background .2s}
+.ip-copy:hover{background:var(--ink);color:var(--pink)}
+.ip-value{white-space:nowrap}
+/* на телефоне кнопка «Скопировать» уходит под адрес — иначе адрес рвётся на две строки */
+@media (max-width:460px){
+  .ip{grid-template-columns:auto 1fr}
+  .ip .ip-copy{grid-column:1/-1;border-left:0;border-top:1.5px solid var(--ink);min-height:48px}
+}
+.ip-meta{margin-top:10px;font-size:var(--t-small);color:var(--ink-soft)}
+.hero .btns{margin-top:var(--sp-s)}
+
+/* три шага «спавн → заявка → основной мир» */
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1.5px solid var(--ink)}
+.flow>div{padding:var(--sp-s);border-left:1.5px solid var(--ink);background:var(--card)}
+.flow>div:first-child{border-left:0}
+.flow b{display:inline-grid;place-items:center;width:44px;height:44px;border:1.5px solid var(--ink);background:var(--pink);font-size:20px}
+.flow h4{font-size:var(--t-h4);font-weight:800;margin-top:14px;line-height:1.2}
+.flow p{font-size:var(--t-small);color:var(--ink-soft);margin-top:6px}
+@media (max-width:760px){.flow{grid-template-columns:1fr}.flow>div{border-left:0;border-top:1.5px solid var(--ink)}.flow>div:first-child{border-top:0}}
+
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1.5px solid var(--ink)}
+.facts>div{padding:var(--sp-xs) var(--sp-xs) var(--sp-s) 0;border-bottom:1px solid var(--line)}
+.facts>div:nth-child(3n+2),.facts>div:nth-child(3n+3){padding-left:var(--sp-xs);border-left:1px solid var(--line)}
+.facts h4{font-size:var(--t-h4);font-weight:800;line-height:1.2}
+.facts p{font-size:var(--t-small);color:var(--ink-soft);margin-top:6px}
+@media (max-width:900px){.facts{grid-template-columns:1fr 1fr}.facts>div:nth-child(n){padding-left:0;border-left:0}.facts>div:nth-child(2n){padding-left:var(--sp-xs);border-left:1px solid var(--line)}}
+@media (max-width:560px){.facts{grid-template-columns:1fr}.facts>div:nth-child(n){padding-left:0;border-left:0}}
+
+/* раскрывашки: FAQ, гайды, разделы правил */
+.acc{border-top:1.5px solid var(--ink)}
+.acc details{border-bottom:1px solid var(--line)}
+.acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;font-weight:800;font-size:var(--t-h4);line-height:1.25}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"+";flex-shrink:0;width:32px;height:32px;display:grid;place-items:center;border:1.5px solid var(--ink);font-weight:700;font-size:20px;line-height:1;transition:background .2s}
+.acc details[open] summary::after{content:"−";background:var(--pink)}
+.acc summary:hover::after{background:var(--pink)}
+.acc .body{padding:0 0 22px;max-width:760px}
+.acc .body p+p,.acc .body p+ul,.acc .body ul+p,.acc .body ol+p,.acc .body p+ol{margin-top:10px}
+.acc ul,.acc ol,.list{padding-left:1.2em}
+.acc li+li,.list li+li{margin-top:6px}
+
+.band{margin-top:var(--sp-l);background:var(--pink);border:1.5px solid var(--ink);padding:var(--sp-m) var(--sp-s);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--sp-s)}
+.band h3{font-size:var(--t-h2);font-weight:800;line-height:1;letter-spacing:var(--ls-tight);text-transform:uppercase}
+.band p{margin-top:8px;max-width:520px}
+
+/* ── Как зайти: пошагово ── */
+.steps{list-style:none;counter-reset:st;border-top:1.5px solid var(--ink)}
+.steps>li{counter-increment:st;display:grid;grid-template-columns:64px minmax(0,1fr);gap:var(--sp-xs);padding:var(--sp-s) 0;border-bottom:1px solid var(--line)}
+.steps>li::before{content:counter(st);font-family:'Minecraft87','Schibsted Grotesk',sans-serif;width:52px;height:52px;display:grid;place-items:center;border:1.5px solid var(--ink);background:var(--pink);font-size:24px}
+.steps h4{font-size:var(--t-h4);font-weight:800;line-height:1.25}
+.steps p{margin-top:6px;color:var(--ink-soft);max-width:680px}
+.steps p b,.steps p code{color:var(--ink)}
+.steps .ip{margin-top:14px}
+.steps .opt{display:inline-block;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800;background:var(--card);border:1px solid var(--ink);padding:2px 8px;margin-left:8px;vertical-align:middle}
+@media (max-width:520px){.steps>li{grid-template-columns:1fr}}
+.note{padding:14px 18px;border-left:4px solid var(--pink);background:var(--pink-wash);font-size:var(--t-small);max-width:760px}
+.note+.note{margin-top:12px}
+.reqs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1.5px solid var(--ink);background:var(--card)}
+.reqs>div{padding:var(--sp-xs);border-bottom:1px solid var(--line)}
+.reqs>div:nth-child(odd){border-right:1px solid var(--line)}
+.reqs b{display:block;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-soft)}
+.reqs span{display:block;font-weight:700;margin-top:4px}
+@media (max-width:640px){.reqs{grid-template-columns:1fr}.reqs>div:nth-child(odd){border-right:0}}
+
+/* ── Заявка и статус ── */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:var(--sp-l);align-items:start}
+@media (max-width:900px){.split{grid-template-columns:1fr;gap:var(--sp-m)}}
+.form{display:flex;flex-direction:column;gap:var(--sp-xs);max-width:560px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field>span{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800;color:var(--ink-soft)}
+.field em{font-style:normal;font-weight:500;text-transform:none;letter-spacing:0}
+.field input,.field textarea{font:inherit;font-size:16px;padding:14px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);border-radius:0;resize:vertical;width:100%}
+.field input:focus,.field textarea:focus{outline:3px solid var(--pink);outline-offset:0}
+.field small{font-size:var(--t-small);color:var(--ink-soft);line-height:1.45}
+.field input[type=number]{-moz-appearance:textfield}
+.field input::-webkit-inner-spin-button,.field input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.honey{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;opacity:0}
+.msg{font-size:var(--t-small);color:var(--ink-soft);min-height:1.4em}
+.msg.err{color:var(--bad)}
+.aside{border:1.5px solid var(--ink);background:var(--card);padding:var(--sp-s)}
+.aside h4{font-size:var(--t-h4);font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
+.mini{list-style:none;counter-reset:m;margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.mini li{counter-increment:m;position:relative;padding-left:40px;font-size:var(--t-small);line-height:1.5}
+.mini li::before{content:counter(m);position:absolute;left:0;top:0;width:28px;height:28px;display:grid;place-items:center;border:1.5px solid var(--ink);background:var(--pink);font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-size:13px}
+.done{max-width:560px;border:1.5px solid var(--ink);background:var(--card);padding:var(--sp-s)}
+.done h3{font-size:var(--t-h3);font-weight:800;text-transform:uppercase;line-height:1.1}
+.done>p{margin-top:8px;color:var(--ink-soft)}
+.code{margin-top:var(--sp-xs);display:flex;flex-wrap:wrap;align-items:stretch;border:1.5px solid var(--ink)}
+.code-v{flex:1 1 auto;padding:14px 16px;font-size:clamp(20px,3.4vw,28px);line-height:1.1;background:var(--pink-wash);letter-spacing:.04em;white-space:nowrap}
+.code .ip-copy{min-height:auto;padding:12px 18px}
+@media (max-width:460px){.code{flex-direction:column}.code .ip-copy{border-left:0;border-top:1.5px solid var(--ink);min-height:48px}}
+.done .mini{margin-top:var(--sp-xs)}
+.done .btns{margin-top:var(--sp-s)}
+
+.check{display:flex;gap:0;max-width:560px}
+.check input{flex:1;min-width:0;font:inherit;font-size:18px;letter-spacing:.06em;text-transform:uppercase;padding:14px;border:1.5px solid var(--ink);border-right:0;background:var(--card);border-radius:0}
+.check input:focus{outline:3px solid var(--pink);outline-offset:0}
+.check .btn{flex-shrink:0}
+@media (max-width:420px){.check{flex-direction:column}.check input{border-right:1.5px solid var(--ink);border-bottom:0}}
+.saved{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.saved button{font-size:var(--t-small);padding:8px 12px;border:1.5px solid var(--ink);background:var(--card);font-weight:700}
+.saved button:hover,.saved button.on{background:var(--pink)}
+.res{margin-top:var(--sp-s);max-width:560px;border:1.5px solid var(--ink);background:var(--card)}
+.res-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:14px 18px;border-bottom:1.5px solid var(--ink)}
+.badge{display:inline-block;padding:6px 12px;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800;border:1.5px solid var(--ink);background:var(--pink-wash)}
+.badge.ok{background:var(--ok-wash);border-color:var(--ok);color:var(--ok)}
+.badge.bad{background:var(--bad-wash);border-color:var(--bad);color:var(--bad)}
+.res-body{padding:18px}
+.res-body h4{font-size:var(--t-h4);font-weight:800;line-height:1.25}
+.res-body>p{margin-top:8px;color:var(--ink-soft)}
+.res-comment{margin-top:14px;padding:12px 16px;border-left:4px solid var(--ink);background:var(--bg)}
+.res-comment b{display:block;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase}
+.res-meta{margin-top:14px;font-size:var(--t-small);color:var(--ink-soft)}
+
+/* ── Моды ── */
+.mods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1.5px solid var(--ink)}
+.mods>div{padding:var(--sp-s);background:var(--card);border-left:1.5px solid var(--ink);display:flex;flex-direction:column;gap:8px}
+.mods>div:first-child{border-left:0}
+.mods h4{font-size:var(--t-h4);font-weight:800}
+.mods p{font-size:var(--t-small);color:var(--ink-soft);flex:1}
+.mods .btn{align-self:flex-start;min-height:44px;padding:10px 18px;margin-top:6px}
+.mods .tag{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800;color:var(--pink-deep)}
+.mods.one{grid-template-columns:minmax(0,1fr);max-width:440px}
+@media (max-width:860px){.mods{grid-template-columns:1fr}.mods>div{border-left:0;border-top:1.5px solid var(--ink)}.mods>div:first-child{border-top:0}}
+.big-yes{display:flex;gap:var(--sp-s);align-items:center;flex-wrap:wrap;border:1.5px solid var(--ink);background:var(--pink);padding:var(--sp-s)}
+.big-yes b{font-size:var(--t-h3);font-weight:800;text-transform:uppercase;line-height:1.05;letter-spacing:-.02em}
+.big-yes p{max-width:520px}
+.no li::marker{content:"✕  ";color:var(--bad);font-weight:800}
+
+/* ── Правила ── */
+.short{list-style:none;counter-reset:r;border-top:1.5px solid var(--ink)}
+.short li{counter-increment:r;display:grid;grid-template-columns:52px minmax(0,1fr);gap:14px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line);font-size:var(--t-h4);font-weight:700;line-height:1.35}
+.short li::before{content:counter(r);font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-weight:400;font-size:22px;color:var(--pink-deep)}
+.pen{display:inline-block;font-size:var(--t-caption);letter-spacing:.08em;text-transform:uppercase;font-weight:800;padding:1px 7px;border:1px solid var(--ink);background:var(--pink-wash);margin-left:6px;white-space:nowrap;vertical-align:.1em}
+.pen.ban{background:var(--ink);color:var(--bg)}
+dl.gloss{display:grid;grid-template-columns:minmax(120px,auto) 1fr;gap:10px 22px}
+dl.gloss dt{font-weight:800}
+dl.gloss dd{color:var(--ink-soft)}
+@media (max-width:520px){dl.gloss{grid-template-columns:1fr;gap:2px}dl.gloss dd{margin-bottom:10px}}
+
+/* ── подвал ── */
+.foot{border-top:1.5px solid var(--ink);padding-block:var(--sp-m);font-size:var(--t-small)}
+.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px}
+.foot nav{display:flex;flex-wrap:wrap;gap:18px}
+.foot a{font-weight:700;text-decoration:none;border-bottom:1.5px solid var(--pink)}
+.foot a:hover{border-color:var(--ink)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);padding:12px 18px;font-size:var(--t-small);font-weight:700;pointer-events:none;transition:opacity .2s,transform .2s var(--ease);z-index:60;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="sr-only" href="#main">К содержимому</a>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <a class="brand px" href="#about" aria-label="87CRAFT — главная сервера">
+        <img src="../assets/craft87-32.png" alt="" width="34" height="34"/>87CRAFT
+      </a>
+      <div class="top-tools">
+        <a class="back" href="../" title="На главную Macan News">← <span>87 · Macan News</span></a>
+        <a class="btn btn-pink" href="#apply">Заявка</a>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Разделы 87CRAFT">
+      <a href="#about">О сервере</a>
+      <a href="#join">Как зайти</a>
+      <a href="#apply">Заявка</a>
+      <a href="#status">Статус заявки</a>
+      <a href="#mods">Моды</a>
+      <a href="#guides">Гайды</a>
+      <a href="#rules">Правила</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap" tabindex="-1">
+
+<!-- ═══════════════ О СЕРВЕРЕ ═══════════════ -->
+<section class="view" id="view-about" data-title="87CRAFT — Minecraft-сервер · IP 87craft.ru">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Minecraft-сервер от Macan News</div>
+      <h1 class="px">87CRAFT</h1>
+      <p class="lead">Ванильное выживание с валютой, аукционом и голосовым чатом. Строим города, делим землю через суд и устраиваем ивенты — без читов и грифа.</p>
+      <p class="srv" id="srvStatus" hidden><i></i><span id="srvText">Сервер онлайн</span></p>
+      <div class="ip">
+        <span class="ip-label">IP</span>
+        <span class="ip-value px">87craft.ru</span>
+        <button class="ip-copy" type="button" data-copy="87craft.ru">Скопировать</button>
+      </div>
+      <p class="ip-meta">Java Edition 1.21.11 · подойдёт и лицензия, и пиратка</p>
+      <div class="btns">
+        <a class="btn btn-pink" href="#apply">Подать заявку</a>
+        <a class="btn" href="#join">Как зайти</a>
+      </div>
+    </div>
+    <figure class="hero-art">
+      <picture>
+        <source srcset="../assets/craft87-640.webp" type="image/webp"/>
+        <img src="../assets/craft87-640.png" alt="Эндермен с табличкой — иконка сервера 87CRAFT" width="640" height="640"/>
+      </picture>
+    </figure>
+  </div>
+
+  <div class="block">
+    <h3>Как устроен вход</h3>
+    <div class="flow">
+      <div><b class="px">1</b><h4>Спавн — сразу</h4><p>Заходи по IP хоть сейчас: спавн открыт всем. Осмотрись, познакомься, позови друзей.</p></div>
+      <div><b class="px">2</b><h4>Заявка — минута</h4><p>Ник, как к тебе обращаться, возраст. После отправки получишь личный код заявки.</p></div>
+      <div><b class="px">3</b><h4>Основной мир</h4><p>Модеры одобряют заявку — и основной мир открыт. Статус смотри по коду во вкладке «Статус заявки».</p></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Что внутри</h3>
+    <div class="facts">
+      <div><h4>Ванилла + валюта</h4><p>Обычный Minecraft без лишних механик, но со своей экономикой: штрафы, например, платятся в казну сервера.</p></div>
+      <div><h4>Аукцион</h4><p>Продавай и покупай у других игроков.</p></div>
+      <div><h4>Голосовой чат</h4><p>Plasmo Voice — говоришь с теми, кто рядом. По желанию: без мода тоже можно играть. <a href="#mods">Как поставить →</a></p></div>
+      <div><h4>Приват до 500×500</h4><p>Отмечаешь территорию табличкой со своим ником. Споры о земле решает суд.</p></div>
+      <div><h4>Города, РП и суды</h4><p>Ролевые ивенты согласуются с игроками, судью выбирают голосованием.</p></div>
+      <div><h4>Без читов и грифа</h4><p>Читы — бан сразу. Гриф и воровство — штраф и возврат вещей. <a href="#rules">Правила →</a></p></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Частые вопросы</h3>
+    <div class="acc">
+      <details><summary>Нужна лицензия?</summary><div class="body"><p>Нет. Подойдёт любой лаунчер — официальный или пиратский. Главное — версия <b>Java Edition 1.21.11</b>.</p></div></details>
+      <details><summary>Пишет «You do not have permissions» или не пускает в основной мир</summary><div class="body"><p>Значит, заявку ещё смотрят. Спавн при этом работает — играй, прогресс не пропадёт. Проверить статус можно во вкладке <a href="#status">«Статус заявки»</a>.</p></div></details>
+      <details><summary>Что за /register и /login?</summary><div class="body"><p>Это пароль от твоего ника на сервере. При первом входе напиши <code>/register пароль пароль</code>, дальше при каждом входе — <code>/login пароль</code>. Не бери пароль от почты или других игр.</p></div></details>
+      <details><summary>Обязателен ли Discord?</summary><div class="body"><p>Нет. Заявка, статус, правила и гайды — всё здесь, на сайте. В Discord новости, ивенты и помощь от модеров. Он открывается только с VPN.</p></div></details>
+      <details><summary>Не могу подключиться</summary><div class="body"><p>Проверь версию — нужна ровно <b>1.21.11</b>. Адрес — <code>87craft.ru</code>, без порта. Не помогло — загляни в <a href="#guides">гайды</a> или напиши в Discord в канал «помощь»: ник, лаунчер и скриншот ошибки.</p></div></details>
+    </div>
+  </div>
+
+  <div class="band">
+    <div>
+      <h3>Готов?</h3>
+      <p>Подай заявку — и пока её смотрят, заходи на спавн: <b>87craft.ru</b></p>
+    </div>
+    <div class="btns">
+      <a class="btn btn-ink" href="#apply">Подать заявку</a>
+      <a class="btn js-discord" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">Discord</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ КАК ЗАЙТИ ═══════════════ -->
+<section class="view" id="view-join" data-title="Как зайти на 87CRAFT — IP, версия, регистрация">
+  <div class="head">
+    <div class="eyebrow">Пошагово · 5 минут</div>
+    <h2>Как зайти</h2>
+    <p>От запуска игры до основного мира. Моды не нужны — сервер работает на чистой версии.</p>
+  </div>
+
+  <div class="reqs">
+    <div><b>Игра</b><span>Minecraft Java Edition</span></div>
+    <div><b>Версия</b><span>1.21.11</span></div>
+    <div><b>Лаунчер</b><span>Любой: лицензия или пиратка</span></div>
+    <div><b>Ник</b><span>3–16 символов: латиница, цифры, _</span></div>
+  </div>
+
+  <ol class="steps block">
+    <li><div>
+      <h4>Запусти Minecraft Java 1.21.11</h4>
+      <p>В лаунчере выбери версию <b>1.21.11</b>. Ник, под которым играешь, запомни — он нужен в заявке.</p>
+    </div></li>
+    <li><div>
+      <h4>Добавь сервер</h4>
+      <p>«Сетевая игра» → «Добавить сервер» → в поле адреса вставь IP → «Готово».</p>
+      <div class="ip">
+        <span class="ip-label">IP</span>
+        <span class="ip-value px">87craft.ru</span>
+        <button class="ip-copy" type="button" data-copy="87craft.ru">Скопировать</button>
+      </div>
+    </div></li>
+    <li><div>
+      <h4>Придумай пароль</h4>
+      <p>При первом входе напиши в чат <code>/register пароль пароль</code> (два раза одно и то же). Дальше при каждом входе — <code>/login пароль</code>. Пароль защищает твой ник — не бери пароль от почты или других игр.</p>
+    </div></li>
+    <li><div>
+      <h4>Осваивайся на спавне</h4>
+      <p>Спавн открыт всем сразу — бегай, знакомься, зови друзей. Прогресс никуда не денется.</p>
+    </div></li>
+    <li><div>
+      <h4>Подай заявку</h4>
+      <p>Ник в заявке — <b>точно как в игре</b>. После одобрения откроется основной мир. Статус — по коду во вкладке <a href="#status">«Статус заявки»</a>.</p>
+      <div class="btns" style="margin-top:14px"><a class="btn btn-pink" href="#apply">Подать заявку</a></div>
+    </div></li>
+    <li><div>
+      <h4>Голосовой чат <span class="opt">по желанию</span></h4>
+      <p>Хочешь слышать других — поставь Fabric и мод Plasmo Voice. Это пять минут, инструкция во вкладке <a href="#mods">«Моды»</a>.</p>
+    </div></li>
+    <li><div>
+      <h4>Discord <span class="opt">по желанию</span></h4>
+      <p>Новости, ивенты, помощь модеров. Ник в Discord лучше поставить как в Minecraft: название сервера слева сверху → «Редактировать личный профиль сервера» → «Никнейм». Discord открывается только с VPN.</p>
+      <div class="btns" style="margin-top:14px"><a class="btn js-discord" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">Открыть Discord</a></div>
+    </div></li>
+  </ol>
+</section>
+
+<!-- ═══════════════ ЗАЯВКА ═══════════════ -->
+<section class="view" id="view-apply" data-title="Заявка на 87CRAFT">
+  <div class="head">
+    <div class="eyebrow">Вайтлист · основной мир</div>
+    <h2>Заявка</h2>
+    <p>Минута и четыре поля. После отправки получишь личный код — по нему проверишь, одобрили ли заявку.</p>
+  </div>
+  <div class="split">
+    <div>
+      <form class="form ym-hide-content ym-disable-keys" id="craftForm" novalidate>
+        <label class="field">
+          <span>Ник в Minecraft</span>
+          <input type="text" id="craftNick" placeholder="Steve_87" autocomplete="off" autocapitalize="off" spellcheck="false" required maxlength="16"/>
+          <small>Точно как в игре: 3–16 латинских букв, цифр или «_».</small>
+        </label>
+        <label class="field">
+          <span>Как к тебе обращаться</span>
+          <input type="text" id="craftCallname" placeholder="Обамасан" autocomplete="off" required maxlength="60"/>
+        </label>
+        <label class="field">
+          <span>Сколько тебе лет</span>
+          <input type="number" id="craftAge" placeholder="15" inputmode="numeric" min="5" max="99" required/>
+        </label>
+        <label class="field">
+          <span>Чем планируешь заниматься на сервере</span>
+          <textarea id="craftPlans" placeholder="строить, фармить, устраивать ивенты…" rows="3" maxlength="300"></textarea>
+        </label>
+        <label class="field">
+          <span>Из какого ты класса <em>— необязательно</em></span>
+          <input type="text" id="craftGrade" placeholder="9Б" autocomplete="off" maxlength="20"/>
+        </label>
+        <label class="field">
+          <span>Ник в Discord <em>— необязательно</em></span>
+          <input type="text" id="craftDiscord" placeholder="steve87" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40"/>
+          <small>Если укажешь — решение по заявке придёт ещё и тегом в Discord.</small>
+        </label>
+        <label class="honey" aria-hidden="true">Сайт <input type="text" id="craftHoney" tabindex="-1" autocomplete="off"/></label>
+        <button type="submit" class="btn btn-pink" id="craftSubmit">Отправить заявку</button>
+        <p class="msg" id="craftMsg" aria-live="polite"></p>
+      </form>
+
+      <div class="done" id="craftDone" hidden>
+        <h3>Заявка отправлена</h3>
+        <p id="craftDoneSub">Модеры посмотрят её и откроют тебе основной мир.</p>
+        <div id="craftCodeBox">
+          <div class="code">
+            <span class="code-v px" id="craftCode">87-XXXX-XXXX</span>
+            <button class="ip-copy" type="button" id="craftCodeCopy">Скопировать</button>
+          </div>
+          <p class="ip-meta">Это твой код заявки. На этом устройстве он запомнится сам, но лучше сделай скриншот — с другого телефона без кода статус не проверить.</p>
+        </div>
+        <ol class="mini">
+          <li>Заходи на спавн: <b>87craft.ru</b>, Java 1.21.11.</li>
+          <li>При первом входе — <code>/register пароль пароль</code>.</li>
+          <li>Проверяй статус во вкладке <a href="#status">«Статус заявки»</a>.</li>
+        </ol>
+        <div class="btns">
+          <a class="btn btn-pink" href="#status" id="craftGoStatus">Проверить статус</a>
+          <button class="btn" type="button" id="craftAgain">Ещё одна заявка</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="aside">
+      <h4>Что дальше</h4>
+      <ol class="mini">
+        <li>Заявка попадает к модерам — они смотрят её вручную.</li>
+        <li>Пока ждёшь, играй на спавне: <b>87craft.ru</b> открыт всем.</li>
+        <li>Решение и комментарий модера — во вкладке <a href="#status">«Статус заявки»</a> по твоему коду.</li>
+        <li>Одобрили — основной мир открыт. Перезайди на сервер, если был онлайн.</li>
+      </ol>
+      <p class="ip-meta" style="margin-top:18px">Перед заявкой загляни в <a href="#rules">правила</a> — их нарушение может стоить вайтлиста.</p>
+    </aside>
+  </div>
+</section>
+
+<!-- ═══════════════ СТАТУС ЗАЯВКИ ═══════════════ -->
+<section class="view" id="view-status" data-title="Статус заявки — 87CRAFT">
+  <div class="head">
+    <div class="eyebrow">Только твоя заявка</div>
+    <h2>Статус заявки</h2>
+    <p>Введи код, который получил после отправки. Решение и комментарий видишь только ты — по коду, без него чужую заявку не открыть.</p>
+  </div>
+  <form class="check" id="checkForm" novalidate>
+    <label class="sr-only" for="checkCode">Код заявки</label>
+    <input type="text" id="checkCode" placeholder="87-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="14"/>
+    <button class="btn btn-pink" type="submit" id="checkBtn">Проверить</button>
+  </form>
+  <div class="saved" id="savedCodes" hidden></div>
+  <p class="msg" id="checkMsg" aria-live="polite" style="margin-top:12px"></p>
+
+  <div class="res ym-hide-content" id="checkRes" hidden>
+    <div class="res-top">
+      <span class="badge" id="resBadge">На рассмотрении</span>
+      <span class="px" id="resNick"></span>
+    </div>
+    <div class="res-body">
+      <h4 id="resTitle"></h4>
+      <p id="resText"></p>
+      <div class="res-comment" id="resComment" hidden><b>Комментарий модератора</b><span id="resCommentText"></span></div>
+      <p class="res-meta" id="resMeta"></p>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="note">Подавал заявку раньше, когда коды ещё не выдавали? Решение по ней смотри в Discord, в канале «решения». Или подай заявку заново — получишь код.</div>
+    <div class="note">Код потерялся? Подай заявку ещё раз с тем же ником — модеры увидят, что это ты.</div>
+  </div>
+</section>
+
+<!-- ═══════════════ МОДЫ ═══════════════ -->
+<section class="view" id="view-mods" data-title="Моды для 87CRAFT — голосовой чат Plasmo Voice">
+  <div class="head">
+    <div class="eyebrow">Fabric 1.21.11</div>
+    <h2>Моды</h2>
+    <p>Что поставить, чтобы играть было удобнее, и чего ставить нельзя.</p>
+  </div>
+
+  <div class="big-yes">
+    <b>Обязательных модов нет</b>
+    <p>Сервер — ванилла. Заходи с чистой 1.21.11 из любого лаунчера. Моды ниже — по желанию.</p>
+  </div>
+
+  <div class="block">
+    <h3>Голосовой чат</h3>
+    <div class="mods">
+      <div><span class="tag">Шаг 1 · загрузчик</span><h4>Fabric Loader</h4><p>Основа для модов. Выбери версию игры 1.21.11 и нажми Install. В TLauncher и похожих лаунчерах установщик обычно не нужен — просто выбери в списке версию «Fabric 1.21.11».</p><a class="btn" href="https://fabricmc.net/use/installer/" target="_blank" rel="noopener">fabricmc.net</a></div>
+      <div><span class="tag">Шаг 2 · мод</span><h4>Fabric API</h4><p>Библиотека, без которой не запустится большинство модов, включая голосовой чат. Бери файл для 1.21.11.</p><a class="btn" href="https://modrinth.com/mod/fabric-api" target="_blank" rel="noopener">Modrinth</a></div>
+      <div><span class="tag">Шаг 3 · мод</span><h4>Plasmo Voice</h4><p>Сам голосовой чат: слышишь тех, кто рядом в игре. Бери версию для Fabric 1.21.11.</p><a class="btn" href="https://modrinth.com/plugin/plasmo-voice" target="_blank" rel="noopener">Modrinth</a></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Как поставить</h3>
+    <ol class="steps">
+      <li><div><h4>Поставь Fabric для 1.21.11</h4><p>Через установщик с fabricmc.net или выбери «Fabric 1.21.11» в своём лаунчере.</p></div></li>
+      <li><div><h4>Скачай Fabric API и Plasmo Voice</h4><p>Оба файла — <b>.jar</b>, оба для <b>Fabric 1.21.11</b>. Не распаковывай их.</p></div></li>
+      <li><div><h4>Положи их в папку mods</h4><p>Windows: нажми <kbd>Win</kbd>+<kbd>R</kbd>, вставь <code>%appdata%\.minecraft\mods</code> и Enter. Нет папки mods — создай. Если лаунчер хранит игру в другом месте, у него в настройках есть кнопка «Открыть папку игры».</p></div></li>
+      <li><div><h4>Запусти версию Fabric 1.21.11</h4><p>Именно её, а не обычную 1.21.11 — иначе моды не загрузятся.</p></div></li>
+      <li><div><h4>Настрой микрофон</h4><p>В игре нажми <kbd>V</kbd> — откроется меню голосового чата: там выбор микрофона, громкость и режим активации.</p></div></li>
+    </ol>
+    <div class="note" style="margin-top:var(--sp-s)">Modrinth не открывается? Ссылки на те же моды есть в Discord, в канале «сервер».</div>
+  </div>
+
+  <div class="block">
+    <h3>По желанию</h3>
+    <div class="mods one">
+      <div><span class="tag">FPS</span><h4>Sodium</h4><p>Заметно поднимает FPS на слабых ноутбуках. Ставится так же: Fabric + файл в папку mods.</p><a class="btn" href="https://modrinth.com/mod/sodium" target="_blank" rel="noopener">Modrinth</a></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Нельзя</h3>
+    <ul class="list no">
+      <li><b>X-ray</b> — и моды, и ресурспаки, которые показывают руды сквозь блоки.</li>
+      <li><b>Чит-клиенты</b> и любые моды на преимущество: киллаура, флай, автокликер и подобное.</li>
+      <li>Всё, что помогает дюпать или ломать чужие приваты.</li>
+    </ul>
+    <p class="muted" style="margin-top:14px">За это — бан сразу. Сомневаешься в моде — спроси у модеров в Discord, пока не поставил.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ ГАЙДЫ ═══════════════ -->
+<section class="view" id="view-guides" data-title="Гайды 87CRAFT — приват, суды, пароль, подключение">
+  <div class="head">
+    <div class="eyebrow">Как тут всё устроено</div>
+    <h2>Гайды</h2>
+    <p>Короткие ответы на то, с чем сталкиваются в первые дни.</p>
+  </div>
+  <div class="acc">
+    <details open><summary>Первый вход: пароль и спавн</summary><div class="body">
+      <p>Сервер спросит пароль. В первый раз: <code>/register пароль пароль</code>. Потом при каждом входе: <code>/login пароль</code>.</p>
+      <p>Ты появишься на спавне — это безопасная общая зона. Основной мир откроется, когда одобрят заявку.</p>
+    </div></details>
+    <details><summary>Забыл пароль от /login</summary><div class="body">
+      <p>Сам сбросить его не получится — напиши модерам в Discord: канал «помощь», метка «Вопрос». Укажи ник в Minecraft.</p>
+    </div></details>
+    <details><summary>Как заприватить территорию</summary><div class="body">
+      <ul>
+        <li>Максимум — <b>500×500 блоков</b>.</li>
+        <li>Территорию обозначает <b>табличка с ником владельца</b>. Поставь её так, чтобы было видно.</li>
+        <li>Ломать, открывать сундуки и пользоваться механизмами на чужом привате без разрешения нельзя — это гриф.</li>
+        <li>Любые споры о земле решает суд.</li>
+      </ul>
+    </div></details>
+    <details><summary>Штрафы и казна</summary><div class="body">
+      <p>За гриф, воровство и убийство вне согласованного РП назначают штраф в казну сервера — и возврат вещей пострадавшему. Оскорбил админа — тоже штраф.</p>
+      <p><b>Не оплатил штраф — бан.</b></p>
+    </div></details>
+    <details><summary>Города, РП и суды</summary><div class="body">
+      <ul>
+        <li>РП (ролевая игра) на сервере есть, но его согласовывают: на весь сервер — с админами, в городе — с владельцами города, на чужой территории — с её владельцами.</li>
+        <li>РП не должно мешать играть другим. Крупные РП-ивенты — только с админами.</li>
+        <li>Суды проводятся по мере необходимости. Судью выбирают голосованием игроков.</li>
+      </ul>
+    </div></details>
+    <details><summary>Голосовой чат</summary><div class="body">
+      <p>Fabric 1.21.11 + моды Fabric API и Plasmo Voice в папке mods. Пошагово — во вкладке <a href="#mods">«Моды»</a>. В игре меню голоса открывается на <kbd>V</kbd>.</p>
+      <p>Правила общения в голосовом те же, что и в чате.</p>
+    </div></details>
+    <details><summary>Нашёл баг или дюп</summary><div class="body">
+      <p>Сразу скажи модерам (Discord, канал «помощь»). Молча пользоваться — бан. Дюп — это клонирование предметов через баги сервера или стороннее ПО, он запрещён в любом виде.</p>
+    </div></details>
+    <details><summary>Не могу подключиться</summary><div class="body">
+      <ol>
+        <li>Версия — ровно <b>1.21.11</b> (или Fabric 1.21.11, если ставил моды).</li>
+        <li>Адрес — <code>87craft.ru</code>, без порта и пробелов.</li>
+        <li>Перезапусти игру и попробуй ещё раз через минуту.</li>
+        <li>Не помогло — Discord, канал «помощь», метка «Не пускает»: ник, лаунчер, скриншот ошибки.</li>
+      </ol>
+    </div></details>
+    <details><summary>Зачем ник в Discord как в Minecraft</summary><div class="body">
+      <p>По нему модеры находят тебя по заявке и в спорных ситуациях. Меняется так: название сервера слева сверху → «Редактировать личный профиль сервера» → «Никнейм».</p>
+    </div></details>
+  </div>
+</section>
+
+<!-- ═══════════════ ПРАВИЛА ═══════════════ -->
+<section class="view" id="view-rules" data-title="Правила 87CRAFT">
+  <div class="head">
+    <div class="eyebrow">Коротко и по делу</div>
+    <h2>Правила</h2>
+    <p>Сначала главное, ниже — подробно по разделам. Спорные случаи решают модеры, и администрация может применять меры по своему усмотрению.</p>
+  </div>
+
+  <ol class="short">
+    <li><span>Ник в Discord = ник в Minecraft.</span></li>
+    <li><span>Читы, X-ray, автокликер и моды на преимущество <span class="pen ban">бан сразу</span></span></li>
+    <li><span>Травля, оскорбления, слив чужих личных данных <span class="pen ban">бан</span></span></li>
+    <li><span>Гриф, воровство, убийство вне согласованного РП <span class="pen">штраф + возврат</span></span></li>
+    <li><span>Приват — до 500×500 блоков, табличкой со своим ником. Споры — в суде.</span></li>
+    <li><span>Нашёл баг или дюп — скажи модерам. Молча пользуешься <span class="pen ban">бан</span></span></li>
+    <li><span>Без спама, рекламы, политики и 18+.</span></li>
+  </ol>
+
+  <div class="block">
+    <h3>Подробно</h3>
+    <div class="acc">
+      <details><summary>1 · Читы</summary><div class="body">
+        <p>Читы и любые программы или моды, которые дают преимущество, — <b>бан сразу</b>, без предупреждений.</p>
+      </div></details>
+      <details><summary>2 · Общение</summary><div class="body">
+        <ul>
+          <li>Систематические оскорбления по национальному, половому, религиозному признаку, буллинг — бан.</li>
+          <li>Докс и слив личных данных — бан без возможности разбана.</li>
+          <li>Сервер — не место для политических споров.</li>
+          <li>Оскорбление админов — штраф в казну сервера.</li>
+          <li>Спам, флуд, реклама других серверов и ресурсов — запрещены.</li>
+          <li>Правила текстового чата действуют и в голосовом.</li>
+        </ul>
+      </div></details>
+      <details><summary>3 · Гриферство</summary><div class="body">
+        <ul>
+          <li>Уничтожение построек, чужих вещей, городской собственности и приватов — штраф. Не оплатил — бан.</li>
+          <li>Убийство игроков вне согласованного РП — штраф и возврат вещей.</li>
+          <li>Воровство — штраф и возврат вещей.</li>
+        </ul>
+      </div></details>
+      <details><summary>4 · Территории</summary><div class="body">
+        <ul>
+          <li>Заприватить можно до 500×500 блоков.</li>
+          <li>Территория обозначается табличкой с ником владельца.</li>
+          <li>Любые территориальные вопросы решаются в суде.</li>
+        </ul>
+      </div></details>
+      <details><summary>5 · РП и суды</summary><div class="body">
+        <ul>
+          <li>РП на весь сервер согласуется с админами, в городе — с владельцами города, на чужой территории — с её владельцами.</li>
+          <li>РП не должно вредить игре других. Крупные РП-ивенты — только с админами.</li>
+          <li>Суды проводятся по мере необходимости, судью выбирают голосованием игроков.</li>
+        </ul>
+      </div></details>
+      <details><summary>6 · Запрещено в любом виде</summary><div class="body">
+        <ul>
+          <li>Экстремизм, эротика и 18+, дискриминация, подстрекательство к суициду.</li>
+          <li>Угрозы расправой и вред в реальной жизни.</li>
+          <li>Чужие персональные данные и контент с другими игроками без их согласия.</li>
+          <li>Пропаганда наркотиков.</li>
+          <li>Продажа игровых вещей за реальные деньги.</li>
+          <li>Твинки — дополнительные аккаунты, чтобы обойти бан или ограничения.</li>
+          <li>Запрещённые слова на стримах с сервера.</li>
+          <li>Поиск лазеек в правилах.</li>
+        </ul>
+      </div></details>
+      <details><summary>7 · Прочее</summary><div class="body">
+        <ul>
+          <li>С администрацией — через поддержку и Discord.</li>
+          <li>Администрация не отвечает за контент третьих лиц.</li>
+        </ul>
+      </div></details>
+      <details><summary>Словарик</summary><div class="body">
+        <dl class="gloss">
+          <dt>Вайп</dt><dd>Полная очистка карты и прогресса всех игроков — ради обновления мира и экономики.</dd>
+          <dt>Гриф</dt><dd>Намеренное разрушение чужих построек, убийство мирных животных, вред чужому имуществу.</dd>
+          <dt>Дюп</dt><dd>Клонирование предметов через баги сервера или стороннее ПО. Строго запрещено.</dd>
+          <dt>Приват</dt><dd>Защищённая территория игрока: без разрешения нельзя ломать блоки, открывать сундуки и трогать механизмы.</dd>
+          <dt>Спавн</dt><dd>Место появления новых игроков. Безопасная общая зона.</dd>
+          <dt>Кик</dt><dd>Принудительное отключение от сервера.</dd>
+          <dt>Мут</dt><dd>Запрет писать в чат на время.</dd>
+          <dt>Бан</dt><dd>Блокировка доступа к серверу на время или навсегда.</dd>
+        </dl>
+      </div></details>
+    </div>
+    <p class="muted" style="margin-top:var(--sp-s)">Полная версия — в Discord, канал «правила». Если здесь и там что-то расходится, действует версия в Discord.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span><b class="px">87CRAFT</b> · Minecraft-сервер от 87 · Macan News</span>
+    <nav aria-label="Ссылки">
+      <a href="../">macannews.ru</a>
+      <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener">Telegram</a>
+      <a class="js-discord" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+  /* ── НАСТРОЙКИ ──────────────────────────────────────────────────────────
+     RELAY_URLS — Yandex Cloud Function (код в relay/yandex-function). Она
+     принимает заявку (POST), отдаёт статус заявки по коду (GET ?check=)
+     и онлайн сервера (GET ?status). Discord из РФ без VPN не открывается,
+     поэтому всё, что игроку нужно, идёт через неё, а не через discord.com. */
+  var RELAY_URLS = ['https://functions.yandexcloud.net/d4e06f6ljufv9mbn9qth'];
+  var DISCORD_INVITE_URL = 'https://discord.gg/dhGdzAnNj5';
+  var RELAY_KEY = 'mn-craft-relay';    /* какой адрес сработал в прошлый раз (общий с главной) */
+  var APPS_KEY  = 'mn-craft-apps';     /* коды заявок с этого устройства */
+  var MIN_SHOWN = 3;                   /* меньше трёх игроков — пишем просто «Сервер онлайн» */
+
+  function goal(n){ if(window.mnGoal) window.mnGoal(n); }
+  function $(id){ return document.getElementById(id); }
+  function store(key, val){ try{ if(val===undefined) return JSON.parse(localStorage.getItem(key)||'null'); localStorage.setItem(key, JSON.stringify(val)); }catch(e){ return null; } }
+
+  /* ── вкладки ── */
+  var VIEWS=['about','join','apply','status','mods','guides','rules'];
+  var tabs=[].slice.call(document.querySelectorAll('#tabs a'));
+  function current(){
+    var s=(location.hash||'').replace(/^#\/?/,'').split(/[?&\/#]/)[0].toLowerCase();
+    return VIEWS.indexOf(s)>=0 ? s : 'about';
+  }
+  var first=true;
+  function show(){
+    var s=current();
+    VIEWS.forEach(function(v){ var el=$('view-'+v); if(el) el.classList.toggle('active', v===s); });
+    tabs.forEach(function(a){
+      if(a.getAttribute('href')==='#'+s){
+        a.setAttribute('aria-current','page');
+        /* на телефоне полоса вкладок прокручивается: двигаем только её (не
+           страницу), чтобы активная вкладка была по центру — и при прямом
+           заходе по ссылке вида /87craft/#rules тоже */
+        var strip=a.parentNode;
+        if(strip.scrollWidth>strip.clientWidth) strip.scrollLeft=a.offsetLeft-(strip.clientWidth-a.offsetWidth)/2;
+      }
+      else a.removeAttribute('aria-current');
+    });
+    var el=$('view-'+s);
+    if(el && el.getAttribute('data-title')) document.title=el.getAttribute('data-title');
+    if(!first) window.scrollTo(0,0);
+    first=false;
+    if(s==='status') onStatusOpen();
+    pollStatus();
+  }
+  window.addEventListener('hashchange', show);
+  /* «К содержимому» — фокус на текущую вкладку без смены #hash (иначе #main
+     роутер принял бы за неизвестную вкладку и открыл «О сервере») */
+  var skip=document.querySelector('a[href="#main"]');
+  if(skip) skip.addEventListener('click', function(e){
+    e.preventDefault();
+    var v=document.querySelector('.view.active'), h=v && v.querySelector('h1,h2');
+    var t=h || $('main'); if(h && !h.hasAttribute('tabindex')) h.setAttribute('tabindex','-1');
+    t.focus();
+  });
+
+  /* ── тост и копирование ── */
+  var toastEl=$('toast'), toastT=null;
+  function toast(t){ toastEl.textContent=t; toastEl.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(function(){ toastEl.classList.remove('on'); }, 2200); }
+  function copy(text){
+    function fallback(){
+      var ta=document.createElement('textarea'); ta.value=text; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select(); var ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+      document.body.removeChild(ta); return ok;
+    }
+    if(navigator.clipboard && window.isSecureContext){
+      return navigator.clipboard.writeText(text).then(function(){ return true; }, function(){ return fallback(); });
+    }
+    return Promise.resolve(fallback());
+  }
+  document.addEventListener('click', function(e){
+    var b=e.target.closest ? e.target.closest('[data-copy]') : null; if(!b) return;
+    copy(b.getAttribute('data-copy')).then(function(ok){
+      toast(ok ? 'Скопировано: '+b.getAttribute('data-copy') : 'Не вышло — выдели адрес и скопируй вручную');
+      if(ok){ var t=b.textContent; b.textContent='Готово'; setTimeout(function(){ b.textContent=t; }, 1500); }
+    });
+    goal('craft_ip_copy');
+  });
+  [].forEach.call(document.querySelectorAll('.js-discord'), function(a){
+    a.href=DISCORD_INVITE_URL;
+    a.addEventListener('click', function(){ goal('craft_discord'); });
+  });
+
+  /* ── запросы к функции ── */
+  function relayOrder(){
+    var list=RELAY_URLS.slice(), last=null;
+    try{ last=localStorage.getItem(RELAY_KEY); }catch(e){}
+    var i=last?list.indexOf(last):-1;
+    if(i>0){ list.splice(i,1); list.unshift(last); }
+    return list;
+  }
+  function request(method, query, body, timeoutMs){
+    var queue=relayOrder();
+    function attempt(i){
+      if(i>=queue.length) return Promise.reject(new Error('no route'));
+      var url=queue[i]+(query||'');
+      var ctrl=window.AbortController ? new AbortController() : null;
+      var t=setTimeout(function(){ if(ctrl) ctrl.abort(); }, timeoutMs||15000);
+      var opts={method:method, cache:'no-store'};
+      /* text/plain — «простой» запрос без лишнего preflight на мобильной сети */
+      if(body){ opts.headers={'Content-Type':'text/plain;charset=UTF-8'}; opts.body=JSON.stringify(body); }
+      if(ctrl) opts.signal=ctrl.signal;
+      return fetch(url, opts).then(function(r){
+        clearTimeout(t);
+        return r.text().then(function(txt){
+          var data=null; try{ data=JSON.parse(txt); }catch(e){}
+          if(!r.ok && !(data && data.error)) throw new Error('http '+r.status);
+          try{ localStorage.setItem(RELAY_KEY, queue[i]); }catch(e){}
+          return {ok:r.ok, status:r.status, data:data};
+        });
+      }, function(err){ clearTimeout(t); throw err; }).catch(function(){ return attempt(i+1); });
+    }
+    return attempt(0);
+  }
+
+  /* ── онлайн сервера: плашка появляется, только если функция ответила ── */
+  var srvEl=$('srvStatus'), srvText=$('srvText'), srvTimer=null, srvAt=0;
+  function plural(n, a, b, c){ var m=n%10, h=n%100; return (m===1&&h!==11)?a:(m>=2&&m<=4&&(h<12||h>14))?b:c; }
+  function pollStatus(){
+    if(current()!=='about' || document.hidden || !RELAY_URLS.length) return;
+    if(Date.now()-srvAt < 55000) return;
+    srvAt=Date.now();
+    request('GET', '?status=1', null, 8000).then(function(res){
+      var d=res.data;
+      if(!d || typeof d.online!=='boolean'){ srvEl.hidden=true; return; }
+      if(!d.online){ srvEl.hidden=true; return; }
+      srvEl.classList.remove('off');
+      srvText.textContent = d.players>=MIN_SHOWN ? ('Онлайн · '+d.players+' '+plural(d.players,'игрок','игрока','игроков')) : 'Сервер онлайн';
+      srvEl.hidden=false;
+    }, function(){ srvEl.hidden=true; });
+  }
+  srvTimer=setInterval(pollStatus, 60000);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) pollStatus(); });
+
+  /* ── коды заявок на этом устройстве ── */
+  function savedApps(){ var a=store(APPS_KEY); return Array.isArray(a) ? a : []; }
+  function saveApp(code, nick){
+    var a=savedApps().filter(function(x){ return x && x.c!==code; });
+    a.unshift({c:code, n:nick, t:Date.now()});
+    store(APPS_KEY, a.slice(0,5));
+  }
+  /* тот же разбор, что в функции: пробелы, строчные, без дефисов — всё годится */
+  function normCode(v){
+    var s=String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+    var body=(s.length===10 && s.indexOf('87')===0) ? s.slice(2) : s;
+    if(!/^[A-HJ-NP-Z2-9]{8}$/.test(body)) return '';
+    return '87-'+body.slice(0,4)+'-'+body.slice(4);
+  }
+
+  /* ── заявка ── */
+  var form=$('craftForm'), msg=$('craftMsg'), done=$('craftDone'), submitBtn=$('craftSubmit');
+  var nick=$('craftNick'), callname=$('craftCallname'), age=$('craftAge'), plans=$('craftPlans'), grade=$('craftGrade'), discordNick=$('craftDiscord'), honey=$('craftHoney');
+  var opened=false;
+  form.addEventListener('focusin', function(){ if(!opened){ opened=true; goal('craft_form_open'); } });
+  function setMsg(t, err){ msg.textContent=t; msg.classList.toggle('err', !!err); }
+
+  function showDone(code){
+    form.hidden=true; done.hidden=false;
+    $('craftCodeBox').hidden=!code;
+    $('craftDoneSub').textContent = code
+      ? 'Модеры посмотрят её и откроют тебе основной мир. Сохрани код ниже.'
+      : 'Модеры посмотрят её и откроют тебе основной мир. Решение придёт в Discord, в канал «решения».';
+    if(code){ $('craftCode').textContent=code; $('craftCodeCopy').setAttribute('data-copy', code); $('checkCode').value=code; }
+    done.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  $('craftAgain').addEventListener('click', function(){ done.hidden=true; form.hidden=false; setMsg(''); nick.focus(); });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    /* honeypot: люди поле не видят, простые боты заполняют — тихо «принимаем» */
+    if(honey.value){ form.reset(); showDone(''); return; }
+    var nickVal=(nick.value||'').trim();
+    if(!/^[A-Za-z0-9_]{3,16}$/.test(nickVal)){ setMsg('Ник — 3–16 латинских букв, цифр или «_», точно как в Minecraft.', true); nick.focus(); return; }
+    var callVal=(callname.value||'').trim();
+    if(!callVal){ setMsg('Напиши, как к тебе обращаться.', true); callname.focus(); return; }
+    var ageVal=parseInt((age.value||'').trim(),10);
+    if(!(ageVal>=5 && ageVal<=99)){ setMsg('Укажи возраст числом.', true); age.focus(); return; }
+    if(!RELAY_URLS.length){ setMsg('Приём заявок временно закрыт — загляни в Telegram-канал.', true); return; }
+
+    submitBtn.disabled=true; setMsg('Отправляем…');
+    request('POST', '', {
+      nickname:nickVal, callname:callVal, age:ageVal,
+      plans:(plans.value||'').trim(), grade:(grade.value||'').trim(),
+      discord:((discordNick.value)||'').trim().replace(/^@+/,''),
+      site:''
+    }, 15000).then(function(res){
+      if(!res.ok){
+        var err=res.data && res.data.error;
+        if(err==='nickname'){ setMsg('Сервер не принял ник — только латиница, цифры и «_», 3–16 символов.', true); nick.focus(); }
+        else if(err==='age'){ setMsg('Сервер не принял возраст — укажи его числом.', true); age.focus(); }
+        else { goal('craft_submit_fail'); setMsg('Заявка не ушла — попробуй ещё раз через минуту, поля уже заполнены.', true); }
+        return;
+      }
+      goal('craft_submit_ok');
+      var code=normCode(res.data && res.data.code);
+      if(code) saveApp(code, nickVal);
+      form.reset(); setMsg('');
+      showDone(code);
+    }, function(){
+      goal('craft_submit_fail');
+      setMsg('Заявка не ушла — сеть режет запрос. Попробуй ещё раз или с другого интернета (Wi-Fi ↔ мобильный), поля уже заполнены.', true);
+    }).then(function(){ submitBtn.disabled=false; });
+  });
+
+  /* ── статус заявки ── */
+  var checkForm=$('checkForm'), checkCode=$('checkCode'), checkBtn=$('checkBtn'), checkMsg=$('checkMsg'), res=$('checkRes'), savedBox=$('savedCodes');
+  var TEXTS={
+    pending:{badge:'На рассмотрении', cls:'', title:'Заявку ещё смотрят', text:'Модеры пока не приняли решение. Пока ждёшь — играй на спавне 87craft.ru, прогресс не пропадёт.'},
+    approved:{badge:'Одобрена', cls:'ok', title:'Основной мир открыт', text:'Заходи на 87craft.ru. Если был онлайн, пока модеры решали, — перезайди на сервер.'},
+    rejected:{badge:'Отклонена', cls:'bad', title:'Заявку отклонили', text:'Причину модер обычно пишет в комментарии. Исправь, что не так, и подай заявку заново.'}
+  };
+  function fmtDate(iso){
+    if(!iso) return '';
+    var d=new Date(iso); if(isNaN(d)) return '';
+    try{ return d.toLocaleString('ru-RU',{day:'numeric', month:'long', hour:'2-digit', minute:'2-digit'}); }catch(e){ return d.toISOString().slice(0,16).replace('T',' '); }
+  }
+  function renderSaved(active){
+    var apps=savedApps();
+    savedBox.innerHTML='';
+    savedBox.hidden=!apps.length;
+    apps.forEach(function(a){
+      var b=document.createElement('button');
+      b.type='button'; b.textContent=a.c+(a.n?' · '+a.n:'');
+      if(a.c===active) b.className='on';
+      b.addEventListener('click', function(){ checkCode.value=a.c; check(a.c); });
+      savedBox.appendChild(b);
+    });
+  }
+  function setCheckMsg(t, err){ checkMsg.textContent=t; checkMsg.classList.toggle('err', !!err); }
+  var busy=false;
+  function check(raw){
+    var code=normCode(raw);
+    if(!code){ setCheckMsg('Код выглядит так: 87-XXXX-XXXX — восемь букв и цифр после «87».', true); res.hidden=true; checkCode.focus(); return; }
+    if(busy) return; busy=true;
+    checkCode.value=code; renderSaved(code);
+    checkBtn.disabled=true; setCheckMsg('Проверяем…'); goal('craft_status_check');
+    request('GET', '?check='+encodeURIComponent(code), null, 12000).then(function(r){
+      var d=r.data||{};
+      /* ответ не JSON — функция ещё старой версии, без проверки статуса */
+      if(r.ok && !r.data){
+        res.hidden=true;
+        setCheckMsg('Проверка статуса вот-вот заработает. Пока решение смотри в Discord, в канале «решения».', true);
+        return;
+      }
+      if(!r.ok){
+        res.hidden=true;
+        setCheckMsg(d.error==='code' ? 'Такого кода не бывает — проверь, нет ли опечатки.' : 'Не получилось проверить — попробуй через минуту.', true);
+        return;
+      }
+      if(!d.found){
+        res.hidden=true;
+        setCheckMsg('Заявку с этим кодом не нашли. Если отправил только что — подожди минуту и проверь ещё раз.', true);
+        return;
+      }
+      var t=TEXTS[d.status]||TEXTS.pending;
+      $('resBadge').textContent=t.badge; $('resBadge').className='badge'+(t.cls?' '+t.cls:'');
+      $('resNick').textContent=d.nick||'';
+      $('resTitle').textContent=t.title; $('resText').textContent=t.text;
+      var hasComment=!!(d.comment && String(d.comment).trim());
+      $('resComment').hidden=!hasComment; $('resCommentText').textContent=hasComment?(' '+d.comment):'';
+      var meta=[];
+      if(d.created) meta.push('Подана '+fmtDate(d.created));
+      if(d.status!=='pending' && d.updated) meta.push('решение '+fmtDate(d.updated));
+      $('resMeta').textContent=meta.join(' · ');
+      res.hidden=false; setCheckMsg('');
+    }, function(){
+      res.hidden=true;
+      setCheckMsg('Сеть не пропускает запрос — попробуй ещё раз или с другого интернета.', true);
+    }).then(function(){ busy=false; checkBtn.disabled=false; });
+  }
+  checkForm.addEventListener('submit', function(e){ e.preventDefault(); check(checkCode.value); });
+  /* при открытии вкладки — сразу проверяем последнюю заявку с этого устройства */
+  function onStatusOpen(){
+    var apps=savedApps();
+    renderSaved(normCode(checkCode.value));
+    var code=normCode(checkCode.value) || (apps[0] && apps[0].c);
+    if(code && res.hidden && !busy){ checkCode.value=code; check(code); }
+  }
+
+  show();
+})();
+</script>
+</body>
+</html>
