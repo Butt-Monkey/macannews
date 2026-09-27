@@ -36,6 +36,10 @@
    статуса скрыты от Вебвизора (ym-hide-content): там возраст/класс детей.
    Цели («JavaScript-событие»): craft_form_open · craft_submit_ok ·
    craft_submit_fail · craft_discord · craft_ip_copy · craft_status_check */
+/* ссылка на статус вида /87craft/#status/87-K4TD-9QXM: код забираем ДО
+   запуска Метрики и убираем из адреса — в статистику он не попадает */
+var m=/^#status[\/=:]([A-Za-z0-9\- ]{8,14})$/.exec(location.hash||'');
+if(m){ window.__craftCode=m[1]; try{ history.replaceState(null,'',location.pathname+location.search+'#status'); }catch(e){} }
 var YM_ID=112939024;
 window.mnGoal=function(name){ try{ if(YM_ID && window.ym) window.ym(YM_ID,'reachGoal',name); }catch(e){} };
 if(YM_ID){
@@ -242,7 +246,21 @@ code,kbd{font-family:ui-monospace,Consolas,monospace;font-size:.92em;background:
 .code-v{flex:1 1 auto;padding:14px 16px;font-size:clamp(20px,3.4vw,28px);line-height:1.1;background:var(--pink-wash);letter-spacing:.04em;white-space:nowrap}
 .code .ip-copy{min-height:auto;padding:12px 18px}
 @media (max-width:460px){.code{flex-direction:column}.code .ip-copy{border-left:0;border-top:1.5px solid var(--ink);min-height:48px}}
+.code-label{margin-top:var(--sp-xs);font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800}
+.code-label+.code{margin-top:8px}
+.keep{margin-top:14px;padding:14px 16px;background:var(--pink-wash);border-left:4px solid var(--pink);font-size:var(--t-small)}
+.keep .btns{margin-top:12px}
+.keep .btn{min-height:44px;padding:10px 18px}
 .done .mini{margin-top:var(--sp-xs)}
+/* плашка «Твоя заявка» над вкладками-разделами */
+.mine{display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;margin-top:16px;padding:10px 16px;border:1.5px solid var(--ink);background:var(--card);text-decoration:none;font-size:var(--t-small)}
+.mine:hover{background:var(--pink-wash)}
+.mine-l{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800;color:var(--ink-soft)}
+.mine-code{font-size:16px;letter-spacing:.04em}
+.mine-nick{font-weight:700}
+.mine-go{margin-left:auto;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800}
+.mine:not([hidden])~.view{padding-top:var(--sp-s)}
+@media (max-width:520px){.mine-go{margin-left:0}}
 .done .btns{margin-top:var(--sp-s)}
 
 .check{display:flex;gap:0;max-width:560px}
@@ -330,6 +348,16 @@ dl.gloss dd{color:var(--ink-soft)}
 </header>
 
 <main id="main" class="wrap" tabindex="-1">
+
+<!-- «Твоя заявка»: если с этого устройства подавали заявку — показываем её
+     и живой статус на любой вкладке, чтобы код не надо было искать -->
+<a class="mine ym-hide-content" id="myApp" href="#status" hidden>
+  <span class="mine-l">Твоя заявка</span>
+  <span class="mine-code px" id="myAppCode"></span>
+  <span class="mine-nick" id="myAppNick"></span>
+  <span class="badge" id="myAppBadge">…</span>
+  <span class="mine-go">Статус →</span>
+</a>
 
 <!-- ═══════════════ О СЕРВЕРЕ ═══════════════ -->
 <section class="view" id="view-about" data-title="87CRAFT — Minecraft-сервер · IP 87craft.ru">
@@ -501,11 +529,19 @@ dl.gloss dd{color:var(--ink-soft)}
         <h3>Заявка отправлена</h3>
         <p id="craftDoneSub">Модеры посмотрят её и откроют тебе основной мир.</p>
         <div id="craftCodeBox">
+          <p class="code-label">Твой код заявки</p>
           <div class="code">
             <span class="code-v px" id="craftCode">87-XXXX-XXXX</span>
             <button class="ip-copy" type="button" id="craftCodeCopy">Скопировать</button>
           </div>
-          <p class="ip-meta">Это твой код заявки. На этом устройстве он запомнится сам, но лучше сделай скриншот — с другого телефона без кода статус не проверить.</p>
+          <div class="keep">
+            <p><b>Сохрани код — по нему смотрят статус.</b> На этом устройстве он уже запомнился: зайдёшь на сайт — заявка покажется сама. Для другого телефона или компьютера:</p>
+            <div class="btns">
+              <a class="btn btn-ink" id="craftTgSave" href="#" target="_blank" rel="noopener">Сохранить в Telegram</a>
+              <button class="btn" type="button" id="craftLinkSave">Ссылка на статус</button>
+            </div>
+            <p class="ip-meta">«Сохранить в Telegram» — выбери чат «Избранное». Или просто сделай скриншот этого экрана.</p>
+          </div>
         </div>
         <ol class="mini">
           <li>Заходи на спавн: <b>87craft.ru</b>, Java 1.21.11.</li>
@@ -561,8 +597,9 @@ dl.gloss dd{color:var(--ink-soft)}
   </div>
 
   <div class="block">
-    <div class="note">Подавал заявку раньше, когда коды ещё не выдавали? Решение по ней смотри в Discord, в канале «решения». Или подай заявку заново — получишь код.</div>
-    <div class="note">Код потерялся? Подай заявку ещё раз с тем же ником — модеры увидят, что это ты.</div>
+    <div class="note"><b>Где взять код?</b> Его показали сразу после отправки заявки — вида 87-XXXX-XXXX. Если отправлял с этого устройства, он уже подставлен выше.</div>
+    <div class="note"><b>Код потерялся?</b> Напиши модерам в Discord (канал «помощь») свой ник в Minecraft — код есть у них в карточке заявки. Или подай заявку заново: новый код придёт сразу.</div>
+    <div class="note">Подавал заявку раньше, когда коды ещё не выдавали? Решение по ней — в Discord, в канале «решения».</div>
   </div>
 </section>
 
@@ -804,6 +841,9 @@ dl.gloss dd{color:var(--ink-soft)}
   }
   var first=true;
   function show(){
+    /* личная ссылка открыта, когда страница уже была открыта: забираем код из адреса */
+    var hm=/^#status[\/=:](.+)$/.exec(location.hash||'');
+    if(hm){ try{ window.__craftCode=decodeURIComponent(hm[1]); history.replaceState(null,'',location.pathname+location.search+'#status'); }catch(e){} }
     var s=current();
     VIEWS.forEach(function(v){ var el=$('view-'+v); if(el) el.classList.toggle('active', v===s); });
     tabs.forEach(function(a){
@@ -822,6 +862,7 @@ dl.gloss dd{color:var(--ink-soft)}
     if(!first) window.scrollTo(0,0);
     first=false;
     if(s==='status') onStatusOpen();
+    refreshMine();
     pollStatus();
   }
   window.addEventListener('hashchange', show);
@@ -917,7 +958,7 @@ dl.gloss dd{color:var(--ink-soft)}
   function savedApps(){ var a=store(APPS_KEY); return Array.isArray(a) ? a : []; }
   function saveApp(code, nick){
     var a=savedApps().filter(function(x){ return x && x.c!==code; });
-    a.unshift({c:code, n:nick, t:Date.now()});
+    a.unshift({c:code, n:nick, t:Date.now(), s:'pending'});
     store(APPS_KEY, a.slice(0,5));
   }
   /* тот же разбор, что в функции: пробелы, строчные, без дефисов — всё годится */
@@ -941,9 +982,28 @@ dl.gloss dd{color:var(--ink-soft)}
     $('craftDoneSub').textContent = code
       ? 'Модеры посмотрят её и откроют тебе основной мир. Сохрани код ниже.'
       : 'Модеры посмотрят её и откроют тебе основной мир. Решение придёт в Discord, в канал «решения».';
-    if(code){ $('craftCode').textContent=code; $('craftCodeCopy').setAttribute('data-copy', code); $('checkCode').value=code; }
+    if(code){
+      $('craftCode').textContent=code; $('craftCodeCopy').setAttribute('data-copy', code); $('checkCode').value=code;
+      var link=statusLink(code);
+      $('craftTgSave').href='https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent('Моя заявка на 87CRAFT. Код: '+code);
+      $('craftLinkSave').setAttribute('data-link', link);
+      refreshMine(true);
+    }
     done.scrollIntoView({behavior:'smooth', block:'start'});
   }
+  /* личная ссылка: открыл её на другом устройстве — статус проверится сам,
+     а код запомнится и там. Код в адресе виден только тому, кому его дали. */
+  function statusLink(code){ return location.origin+location.pathname+'#status/'+code; }
+  $('craftTgSave').addEventListener('click', function(){ goal('craft_code_save'); });
+  $('craftLinkSave').addEventListener('click', function(){
+    var link=this.getAttribute('data-link'); if(!link) return;
+    goal('craft_code_save');
+    if(navigator.share){
+      navigator.share({title:'87CRAFT — статус заявки', text:'Моя заявка на 87CRAFT', url:link}).catch(function(){});
+      return;
+    }
+    copy(link).then(function(ok){ toast(ok ? 'Ссылка скопирована — сохрани её себе' : 'Не вышло скопировать — сделай скриншот кода'); });
+  });
   $('craftAgain').addEventListener('click', function(){ done.hidden=true; form.hidden=false; setMsg(''); nick.focus(); });
 
   form.addEventListener('submit', function(e){
@@ -964,7 +1024,7 @@ dl.gloss dd{color:var(--ink-soft)}
       plans:(plans.value||'').trim(), grade:(grade.value||'').trim(),
       discord:((discordNick.value)||'').trim().replace(/^@+/,''),
       site:''
-    }, 15000).then(function(res){
+    }, 20000).then(function(res){
       if(!res.ok){
         var err=res.data && res.data.error;
         if(err==='nickname'){ setMsg('Сервер не принял ник — только латиница, цифры и «_», 3–16 символов.', true); nick.focus(); }
@@ -979,7 +1039,7 @@ dl.gloss dd{color:var(--ink-soft)}
       showDone(code);
     }, function(){
       goal('craft_submit_fail');
-      setMsg('Заявка не ушла — сеть режет запрос. Попробуй ещё раз или с другого интернета (Wi-Fi ↔ мобильный), поля уже заполнены.', true);
+      setMsg('Не получили ответ — похоже, сеть режет запрос. Нажми «Отправить» ещё раз или попробуй с другого интернета (Wi-Fi ↔ мобильный), поля уже заполнены. Если первая заявка всё-таки дошла, модеры просто увидят две одинаковые — ничего страшного.', true);
     }).then(function(){ submitBtn.disabled=false; });
   });
 
@@ -1009,7 +1069,7 @@ dl.gloss dd{color:var(--ink-soft)}
   }
   function setCheckMsg(t, err){ checkMsg.textContent=t; checkMsg.classList.toggle('err', !!err); }
   var busy=false;
-  function check(raw){
+  function check(raw, saveHere){
     var code=normCode(raw);
     if(!code){ setCheckMsg('Код выглядит так: 87-XXXX-XXXX — восемь букв и цифр после «87».', true); res.hidden=true; checkCode.focus(); return; }
     if(busy) return; busy=true;
@@ -1043,6 +1103,9 @@ dl.gloss dd{color:var(--ink-soft)}
       if(d.created) meta.push('Подана '+fmtDate(d.created));
       if(d.status!=='pending' && d.updated) meta.push('решение '+fmtDate(d.updated));
       $('resMeta').textContent=meta.join(' · ');
+      rememberStatus(code, d.status);
+      /* открыли по личной ссылке на новом устройстве — запоминаем код и тут */
+      if(saveHere && !savedApps().some(function(x){ return x.c===code; })){ saveApp(code, d.nick||''); rememberStatus(code, d.status); renderSaved(code); }
       res.hidden=false; setCheckMsg('');
     }, function(){
       res.hidden=true;
@@ -1053,10 +1116,44 @@ dl.gloss dd{color:var(--ink-soft)}
   /* при открытии вкладки — сразу проверяем последнюю заявку с этого устройства */
   function onStatusOpen(){
     var apps=savedApps();
+    /* пришли по личной ссылке #status/<код> — проверяем именно этот код */
+    var fromLink=normCode(window.__craftCode); window.__craftCode=null;
+    if(fromLink){ checkCode.value=fromLink; res.hidden=true; }
     renderSaved(normCode(checkCode.value));
     var code=normCode(checkCode.value) || (apps[0] && apps[0].c);
-    if(code && res.hidden && !busy){ checkCode.value=code; check(code); }
+    if(code && res.hidden && !busy){ checkCode.value=code; check(code, !!fromLink); }
   }
+
+  /* ── плашка «Твоя заявка» ──
+     Статус последней заявки с этого устройства — на любой вкладке, кроме
+     самой «Статус заявки». Спрашиваем функцию не чаще раза в минуту. */
+  var mine=$('myApp'), mineAt=0, mineCode='';
+  function paintMine(status){
+    var t=TEXTS[status]; var b=$('myAppBadge');
+    b.textContent=t ? t.badge : 'Проверить'; b.className='badge'+(t && t.cls ? ' '+t.cls : '');
+  }
+  function refreshMine(force){
+    var apps=savedApps(), a=apps[0];
+    if(!a){ mine.hidden=true; return; }
+    $('myAppCode').textContent=a.c; $('myAppNick').textContent=a.n||'';
+    mine.hidden = current()==='status';
+    if(a.c!==mineCode){ mineCode=a.c; paintMine(a.s); }
+    if(!force && Date.now()-mineAt<60000) return;
+    if((document.hidden && !force) || !RELAY_URLS.length) return;
+    mineAt=Date.now();
+    request('GET', '?check='+encodeURIComponent(a.c), null, 12000).then(function(r){
+      var d=r.data;
+      if(r.ok && d && d.found){ rememberStatus(a.c, d.status); paintMine(d.status); }
+    }, function(){});
+  }
+  /* последний известный статус храним рядом с кодом — плашка сразу рисуется
+     с ним, ещё до ответа сети */
+  function rememberStatus(code, status){
+    var list=savedApps(); var ch=false;
+    list.forEach(function(x){ if(x.c===code && x.s!==status){ x.s=status; ch=true; } });
+    if(ch) store(APPS_KEY, list);
+  }
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) refreshMine(); });
 
   show();
 })();
