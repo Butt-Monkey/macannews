@@ -14,6 +14,9 @@
 <!-- без JavaScript заставку никто не уберёт — прячем её сразу, главная видна как есть -->
 <noscript><style>.loader{display:none!important}.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script>(function(){
+/* 87CRAFT переехал на свою страницу /87craft/ (2026-09-27). Старые ссылки
+   macannews.ru/#87craft (посты, Discord, QR) уводим туда до заставки */
+if(/^#\/?87craft(?![a-z0-9])/i.test(location.hash)){ location.replace('87craft/'+location.search); }
 /* режим уличного экрана: macannews.ru/?billboard — без чата Ye (его некому
    закрыть) и без курсора; на обычных посетителей не влияет */
 if(/[?&]billboard(\b|=)/.test(location.search)) document.documentElement.classList.add('billboard');
@@ -483,59 +486,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 @media (prefers-reduced-motion:reduce){.ye-toast,.ye-fab,.ye-chat,.ye-msg,.ye-me,.ye-link{animation:none}.ye-typing i{animation:none;opacity:.6}}
 
-/* ===== 87CRAFT — раздел с заявкой ===== */
-/* плашка старта: до 25.09 18:07 МСК — обратный отсчёт, после — «Сервер открыт» (переключает скрипт отсчёта) */
-.craft-launch{border:1.5px solid var(--ink);background:var(--pink);padding:var(--sp-xs);margin-bottom:var(--sp-m);max-width:640px}
-.craft-launch-date{font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-size:var(--t-h4);line-height:1.05}
-.craft-launch-date.is-open{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:var(--ls-tight)}
-.craft-launch-date small{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;font-size:.5em;letter-spacing:.02em;vertical-align:.25em;margin-left:.3em}
-.craft-count{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:14px;border:1.5px solid var(--ink);background:var(--bg)}
-.craft-count[hidden]{display:none}
-.craft-count div{padding:10px 6px;text-align:center;border-left:1.5px solid var(--ink)}
-.craft-count div:first-child{border-left:0}
-.craft-count b{display:block;font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-weight:400;font-size:var(--t-h4);line-height:1;font-variant-numeric:tabular-nums}
-.craft-count span{display:block;margin-top:6px;font-size:var(--t-caption);letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
-.craft-launch-sub{font-size:var(--t-small);line-height:1.45;margin-top:12px}
+/* ===== 87CRAFT — с 2026-09-27 отдельная страница /87craft/ (своя вёрстка и
+   скрипты: заявка, статус по коду, моды, гайды, правила). Здесь остался
+   только запасной раздел-ссылка; роутер переводит #87craft туда сам. ===== */
 #view-87craft .page-title{font-family:'Minecraft87','Schibsted Grotesk',sans-serif;letter-spacing:.01em}
-.craft-panel{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-s);padding-bottom:var(--sp-m);border-bottom:1px solid var(--line)}
-/* заявка — главное действие (розовая), Discord — второе (контурная): можно осмотреться до заявки */
-.craft-actions{display:flex;align-items:stretch;flex-wrap:wrap;gap:12px}
-.craft-discord-btn svg{width:18px;height:18px}
-@media (max-width:640px){
-  .craft-actions{width:100%}
-  .craft-actions .btn{flex:1 1 auto;justify-content:center;min-height:54px}
-}
-.craft-tag{font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-size:var(--t-small);letter-spacing:.02em;color:var(--ink-soft)}
-.craft-form{max-width:520px;margin-top:var(--sp-m);display:flex;flex-direction:column;gap:var(--sp-s)}
-.craft-form[hidden]{display:none}
-.craft-field{display:flex;flex-direction:column;gap:8px;position:relative}
-.craft-field span{font-size:var(--t-small);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
-.craft-opt{font-style:normal;font-weight:500;text-transform:none;letter-spacing:0;color:var(--ink-soft)}
-.craft-hint{font-size:var(--t-small);line-height:1.45;color:var(--ink-soft)}
-.craft-hint::before{content:"→ ";color:var(--pink-deep);font-weight:700}
-.craft-field input[type=number]{-moz-appearance:textfield}
-.craft-field input[type=number]::-webkit-inner-spin-button,.craft-field input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
-/* 16px — порог iOS Safari: при меньшем шрифте iPhone зумит страницу при тапе по полю */
-.craft-field input,.craft-field textarea{font-family:'Schibsted Grotesk',sans-serif;font-size:16px;padding:14px;border:1.5px solid var(--ink);background:var(--bg);color:var(--ink);border-radius:0;resize:vertical}
-.craft-field input:focus,.craft-field textarea:focus{outline:2px solid var(--pink);outline-offset:2px}
-.craft-honey{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;left:-9999px}
-.craft-note{font-size:var(--t-small);line-height:1.5;color:var(--ink);padding:10px 14px;border-left:3px solid var(--pink);background:var(--pink-wash)}
-.craft-form-msg{font-size:var(--t-small);color:var(--ink-soft);min-height:1.4em}
-.craft-form-msg.is-error{color:#c0392b}
-/* экран после отправки заявки: три шага вместо мгновенного редиректа —
-   иначе человека выбрасывало в Discord раньше, чем он успевал что-то понять */
-.craft-done{max-width:520px;margin-top:var(--sp-m);border:1.5px solid var(--ink);padding:var(--sp-s)}
-.craft-done-title{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;text-transform:uppercase;font-size:var(--t-h5);letter-spacing:var(--ls-tight);line-height:var(--lh-head)}
-.craft-done-sub{font-size:var(--t-small);line-height:1.5;color:var(--ink-soft);margin-top:8px}
-.craft-steps{list-style:none;counter-reset:cstep;margin-top:var(--sp-s);display:flex;flex-direction:column;gap:14px}
-/* номер — абсолютом, а не grid-колонкой: в grid каждый текстовый узел после
-   <b> становился отдельным элементом сетки и текст вставал по слову в строку */
-.craft-steps li{position:relative;padding-left:46px;min-height:32px;font-size:var(--t-small);line-height:1.5}
-.craft-steps li::before{counter-increment:cstep;content:counter(cstep);position:absolute;left:0;top:0;font-family:'Minecraft87','Schibsted Grotesk',sans-serif;font-size:var(--t-small);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--ink);background:var(--pink)}
-.craft-steps b{font-weight:800}
-.craft-done .craft-note{margin-top:var(--sp-s)}
-.craft-done .btn{margin-top:var(--sp-s)}
-.craft-done-timer{margin-top:10px;font-variant-numeric:tabular-nums;color:var(--ink-faint)}
 @media (max-width:640px){
   .news-card{grid-template-columns:76px 1fr;gap:12px}
   .news-card-text{-webkit-line-clamp:3;font-size:var(--t-small)}
@@ -1048,7 +1002,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
 <nav class="nav" id="nav">
   <a href="#home" data-view="home" class="nav-mark">87</a>
   <div class="nav-links">
-    <a href="#87craft" data-view="87craft">87CRAFT</a>
+    <a href="87craft/">87CRAFT</a>
     <a href="#news" data-view="news">NEWS</a>
     <a href="https://t.me/macan777macan777macan777" target="_blank" rel="noopener">Telegram</a>
   </div>
@@ -1064,7 +1018,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#87craft" data-view="87craft">87CRAFT</a>
+  <a href="87craft/">87CRAFT</a>
   <a href="#news" data-view="news">NEWS</a>
   <a href="#workers" data-view="workers">Работники месяца</a>
   <a href="#merch" data-view="merch">Merch</a>
@@ -1091,15 +1045,15 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
              <svg viewBox="0 0 24 24"><path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.47-2.27 2.18c-.25.25-.46.46-.94.46l.34-4.8 8.73-7.9c.38-.34-.08-.53-.59-.19L6.99 13.2l-4.65-1.45c-1.01-.32-1.03-1.01.21-1.49L20.63 2.9c.84-.31 1.58.2 1.31 1.4z"/></svg>
              <span>Перейти в Telegram</span>
            </a> -->
-      <a href="#87craft" data-view="87craft" class="btn gold-btn hero-craft-btn">
+      <a href="87craft/" class="btn gold-btn hero-craft-btn">
         <span>87CRAFT</span>
       </a>
     </div>
   </div>
 
 </header><div class="ticker inline" aria-hidden="true"><div class="ticker-track"><span class="">Macan News</span><span class="st">✦</span><span class="">87</span><span class="st">✦</span><span class="">Breaking</span><span class="st">✦</span><span class="">Eight-Seven</span><span class="st">✦</span><span class="">Exclusive</span><span class="st">✦</span><span class="">Macan News</span><span class="st">✦</span><span class="">87</span><span class="st">✦</span><span class="">Breaking</span><span class="st">✦</span><span class="">Eight-Seven</span><span class="st">✦</span><span class="">Exclusive</span><span class="st">✦</span></div></div><section class="plates-sec"><div class="wrap">
-  <div class="plates"><a class="plate plate-big plate-craft reveal" href="#87craft" data-view="87craft">
-      <span class="ptag">Minecraft-сервер · вайтлист</span>
+  <div class="plates"><a class="plate plate-big plate-craft reveal" href="87craft/">
+      <span class="ptag">IP 87craft.ru · Java 1.21.11</span>
       <span class="pname">87CRAFT</span>
       <span class="pgo">Подать заявку →</span>
     </a><a class="plate plate-big reveal" href="#news" data-view="news">
@@ -1191,74 +1145,10 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
 </div></section></section><section class="view" id="view-87craft"><section class="page-head"><div class="wrap">
     <div class="eyebrow reveal">Minecraft-сервер</div>
     <h1 class="page-title gold reveal">87CRAFT</h1>
-    <p class="page-desc reveal">Строй, фарми, устраивай ивенты без броуков и сничей. Вход по вайтлисту: оставляешь заявку ниже, дальше всё в Discord.</p>
+    <p class="page-desc reveal">У сервера теперь своя страница: IP, заявка и её статус, моды, гайды и правила. Старые ссылки на #87craft ведут туда сами.</p>
     <hr class="hairline page-rule reveal"/>
   </div></section><section><div class="wrap">
-  <div class="craft-launch reveal">
-    <div class="craft-launch-date" id="craftLaunchDate">25.09 · 18:07<small>МСК</small></div>
-    <div class="craft-count" id="craftCount" aria-hidden="true">
-      <div><b data-u="d">00</b><span>дней</span></div>
-      <div><b data-u="h">00</b><span>часов</span></div>
-      <div><b data-u="m">00</b><span>минут</span></div>
-      <div><b data-u="s">00</b><span>секунд</span></div>
-    </div>
-    <p class="craft-launch-sub" id="craftLaunchSub">В пятницу открываем основной мир для всех, чья заявка одобрена. Спавн уже работает — подай заявку сейчас, чтобы к старту быть в вайтлисте.</p>
-  </div>
-  <div class="craft-panel reveal">
-    <div class="craft-tag">JAVA · WHITELIST</div>
-    <div class="craft-actions">
-      <button class="btn gold-btn" id="craftApplyBtn" type="button">Подать заявку</button>
-      <a class="btn craft-discord-btn" id="craftDiscordLink" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.89-1.52.07.07 0 0 0-.08.04c-.21.38-.44.87-.61 1.25a18.3 18.3 0 0 0-5.49 0 12.6 12.6 0 0 0-.62-1.25.08.08 0 0 0-.08-.04 19.7 19.7 0 0 0-4.88 1.52.07.07 0 0 0-.04.03C.53 9.05-.32 13.58.1 18.06a.08.08 0 0 0 .03.06 19.9 19.9 0 0 0 5.99 3.03.08.08 0 0 0 .08-.03c.46-.63.87-1.3 1.23-2a.08.08 0 0 0-.04-.11 13.1 13.1 0 0 1-1.87-.89.08.08 0 0 1-.01-.13l.37-.29a.07.07 0 0 1 .08-.01c3.93 1.79 8.18 1.79 12.07 0a.07.07 0 0 1 .08.01l.37.29a.08.08 0 0 1-.01.13c-.6.35-1.22.65-1.87.89a.08.08 0 0 0-.04.11c.36.7.77 1.37 1.22 2a.08.08 0 0 0 .08.03 19.8 19.8 0 0 0 6-3.03.08.08 0 0 0 .03-.05c.5-5.18-.84-9.67-3.55-13.66a.06.06 0 0 0-.03-.03zM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.34-.96 2.42-2.16 2.42zm7.97 0c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.34-.95 2.42-2.16 2.42z"/></svg>
-        <span>Discord</span>
-      </a>
-    </div>
-  </div>
-  <form class="craft-form ym-hide-content ym-disable-keys" id="craftForm" hidden>
-    <label class="craft-field">
-      <span>Никнейм в Minecraft</span>
-      <input type="text" name="nickname" id="craftNick" placeholder="Steve_87" autocomplete="off" required maxlength="16"/>
-    </label>
-    <label class="craft-field">
-      <span>Как к тебе обращаться</span>
-      <input type="text" name="callname" id="craftCallname" placeholder="Обамасан" autocomplete="off" required maxlength="60"/>
-    </label>
-    <label class="craft-field">
-      <span>Сколько тебе лет</span>
-      <input type="number" name="age" id="craftAge" placeholder="15" inputmode="numeric" min="5" max="99" required/>
-    </label>
-    <label class="craft-field">
-      <span>Чем планируешь заниматься на сервере</span>
-      <textarea name="plans" id="craftPlans" placeholder="строить, фармить, унижать леймов..." rows="3" maxlength="300"></textarea>
-    </label>
-    <label class="craft-field">
-      <span>Из какого ты класса <em class="craft-opt">— необязательно</em></span>
-      <input type="text" name="grade" id="craftGrade" placeholder="9Б" autocomplete="off" maxlength="20"/>
-    </label>
-    <label class="craft-field">
-      <span>Ник в Discord <em class="craft-opt">— необязательно</em></span>
-      <input type="text" name="discord" id="craftDiscord" placeholder="steve87" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40"/>
-      <small class="craft-hint">Если укажешь — быстрее найдём тебя и добавим в вайтлист.</small>
-    </label>
-    <label class="craft-field craft-honey" aria-hidden="true">
-      <span>Сайт</span>
-      <input type="text" name="site" id="craftHoney" tabindex="-1" autocomplete="off"/>
-    </label>
-    <button type="submit" class="btn gold-btn">Отправить и перейти в Discord →</button>
-    <p class="craft-form-msg" id="craftFormMsg" aria-live="polite"></p>
-  </form>
-  <div class="craft-done" id="craftDone" hidden>
-    <p class="craft-done-title">Заявка принята</p>
-    <p class="craft-done-sub">Модеры посмотрят её и внесут тебя в вайтлист. А пока — три шага, чтобы не ждать впустую.</p>
-    <ol class="craft-steps">
-      <li><b>Заходи в Discord</b> по кнопке ниже и ответь на вопрос при входе — каналы откроются сами.</li>
-      <li><b>Поставь там ник как в Minecraft.</b> Нажми на название сервера сверху слева → «Редактировать личный профиль сервера» → поле «Никнейм». По нему тебя найдут по заявке.</li>
-      <li><b>Открой канал «сервер»</b> — там IP, версия и как подключиться.</li>
-    </ol>
-    <p class="craft-note">Discord без VPN или другого обхода просто не загрузится — включи перед переходом. Заявка уже отправлена и никуда не пропадёт.</p>
-    <button type="button" class="btn gold-btn" id="craftGoBtn"><span>Перейти в Discord →</span></button>
-    <p class="craft-form-msg craft-done-timer" id="craftTimer"></p>
-  </div>
+  <a class="btn gold-btn" href="87craft/"><span>Открыть 87CRAFT →</span></a>
 </div></section></section><section class="view" id="view-top100"><section class="page-head"><div class="wrap">
     <div class="eyebrow reveal">Индекс влияния</div>
     <h1 class="page-title gold reveal">ТОП 100</h1>
@@ -1342,9 +1232,9 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
       <p>Тимати против Джигана</p>
       <button class="arcade-play" data-game="pong87">Играть</button>
     </article>
-    <a class="arcade-card arcade-craft" href="#87craft" data-view="87craft">
+    <a class="arcade-card arcade-craft" href="87craft/">
       <span class="arcade-craft-name">87CRAFT</span>
-      <p>Minecraft-сервер 87. Вход по вайтлисту.</p>
+      <p>Minecraft-сервер 87. IP 87craft.ru.</p>
       <span class="arcade-craft-go">Подать заявку →</span>
     </a>
   </div>
@@ -1539,7 +1429,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
     </div>
     <div class="fcol">
       <h5>Разделы</h5>
-      <a href="#87craft" data-view="87craft">87CRAFT</a>
+      <a href="87craft/">87CRAFT</a>
       <a href="#news" data-view="news">NEWS</a>
       <a href="#workers" data-view="workers">Работники месяца</a>
       <a href="#merch" data-view="merch">Merch</a>
@@ -1605,6 +1495,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
  function slug(){var s=(location.hash||'').replace(/^#\/?/,'').split(/[?&\/#]/)[0].toLowerCase();try{s=decodeURIComponent(s);}catch(e){}return VIEWS.indexOf(s)>=0?s:'home';}
  var _prevView='home';
  function showView(s, reveal){
+   if(s==='87craft'){ location.replace('87craft/'+location.search); return; }
    if(VIEWS.indexOf(s)<0) s='home';
    var views=document.querySelectorAll('.view'); for(var i=0;i<views.length;i++) views[i].classList.remove('active');
    var el=document.getElementById('view-'+s)||document.getElementById('view-home');
@@ -3318,271 +3209,6 @@ window.__arcadeWinFX = function(host){
 })();
 </script>
 <script>
-/* ═══════════ 87CRAFT — заявка в вайтлист, напрямую в Discord через webhook ═══════════
-   Сайт статический (GitHub Pages) — бэкенда нет. Форма шлёт заявку прямым POST
-   в Discord-webhook канала заявок (без сервера), затем переводит в инвайт.
-   Пока сервер/вебхук не готовы — обе константы пустые: форма не ломается и не
-   шлёт запрос в никуда, а честно говорит, что вайтлист открывается скоро.
-   Когда пользователь заведёт Discord-сервер и вебхук — просто вписать сюда
-   два значения, без правки остального кода. */
-(function(){
-  "use strict";
-  /* ── КАК ЗАЯВКА ДОХОДИТ ДО DISCORD ────────────────────────────────────────
-     discord.com из России не открывается, а сайт — открывается. Поэтому заявка
-     идёт НЕ напрямую в вебхук, а в «релей». Cloudflare и deno.net на эту роль
-     не годятся — их из РФ тоже режут, поэтому условия разнесены по звеньям:
-     браузер шлёт заявку в функцию Yandex Cloud (российский адрес, доступен
-     всегда), та дёргает GitHub, а GitHub Actions уже кладёт карточку в
-     #заявки. Тем же приёмом живёт лента новостей — посты из Telegram тянет
-     Actions, а не браузер читателя. Код звеньев лежит в папке relay/.
-     RELAY_URLS перебираются по порядку, пока какой-нибудь не ответит: если
-     адрес перестанет работать, достаточно дописать сюда следующий.
-     Прямой вебхук остаётся последней попыткой — он срабатывает только с VPN.
-     Когда релей будет проверен, DISCORD_WEBHOOK_URL можно очистить (''), а сам
-     вебхук в Discord пересоздать: сейчас он виден в исходнике страницы. */
-  var RELAY_URLS = [
-    'https://functions.yandexcloud.net/d4e06f6ljufv9mbn9qth'
-  ];
-  var DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1550539796437405736/FH0ZlqgWI6td7oAEhaQwM5oEDgY47LklgUKeTlKR56xdhpku4Q36VmhVIqgx8lUnbRNu';
-  var DISCORD_INVITE_URL  = 'https://discord.gg/dhGdzAnNj5';
-  var RELAY_KEY = 'mn-craft-relay';   /* какой релей сработал в прошлый раз */
-
-  var applyBtn=document.getElementById('craftApplyBtn');
-  var form=document.getElementById('craftForm');
-  if(!applyBtn || !form) return;
-  var nick=document.getElementById('craftNick');
-  var callname=document.getElementById('craftCallname');
-  var plans=document.getElementById('craftPlans');
-  var age=document.getElementById('craftAge');
-  var grade=document.getElementById('craftGrade');
-  var discordNick=document.getElementById('craftDiscord');
-  var honey=document.getElementById('craftHoney');
-  var msg=document.getElementById('craftFormMsg');
-  var doneBox=document.getElementById('craftDone');
-  var goBtn=document.getElementById('craftGoBtn');
-  var timerEl=document.getElementById('craftTimer');
-
-  /* кнопка «Discord» рядом с заявкой берёт тот же инвайт, что и экран «Заявка принята» */
-  var discordLink=document.getElementById('craftDiscordLink');
-  if(discordLink && DISCORD_INVITE_URL) discordLink.href=DISCORD_INVITE_URL;
-  if(discordLink) discordLink.addEventListener('click', function(){ if(window.mnGoal) window.mnGoal('craft_discord'); });
-
-  applyBtn.addEventListener('click', function(){
-    if(window.mnGoal) window.mnGoal('craft_form_open');
-    form.hidden=false;
-    applyBtn.hidden=true;
-    nick.focus();
-    form.scrollIntoView({behavior:'smooth', block:'center'});
-  });
-
-  function setMsg(text, isError){
-    msg.textContent=text;
-    msg.classList.toggle('is-error', !!isError);
-  }
-
-  /* discord:// открывает приложение напрямую (минуя браузерный редирект инвайта);
-     если не установлено/не сработало — за ~1.2с откатываемся на https-ссылку
-     (тот же приём, что уже используется для ссылок t.me чуть выше по файлу) */
-  function toDiscordDeepLink(inviteUrl){
-    try{
-      var u=new URL(inviteUrl);
-      var code=u.pathname.split('/').filter(Boolean).pop();
-      return code ? ('discord://discord.com/invite/'+code) : null;
-    }catch(e){ return null; }
-  }
-  /* переход идёт В ТЕКУЩЕЙ вкладке, а не через window.open: переход случается
-     через ~0.6с после ответа вебхука, то есть уже вне пользовательского жеста —
-     попап в этот момент блокируется браузером, а обычная навигация нет */
-  function goToDiscord(){
-    if(window.mnGoal) window.mnGoal('craft_discord');
-    if(!DISCORD_INVITE_URL) return;
-    var deep=toDiscordDeepLink(DISCORD_INVITE_URL);
-    if(!deep){ window.location.href=DISCORD_INVITE_URL; return; }
-    var done=false;
-    function fallback(){ if(done) return; done=true; cleanup(); window.location.href=DISCORD_INVITE_URL; }
-    function onHide(){ if(document.hidden){ done=true; clearTimeout(timer); cleanup(); } }
-    function cleanup(){ document.removeEventListener('visibilitychange', onHide); }
-    var timer=setTimeout(fallback, 1200);
-    document.addEventListener('visibilitychange', onHide);
-    window.location.href=deep;
-  }
-
-  /* после успешной отправки показываем три шага ВМЕСТО формы и даём минуту
-     прочитать их: раньше редирект срабатывал через 0.6 с и человек попадал в
-     Discord, не понимая, что делать. Кнопка переносит сразу. */
-  var goTimer=null;
-  function stopGoTimer(){
-    if(goTimer){ clearInterval(goTimer); goTimer=null; }
-    if(timerEl) timerEl.textContent='';
-  }
-  function startGoTimer(){
-    var left=60;
-    function tick(){
-      if(left<=0){ stopGoTimer(); goToDiscord(); return; }
-      if(timerEl) timerEl.textContent='Перенесём автоматически через '+left+' с';
-      left--;
-    }
-    tick();
-    goTimer=setInterval(tick, 1000);
-  }
-  if(goBtn) goBtn.addEventListener('click', function(){ stopGoTimer(); goToDiscord(); });
-
-  /* сработавший в прошлый раз релей пробуем первым — на мобильном интернете
-     это экономит десяток секунд ожидания на заведомо мёртвом адресе */
-  function relayOrder(){
-    var list=RELAY_URLS.slice(), last=null;
-    try{ last=localStorage.getItem(RELAY_KEY); }catch(e){}
-    var i=last?list.indexOf(last):-1;
-    if(i>0){ list.splice(i,1); list.unshift(last); }
-    return list;
-  }
-  function postJSON(url, data, plainText){
-    var ctrl=window.AbortController ? new AbortController() : null;
-    /* 15 с: у серверless-функции бывает холодный старт, плюс она успевает
-       дёрнуть GitHub; на медленной мобильной сети 9 с не всегда хватало */
-    var timer=setTimeout(function(){ if(ctrl) ctrl.abort(); }, 15000);
-    var opts={
-      method:'POST',
-      /* text/plain делает запрос «простым»: браузер не шлёт предварительный
-         OPTIONS, а это лишний round-trip на медленной мобильной сети */
-      headers:{'Content-Type': plainText ? 'text/plain;charset=UTF-8' : 'application/json'},
-      body: JSON.stringify(data)
-    };
-    if(ctrl) opts.signal=ctrl.signal;
-    return fetch(url, opts).then(function(r){
-      clearTimeout(timer);
-      if(!r.ok) throw new Error('http '+r.status);
-      return r;
-    }, function(err){ clearTimeout(timer); throw err; });
-  }
-  /* plain — поля формы как есть (релей сам соберёт сообщение и проверит их
-     заново); webhookBody — готовый embed для прямой отправки в Discord */
-  function sendApplication(plain, webhookBody){
-    var queue=relayOrder();
-    function attempt(i){
-      if(i<queue.length){
-        var url=queue[i];
-        return postJSON(url, plain, true).then(function(r){
-          try{ localStorage.setItem(RELAY_KEY, url); }catch(e){}
-          return r;
-        }, function(){ return attempt(i+1); });
-      }
-      if(!DISCORD_WEBHOOK_URL) return Promise.reject(new Error('no route'));
-      return postJSON(DISCORD_WEBHOOK_URL, webhookBody, false);
-    }
-    return attempt(0);
-  }
-
-  function showDone(){
-    form.reset();
-    if(!doneBox){ setTimeout(goToDiscord, 600); return; }
-    form.hidden=true;
-    doneBox.hidden=false;
-    doneBox.scrollIntoView({behavior:'smooth', block:'center'});
-    startGoTimer();
-  }
-
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    /* honeypot: поле спрятано от людей (aria-hidden + вне таб-порядка), но простые
-       боты его всё равно заполняют — тихо гасим, не подсказывая, что это ловушка */
-    if(honey.value){ setMsg('Заявка отправлена — скоро увидимся на сервере!'); form.reset(); return; }
-
-    var nickVal=(nick.value||'').trim();
-    if(!/^[A-Za-z0-9_]{3,16}$/.test(nickVal)){
-      setMsg('Никнейм — 3–16 латинских букв/цифр/подчёркиваний, как в Minecraft.', true);
-      nick.focus();
-      return;
-    }
-    var callVal=(callname.value||'').trim();
-    if(!callVal){ setMsg('Напиши, как к тебе обращаться.', true); callname.focus(); return; }
-    var ageVal=parseInt((age.value||'').trim(),10);
-    if(!(ageVal>=5 && ageVal<=99)){ setMsg('Укажи возраст числом.', true); age.focus(); return; }
-    var gradeVal=(grade.value||'').trim();
-    var discordVal=((discordNick && discordNick.value)||'').trim().replace(/^@+/,'');
-
-    if(!RELAY_URLS.length && !DISCORD_WEBHOOK_URL){
-      setMsg('Вайтлист открывается совсем скоро — загляни в Telegram-канал за анонсом, заявки пока не принимаем.');
-      return;
-    }
-
-    var plansVal=(plans.value||'').trim();
-    var submitBtn=form.querySelector('button[type="submit"]');
-    if(submitBtn) submitBtn.disabled=true;
-    setMsg('Отправляем…');
-
-    sendApplication({
-      nickname:nickVal, callname:callVal, age:ageVal,
-      plans:plansVal, grade:gradeVal, discord:discordVal
-    }, {
-      allowed_mentions:{parse:[]},   /* текст из формы никого не пингует */
-      embeds:[{
-        title:'Новая заявка на 87CRAFT',
-        color:16622786,   /* #FDA4C2 — фирменный розовый */
-        timestamp:new Date().toISOString(),
-        fields:[
-          {name:'Никнейм', value:nickVal, inline:true},
-          {name:'Обращение', value:callVal, inline:true},
-          {name:'Возраст', value:String(ageVal), inline:true},
-          {name:'Планы на сервере', value:plansVal||'—'},
-          {name:'Класс', value:gradeVal||'—', inline:true},
-          {name:'Discord', value:discordVal||'—', inline:true}
-        ]
-      }]
-    }).then(function(){
-      if(window.mnGoal) window.mnGoal('craft_submit_ok');
-      setMsg('');
-      showDone();
-    }).catch(function(){
-      if(window.mnGoal) window.mnGoal('craft_submit_fail');
-      setMsg('Заявка не ушла — сеть режет запрос. Включи VPN и нажми «Отправить» ещё раз, поля уже заполнены.', true);
-    }).finally(function(){
-      if(submitBtn) submitBtn.disabled=false;
-    });
-  });
-})();
-</script>
-<script>
-/* ═══════════ Старт 87CRAFT: обратный отсчёт до 25.09.2026 18:07 МСК ═══════════
-   Время задано в UTC (МСК = UTC+3), поэтому отсчёт верный в любом поясе.
-   После старта карточка сама меняется на «Сервер открыт» — перезаливать
-   сайт не нужно. Тикает только пока открыт раздел 87CRAFT и вкладка видна:
-   на слабых телефонах не тратим ни такта впустую. */
-(function(){
-  "use strict";
-  var START=Date.UTC(2026,8,25,15,7,0);
-  var view=document.getElementById('view-87craft'), count=document.getElementById('craftCount');
-  var date=document.getElementById('craftLaunchDate'), sub=document.getElementById('craftLaunchSub');
-  if(!view || !count) return;
-  var cells={}, last={};
-  [].forEach.call(count.querySelectorAll('b[data-u]'), function(b){ cells[b.getAttribute('data-u')]=b; });
-  function put(u, n){ var v=(n<10?'0':'')+n; if(last[u]!==v){ last[u]=v; cells[u].textContent=v; } }
-  var timer=null, done=false;
-  function finish(){
-    done=true; stop();
-    count.hidden=true;
-    date.textContent='Сервер открыт'; date.classList.add('is-open');
-    sub.textContent='Основной мир открыт. Подай заявку — модеры внесут тебя в вайтлист, дальше всё в Discord.';
-  }
-  function tick(){
-    var left=Math.floor((START-Date.now())/1000);
-    if(left<=0){ finish(); return; }
-    put('d', Math.floor(left/86400)); put('h', Math.floor(left%86400/3600));
-    put('m', Math.floor(left%3600/60)); put('s', left%60);
-  }
-  function stop(){ if(timer){ clearInterval(timer); timer=null; } }
-  function sync(){
-    if(done) return;
-    if(view.classList.contains('active') && !document.hidden){ tick(); if(!done && !timer) timer=setInterval(tick,1000); }
-    else stop();
-  }
-  tick();
-  new MutationObserver(sync).observe(view,{attributes:true, attributeFilter:['class']});
-  document.addEventListener('visibilitychange', sync);
-  sync();
-})();
-</script>
-<script>
 /* ═══════════ «Консультант» Ye → 87CRAFT (сценарный чат) ═══════════
    Через DELAY после ухода заставки справа снизу всплывает уведомление от Ye:
    сначала «печатает…», потом обрезанное превью сообщения. Закрыть его нельзя
@@ -3607,10 +3233,8 @@ window.__arcadeWinFX = function(host){
   var SCRIPT=[
     {q:'А что там делать?', a:['Строить, фармить, устраивать ивенты. Без броуков и сничей — только свои.',
                               'Я вот третий день строю себе особняк из обсидиана. Скромно, по-моему.']},
-    {q:'Как попасть?', a:['Изи. Жмёшь «Подать заявку», пишешь ник и возраст — тебя добавляют в вайтлист.',
-                         'Дальше всё в Discord: там IP, правила и я.'].concat(
-                         /* до старта (25.09 18:07 МСК) — напоминание про дату, после — само исчезает */
-                         Date.now()<Date.UTC(2026,8,25,15,7) ? ['Старт — в пятницу, 25.09 в 18:07 по Москве. Успей до старта.'] : [])},
+    {q:'Как попасть?', a:['Изи. IP 87craft.ru, Java 1.21.11 — спавн открыт сразу, хоть с пиратки.',
+                         'Подаёшь заявку на странице сервера — и тебе открывают основной мир. Там же правила, моды и гайды.']},
     {q:'Ты правда там играешь?', a:['Каждый день, bro. Увидишь ник Ye — это я.',
                                     'Не увидишь — значит я на невидимости. Это тоже я.']},
     {q:'Погнали', final:true, a:['Вот это разговор. Жду на 87craft 🤝'], link:true}
@@ -3636,9 +3260,9 @@ window.__arcadeWinFX = function(host){
   }
   function addLink(){
     var a=document.createElement('a');
-    a.className='ye-link'; a.href='#87craft'; a.setAttribute('data-view','87craft');
+    a.className='ye-link'; a.href='87craft/';
     a.innerHTML='<div class="ye-link-top"><div class="ye-link-name">87CRAFT</div>'+
-      '<div class="ye-link-sub">Minecraft-сервер · вход по вайтлисту</div></div>'+
+      '<div class="ye-link-sub">IP 87craft.ru · Java 1.21.11</div></div>'+
       '<span class="ye-link-go">Открыть →</span>';
     a.addEventListener('click', function(){ closeChat(); });
     chatBody.appendChild(a); scrollDown();
