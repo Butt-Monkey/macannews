@@ -869,6 +869,10 @@ dl.gloss dd{color:var(--ink-soft)}
   var RELAY_KEY = 'mn-craft-relay';    /* какой адрес сработал в прошлый раз (общий с главной) */
   var APPS_KEY  = 'mn-craft-apps';     /* коды заявок с этого устройства */
   var MIN_SHOWN = 3;                   /* меньше трёх игроков — пишем просто «Сервер онлайн» */
+  /* плашка онлайна выключена по решению пользователя (2026-09-29): пока
+     игроков немного, цифра скорее отталкивает. Вернуть — поставить true
+     (функция ?status=1 в Яндексе по-прежнему работает) */
+  var SHOW_ONLINE = false;
 
   function goal(n){ if(window.mnGoal) window.mnGoal(n); }
   function $(id){ return document.getElementById(id); }
@@ -981,6 +985,7 @@ dl.gloss dd{color:var(--ink-soft)}
   var srvEl=$('srvStatus'), srvText=$('srvText'), srvTimer=null, srvAt=0;
   function plural(n, a, b, c){ var m=n%10, h=n%100; return (m===1&&h!==11)?a:(m>=2&&m<=4&&(h<12||h>14))?b:c; }
   function pollStatus(){
+    if(!SHOW_ONLINE) return;
     if(current()!=='about' || document.hidden || !RELAY_URLS.length) return;
     if(Date.now()-srvAt < 55000) return;
     srvAt=Date.now();
