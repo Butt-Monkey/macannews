@@ -17,6 +17,9 @@
 /* 87CRAFT переехал на свою страницу /87craft/ (2026-09-27). Старые ссылки
    macannews.ru/#87craft (посты, Discord, QR) уводим туда до заставки */
 if(/^#\/?87craft(?![a-z0-9])/i.test(location.hash)){ location.replace('87craft/'+location.search); }
+/* заставку показываем один раз за сеанс вкладки: вернулся с /87craft/ —
+   главная открывается сразу, без повторной вуали и ожидания 1.8 с */
+try{ if(sessionStorage.getItem('mn-intro')) document.documentElement.classList.add('no-intro'); }catch(e){}
 /* режим уличного экрана: macannews.ru/?billboard — без чата Ye (его некому
    закрыть) и без курсора; на обычных посетителей не влияет */
 if(/[?&]billboard(\b|=)/.test(location.search)) document.documentElement.classList.add('billboard');
@@ -154,6 +157,12 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .grain{display:none}
 
 /* preloader */
+/* плавный переход между страницами сайта (главная ↔ /87craft/): браузер сам
+   делает короткое перетекание вместо резкой смены; где не умеет — обычный переход */
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.32s;animation-timing-function:cubic-bezier(.22,.61,.36,1)}
+@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
+.no-intro .loader{display:none}
 .loader{position:fixed;inset:0;z-index:10000;background:var(--bg);display:grid;place-items:center;transition:transform 1s var(--ease-out);cursor:pointer;touch-action:manipulation}
 /* уехавшая заставка полностью выключается: иначе полноэкранный слой с бесконечной
    анимацией продолжал бы жить за экраном и грузить GPU слабых телефонов */
@@ -1602,6 +1611,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
  function doEnter(auto){
    if(entered) return; entered=true;
    if(loaderEl) loaderEl.classList.add('done');
+   try{ sessionStorage.setItem('mn-intro','1'); }catch(e){}
    revealInView(document); bindReveals(document);
    if(!(auto===true && _touch)) tryStart();
  }
@@ -1613,7 +1623,8 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
  /* заставка — вуаль, а не гейт: сайт открывается сам через 1.8с и сразу пытается
     завести трек; если браузер не доверяет автоплею — заведётся на первом же
     взаимодействии (клик по вуали тоже даёт мгновенный вход) */
- setTimeout(function(){ doEnter(true); }, 1800);
+ if(document.documentElement.classList.contains('no-intro')) doEnter(true);
+ else setTimeout(function(){ doEnter(true); }, 1800);
  /* сеть жестов: включаем звук на первом взаимодействии любого рода —
     тач, скролл-колесо (wheel), клик, клавиша; снимается сама, когда звук пошёл */
  var RG=['pointerdown','mousedown','touchstart','touchend','click','keydown','wheel'];
