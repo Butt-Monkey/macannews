@@ -80,6 +80,10 @@ if(YM_ID){
   --ink:#050505; --ink-soft:rgba(5,5,5,.64); --line:rgba(5,5,5,.14);
   --ok:#1F7A45; --ok-wash:#E3F2E8; --bad:#B3261E; --bad-wash:#FBE7E5;
 }
+/* плавный переход между страницами сайта — пара к такому же правилу на главной */
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.32s;animation-timing-function:cubic-bezier(.22,.61,.36,1)}
+@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;scroll-padding-top:130px}
@@ -119,6 +123,8 @@ code,kbd{font-family:ui-monospace,Consolas,monospace;font-size:.92em;background:
 .back:hover{color:var(--ink)}
 .top .btn{min-height:40px;padding:9px 18px}
 @media (max-width:520px){.back span{display:none}}
+/* самые узкие экраны (Galaxy Fold 280px): марка и кнопка чуть компактнее */
+@media (max-width:340px){.brand{font-size:18px;gap:8px}.brand img{width:28px;height:28px}.top-tools{gap:10px}.top .btn{padding:8px 12px;letter-spacing:.1em}}
 .tabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-inline:calc(var(--pad) * -1);padding-inline:var(--pad);scroll-padding-inline:var(--pad)}
 .tabs::-webkit-scrollbar{display:none}
 .tabs a{flex:0 0 auto;padding:10px 10px 12px;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;text-decoration:none;color:var(--ink-soft);position:relative;white-space:nowrap}
@@ -246,6 +252,15 @@ code,kbd{font-family:ui-monospace,Consolas,monospace;font-size:.92em;background:
 .code-v{flex:1 1 auto;padding:14px 16px;font-size:clamp(20px,3.4vw,28px);line-height:1.1;background:var(--pink-wash);letter-spacing:.04em;white-space:nowrap}
 .code .ip-copy{min-height:auto;padding:12px 18px}
 @media (max-width:460px){.code{flex-direction:column}.code .ip-copy{border-left:0;border-top:1.5px solid var(--ink);min-height:48px}}
+.notify{margin-top:var(--sp-xs);padding:16px;border:1.5px solid var(--ink);background:var(--pink)}
+.notify p{font-size:var(--t-small);margin-bottom:12px}
+.res-tg{margin-top:14px;font-size:var(--t-small);font-weight:700}
+.res-tg .btn{min-height:44px;padding:10px 18px}
+.help{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px var(--sp-s);align-items:center;border:1.5px solid var(--ink);background:var(--card);padding:var(--sp-s)}
+.help h3{font-size:var(--t-h4);font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
+.help p{margin-top:6px;font-size:var(--t-small);color:var(--ink-soft)}
+.help .ip-meta{grid-column:1/-1;margin-top:0}
+@media (max-width:760px){.help{grid-template-columns:1fr}}
 .code-label{margin-top:var(--sp-xs);font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800}
 .code-label+.code{margin-top:8px}
 .keep{margin-top:14px;padding:14px 16px;background:var(--pink-wash);border-left:4px solid var(--pink);font-size:var(--t-small)}
@@ -415,6 +430,8 @@ dl.gloss dd{color:var(--ink-soft)}
       <details><summary>Что за /register и /login?</summary><div class="body"><p>Это пароль от твоего ника на сервере. При первом входе напиши <code>/register пароль пароль</code>, дальше при каждом входе — <code>/login пароль</code>. Не бери пароль от почты или других игр.</p></div></details>
       <details><summary>Обязателен ли Discord?</summary><div class="body"><p>Нет. Заявка, статус, правила и гайды — всё здесь, на сайте. В Discord новости, ивенты и помощь от модеров. Он открывается только с VPN.</p></div></details>
       <details><summary>Не могу подключиться</summary><div class="body"><p>Проверь версию — нужна ровно <b>1.21.11</b>. Адрес — <code>87craft.ru</code>, без порта. Не помогло — загляни в <a href="#guides">гайды</a> или напиши в Discord в канал «помощь»: ник, лаунчер и скриншот ошибки.</p></div></details>
+      <details data-tgbot hidden><summary>Как узнать, что заявку одобрили?</summary><div class="body"><p>После отправки заявки жми «Уведомить в Telegram» — бот напишет тебе лично, как только модеры решат. А ещё статус всегда виден вверху этой страницы (плашка «Твоя заявка») и во вкладке <a href="#status">«Статус заявки»</a>. Чужие решения никто не видит — только своё.</p></div></details>
+      <details><summary>С заявкой что-то не так</summary><div class="body"><p>Напиши нам в <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Telegram</a> — это сообщения каналу 87, работает без VPN. Или в Discord: канал «помощь» либо просто в «общение».</p></div></details>
     </div>
   </div>
 
@@ -518,7 +535,7 @@ dl.gloss dd{color:var(--ink-soft)}
         <label class="field">
           <span>Ник в Discord <em>— необязательно</em></span>
           <input type="text" id="craftDiscord" placeholder="steve87" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40"/>
-          <small>Если укажешь — решение по заявке придёт ещё и тегом в Discord.</small>
+          <small>Если укажешь — решение по заявке придёт тебе ещё и в личные сообщения Discord.</small>
         </label>
         <label class="honey" aria-hidden="true">Сайт <input type="text" id="craftHoney" tabindex="-1" autocomplete="off"/></label>
         <button type="submit" class="btn btn-pink" id="craftSubmit">Отправить заявку</button>
@@ -533,6 +550,10 @@ dl.gloss dd{color:var(--ink-soft)}
           <div class="code">
             <span class="code-v px" id="craftCode">87-XXXX-XXXX</span>
             <button class="ip-copy" type="button" id="craftCodeCopy">Скопировать</button>
+          </div>
+          <div class="notify" data-tgbot hidden>
+            <p><b>🔔 Узнай о решении первым.</b> Жми кнопку, в Telegram нажми «Запустить» — бот напишет тебе, как только модеры решат. Лично тебе, никто другой не увидит.</p>
+            <a class="btn btn-ink js-tgbot" href="#" target="_blank" rel="noopener">Уведомить в Telegram</a>
           </div>
           <div class="keep">
             <p><b>Сохрани код — по нему смотрят статус.</b> На этом устройстве он уже запомнился: зайдёшь на сайт — заявка покажется сама. Для другого телефона или компьютера:</p>
@@ -566,6 +587,17 @@ dl.gloss dd{color:var(--ink-soft)}
       <p class="ip-meta" style="margin-top:18px">Перед заявкой загляни в <a href="#rules">правила</a> — их нарушение может стоить вайтлиста.</p>
     </aside>
   </div>
+  <div class="help block">
+    <div>
+      <h3>Проблемы с заявкой?</h3>
+      <p>Не отправляется, потерял код, долго не отвечают или непонятно, что делать дальше — напиши нам, разберёмся.</p>
+    </div>
+    <div class="btns">
+      <a class="btn btn-ink" href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Написать в Telegram</a>
+      <a class="btn js-discord" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">Discord</a>
+    </div>
+    <p class="ip-meta">Telegram — сообщения каналу 87, открывается без VPN. В Discord пиши в канал «помощь» или прямо в «общение» (нужен VPN).</p>
+  </div>
 </section>
 
 <!-- ═══════════════ СТАТУС ЗАЯВКИ ═══════════════ -->
@@ -593,13 +625,17 @@ dl.gloss dd{color:var(--ink-soft)}
       <p id="resText"></p>
       <div class="res-comment" id="resComment" hidden><b>Комментарий модератора</b><span id="resCommentText"></span></div>
       <p class="res-meta" id="resMeta"></p>
+      <div class="res-tg" id="resTg" hidden>
+        <span id="resTgOn" hidden>🔔 Уведомление о решении придёт тебе в Telegram.</span>
+        <a class="btn btn-pink js-tgbot" id="resTgBtn" href="#" target="_blank" rel="noopener" hidden>Уведомить в Telegram</a>
+      </div>
     </div>
   </div>
 
   <div class="block">
     <div class="note"><b>Где взять код?</b> Его показали сразу после отправки заявки — вида 87-XXXX-XXXX. Если отправлял с этого устройства, он уже подставлен выше.</div>
     <div class="note"><b>Код потерялся?</b> Напиши модерам в Discord (канал «помощь») свой ник в Minecraft — код есть у них в карточке заявки. Или подай заявку заново: новый код придёт сразу.</div>
-    <div class="note">Подавал заявку раньше, когда коды ещё не выдавали? Решение по ней — в Discord, в канале «решения».</div>
+    <div class="note"><b>Что-то не так?</b> Напиши нам в <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Telegram</a> (без VPN) или в Discord — канал «помощь» или «общение».</div>
   </div>
 </section>
 
@@ -824,6 +860,12 @@ dl.gloss dd{color:var(--ink-soft)}
      поэтому всё, что игроку нужно, идёт через неё, а не через discord.com. */
   var RELAY_URLS = ['https://functions.yandexcloud.net/d4e06f6ljufv9mbn9qth'];
   var DISCORD_INVITE_URL = 'https://discord.gg/dhGdzAnNj5';
+  /* Telegram-бот личных уведомлений (без @). Пусто — кнопки «Уведомить в
+     Telegram» не показываются. Бот знает код из ссылки ?start=<код без дефисов> */
+  var TG_BOT = '';
+  function tgLink(code){ return 'https://t.me/'+TG_BOT+'?start='+String(code||'').replace(/-/g,''); }
+  if(TG_BOT) [].forEach.call(document.querySelectorAll('[data-tgbot]'), function(el){ el.hidden=false; });
+  document.addEventListener('click', function(e){ var a=e.target.closest ? e.target.closest('.js-tgbot') : null; if(a) goal('craft_tg_notify'); });
   var RELAY_KEY = 'mn-craft-relay';    /* какой адрес сработал в прошлый раз (общий с главной) */
   var APPS_KEY  = 'mn-craft-apps';     /* коды заявок с этого устройства */
   var MIN_SHOWN = 3;                   /* меньше трёх игроков — пишем просто «Сервер онлайн» */
@@ -979,14 +1021,21 @@ dl.gloss dd{color:var(--ink-soft)}
   function showDone(code){
     form.hidden=true; done.hidden=false;
     $('craftCodeBox').hidden=!code;
+    done.querySelector('.notify').hidden=!(code && TG_BOT);
+    /* с ботом «Сохранить в Telegram» лишняя: бот и так запомнит код */
+    $('craftTgSave').hidden=!!TG_BOT;
+    done.querySelector('.keep .ip-meta').textContent = TG_BOT
+      ? 'Или просто сделай скриншот этого экрана.'
+      : '«Сохранить в Telegram» — выбери чат «Избранное». Или просто сделай скриншот этого экрана.';
     $('craftDoneSub').textContent = code
       ? 'Модеры посмотрят её и откроют тебе основной мир. Сохрани код ниже.'
-      : 'Модеры посмотрят её и откроют тебе основной мир. Решение придёт в Discord, в канал «решения».';
+      : 'Модеры посмотрят её и откроют тебе основной мир. Если что-то непонятно — напиши нам в Telegram или Discord.';
     if(code){
       $('craftCode').textContent=code; $('craftCodeCopy').setAttribute('data-copy', code); $('checkCode').value=code;
       var link=statusLink(code);
       $('craftTgSave').href='https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent('Моя заявка на 87CRAFT. Код: '+code);
       $('craftLinkSave').setAttribute('data-link', link);
+      [].forEach.call(done.querySelectorAll('.js-tgbot'), function(a){ a.href=tgLink(code); });
       refreshMine(true);
     }
     done.scrollIntoView({behavior:'smooth', block:'start'});
@@ -1029,6 +1078,7 @@ dl.gloss dd{color:var(--ink-soft)}
         var err=res.data && res.data.error;
         if(err==='nickname'){ setMsg('Сервер не принял ник — только латиница, цифры и «_», 3–16 символов.', true); nick.focus(); }
         else if(err==='age'){ setMsg('Сервер не принял возраст — укажи его числом.', true); age.focus(); }
+        else if(err==='rate'){ setMsg('Слишком много заявок подряд с одного интернета. Подожди 10 минут — или напиши нам в Telegram, если что-то не получается.', true); }
         else { goal('craft_submit_fail'); setMsg('Заявка не ушла — попробуй ещё раз через минуту, поля уже заполнены.', true); }
         return;
       }
@@ -1080,7 +1130,7 @@ dl.gloss dd{color:var(--ink-soft)}
       /* ответ не JSON — функция ещё старой версии, без проверки статуса */
       if(r.ok && !r.data){
         res.hidden=true;
-        setCheckMsg('Проверка статуса вот-вот заработает. Пока решение смотри в Discord, в канале «решения».', true);
+        setCheckMsg('Проверка статуса временно не отвечает — попробуй через пару минут.', true);
         return;
       }
       if(!r.ok){
@@ -1103,6 +1153,13 @@ dl.gloss dd{color:var(--ink-soft)}
       if(d.created) meta.push('Подана '+fmtDate(d.created));
       if(d.status!=='pending' && d.updated) meta.push('решение '+fmtDate(d.updated));
       $('resMeta').textContent=meta.join(' · ');
+      /* уведомление в Telegram: подключено — пишем об этом; нет — предлагаем
+         (только пока решения нет: после решения уведомлять уже не о чем) */
+      var wantTg=!!TG_BOT && (d.tg || d.status==='pending');
+      $('resTg').hidden=!wantTg;
+      $('resTgOn').hidden=!d.tg;
+      $('resTgBtn').hidden=!!d.tg;
+      if(wantTg && !d.tg) $('resTgBtn').href=tgLink(code);
       rememberStatus(code, d.status);
       /* открыли по личной ссылке на новом устройстве — запоминаем код и тут */
       if(saveHere && !savedApps().some(function(x){ return x.c===code; })){ saveApp(code, d.nick||''); rememberStatus(code, d.status); renderSaved(code); }
