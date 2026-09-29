@@ -1,0 +1,49 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 87CRAFT · подключение Telegram-бота (@craft87_bot) к Yandex-функции
+#
+# Путь: .github/workflows/tg-setup.yml в приватном репозитории-приёмнике.
+# Запуск вручную: Actions → «Telegram-бот: подключить» → Run workflow.
+#
+# Зачем отдельно: Telegram заблокирован в РФ, и сама Yandex-функция до
+# api.telegram.org не дотягивается (её ?tgsetup=1 отвечает «unreachable»).
+# GitHub Actions работает вне РФ — отсюда и ставим webhook. Входящие
+# сообщения от Telegram к функции при этом доходят нормально, а отвечает
+# функция прямо в теле ответа на webhook — исходящий запрос ей не нужен.
+#
+# Секрет: TG_TOKEN — тот же токен бота, что и в переменных Yandex-функции.
+# Секрет webhook считается из токена так же, как в функции:
+#   sha256("87craft:" + токен), первые 48 символов.
+# ═══════════════════════════════════════════════════════════════════════════
+
+name: Telegram-бот — подключить
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: setWebhook → Yandex-функция
+        env:
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          FUNC_URL: https://functions.yandexcloud.net/d4e06f6ljufv9mbn9qth
+        run: |
+          set -eu
+          if [ -z "${TG_TOKEN:-}" ]; then echo "Секрет TG_TOKEN не задан" >&2; exit 1; fi
+          secret=$(printf '%s' "87craft:${TG_TOKEN}" | sha256sum | cut -c1-48)
+          jq -n --arg url "$FUNC_URL" --arg s "$secret" \
+            '{ url: $url, secret_token: $s, allowed_updates: ["message"], drop_pending_updates: true }' > hook.json
+          curl -sS -X POST -H 'Content-Type: application/json' --data-binary @hook.json \
+               "https://api.telegram.org/bot${TG_TOKEN}/setWebhook" | jq '{ok, description}'
+          # описание и кнопка «Запустить» в самом боте
+          jq -n '{ description: "Бот 87CRAFT: напишу лично, когда модеры решат по твоей заявке. Пришли код заявки (87-XXXX-XXXX) или нажми «Уведомить в Telegram» на macannews.ru/87craft", short_description: "Личные уведомления о заявке на 87CRAFT · macannews.ru/87craft" }' > desc.json
+          curl -sS -X POST -H 'Content-Type: application/json' --data-binary @desc.json \
+               "https://api.telegram.org/bot${TG_TOKEN}/setMyDescription" | jq '{ok}'
+          jq -n '{ short_description: "Личные уведомления о заявке на 87CRAFT · macannews.ru/87craft" }' > sdesc.json
+          curl -sS -X POST -H 'Content-Type: application/json' --data-binary @sdesc.json \
+               "https://api.telegram.org/bot${TG_TOKEN}/setMyShortDescription" | jq '{ok}'
+          echo "Проверка webhook:"
+          curl -sS "https://api.telegram.org/bot${TG_TOKEN}/getWebhookInfo" \
+            | jq '{ok, url: .result.url, pending: .result.pending_update_count, last_error: .result.last_error_message}'
