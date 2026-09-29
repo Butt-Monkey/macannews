@@ -431,7 +431,7 @@ dl.gloss dd{color:var(--ink-soft)}
       <details><summary>Обязателен ли Discord?</summary><div class="body"><p>Нет. Заявка, статус, правила и гайды — всё здесь, на сайте. В Discord новости, ивенты и помощь от модеров. Он открывается только с VPN.</p></div></details>
       <details><summary>Не могу подключиться</summary><div class="body"><p>Проверь версию — нужна ровно <b>1.21.11</b>. Адрес — <code>87craft.ru</code>, без порта. Не помогло — загляни в <a href="#guides">гайды</a> или напиши в Discord в канал «помощь»: ник, лаунчер и скриншот ошибки.</p></div></details>
       <details data-tgbot hidden><summary>Как узнать, что заявку одобрили?</summary><div class="body"><p>После отправки заявки жми «Уведомить в Telegram» — бот напишет тебе лично, как только модеры решат. А ещё статус всегда виден вверху этой страницы (плашка «Твоя заявка») и во вкладке <a href="#status">«Статус заявки»</a>. Чужие решения никто не видит — только своё.</p></div></details>
-      <details><summary>С заявкой что-то не так</summary><div class="body"><p>Напиши нам в <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Telegram</a> — это сообщения каналу 87, работает без VPN. Или в Discord: канал «помощь» либо просто в «общение».</p></div></details>
+      <details><summary>С заявкой что-то не так</summary><div class="body"><p>Напиши нам в <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Telegram</a> — это сообщения каналу 87. Или в Discord: канал «помощь» либо просто в «общение».</p></div></details>
     </div>
   </div>
 
@@ -596,7 +596,7 @@ dl.gloss dd{color:var(--ink-soft)}
       <a class="btn btn-ink" href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Написать в Telegram</a>
       <a class="btn js-discord" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">Discord</a>
     </div>
-    <p class="ip-meta">Telegram — сообщения каналу 87, открывается без VPN. В Discord пиши в канал «помощь» или прямо в «общение» (нужен VPN).</p>
+    <p class="ip-meta">В Telegram — сообщения каналу 87. В Discord пиши в канал «помощь» или прямо в «общение».</p>
   </div>
 </section>
 
@@ -635,7 +635,7 @@ dl.gloss dd{color:var(--ink-soft)}
   <div class="block">
     <div class="note"><b>Где взять код?</b> Его показали сразу после отправки заявки — вида 87-XXXX-XXXX. Если отправлял с этого устройства, он уже подставлен выше.</div>
     <div class="note"><b>Код потерялся?</b> Напиши модерам в Discord (канал «помощь») свой ник в Minecraft — код есть у них в карточке заявки. Или подай заявку заново: новый код придёт сразу.</div>
-    <div class="note"><b>Что-то не так?</b> Напиши нам в <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Telegram</a> (без VPN) или в Discord — канал «помощь» или «общение».</div>
+    <div class="note"><b>Что-то не так?</b> Напиши нам в <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Telegram</a> или в Discord — канал «помощь» или «общение».</div>
   </div>
 </section>
 
@@ -862,7 +862,7 @@ dl.gloss dd{color:var(--ink-soft)}
   var DISCORD_INVITE_URL = 'https://discord.gg/dhGdzAnNj5';
   /* Telegram-бот личных уведомлений (без @). Пусто — кнопки «Уведомить в
      Telegram» не показываются. Бот знает код из ссылки ?start=<код без дефисов> */
-  var TG_BOT = '';
+  var TG_BOT = 'craft87_bot';
   function tgLink(code){ return 'https://t.me/'+TG_BOT+'?start='+String(code||'').replace(/-/g,''); }
   if(TG_BOT) [].forEach.call(document.querySelectorAll('[data-tgbot]'), function(el){ el.hidden=false; });
   document.addEventListener('click', function(e){ var a=e.target.closest ? e.target.closest('.js-tgbot') : null; if(a) goal('craft_tg_notify'); });
