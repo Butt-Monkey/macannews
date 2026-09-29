@@ -1,0 +1,22 @@
+# 87CRAFT · Telegram-бот: диагностика (что Telegram думает о webhook)
+# Запуск вручную: Actions → «Telegram-бот — проверка» → Run workflow.
+# Ничего не меняет, только показывает getWebhookInfo и getMe.
+name: Telegram-бот — проверка
+
+on:
+  workflow_dispatch:
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: getWebhookInfo
+        env:
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+        run: |
+          set -eu
+          curl -sS "https://api.telegram.org/bot${TG_TOKEN}/getMe" | jq '{ok, username: .result.username}'
+          curl -sS "https://api.telegram.org/bot${TG_TOKEN}/getWebhookInfo" \
+            | jq '{ok, url: .result.url, pending: .result.pending_update_count, last_error_date: .result.last_error_date, last_error: .result.last_error_message, ip: .result.ip_address}'
+          echo "Проверка секрета: длина токена ${#TG_TOKEN}, хвост без пробелов: $(printf '%s' "$TG_TOKEN" | tr -d '[:space:]' | wc -c)"
