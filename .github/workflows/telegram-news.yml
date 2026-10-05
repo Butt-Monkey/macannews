@@ -51,18 +51,34 @@ jobs:
         with:
           node-version: '20'
 
+      # копия ленты ДО обновления — по ней последний шаг поймёт, какие посты новые
+      - name: Запомнить ленту до обновления
+        run: cp news.json "$RUNNER_TEMP/news-before.json" 2>/dev/null || echo '[]' > "$RUNNER_TEMP/news-before.json"
+
       - name: Собрать news.json через Bot API
         env:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           REFETCH_IDS: ${{ github.event.inputs.refetch }}
         run: node .github/scripts/fetch-news.mjs
 
+      # отдельные страницы постов macannews.ru/n/<номер>/ (превью в соцсетях + поиск).
+      # Если шаг упадёт — лента всё равно закоммитится (continue-on-error)
+      - name: Страницы постов для соцсетей и поиска
+        continue-on-error: true
+        run: node .github/scripts/build-news-pages.mjs
+
       - name: Закоммитить, если лента изменилась
         run: |
-          if [ -n "$(git status --porcelain -- news.json assets/news .github/state)" ]; then
+          if [ -n "$(git status --porcelain -- news.json assets/news .github/state n sitemap-news.xml)" ]; then
             git config user.name "87-news-bot"
             git config user.email "actions@users.noreply.github.com"
-            git add news.json assets/news .github/state
+            git add -A news.json assets/news .github/state
+            # страницы постов — только если есть (или были) в репозитории: если шаг
+            # сборки страниц упал в самый первый раз, git add по пустому пути не должен
+            # ронять коммит ленты
+            for p in n sitemap-news.xml; do
+              if [ -e "$p" ] || git ls-files --error-unmatch "$p" >/dev/null 2>&1; then git add -A "$p"; fi
+            done
             git commit -m "auto: обновление ленты Telegram"
             # пока шёл прогон, в main мог попасть чужой коммит (например, зип с сайтом)
             pushed=0
@@ -74,3 +90,48 @@ jobs:
           else
             echo "Без изменений — новых постов нет"
           fi
+
+      # НЕОБЯЗАТЕЛЬНО: новые посты канала — ещё и в Discord (канал «новости-87»).
+      # Включается секретом DISCORD_NEWS_WEBHOOK (вебхук канала в Discord); нет
+      # секрета — шаг молча пропускается. Шлём только посты не старше 2 суток,
+      # чтобы добор старых постов в ленту не устроил спам. Картинку берём с
+      # raw.githubusercontent.com — она доступна сразу после коммита, а
+      # macannews.ru обновляется через минуту-две.
+      - name: Новости → Discord
+        if: ${{ always() }}
+        continue-on-error: true
+        env:
+          HOOK: ${{ secrets.DISCORD_NEWS_WEBHOOK }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -eu
+          if [ -z "${HOOK:-}" ]; then echo "DISCORD_NEWS_WEBHOOK не задан — пропускаю"; exit 0; fi
+          before="$RUNNER_TEMP/news-before.json"
+          jq -c --slurpfile old "$before" '
+            ($old[0] | map(.id)) as $was
+            | [ .[] | select((.id as $i | $was | index($i)) | not)
+                    | select(((.date // "") | sub("[.][0-9]+Z$"; "Z") | try fromdateiso8601 catch 0) > (now - 172800)) ]
+            | reverse | .[]' news.json > new.jsonl || true
+          n=$(wc -l < new.jsonl | tr -d ' ')
+          echo "Новых постов для Discord: $n"
+          while IFS= read -r post; do
+            [ -z "$post" ] && continue
+            echo "$post" | jq -c --arg repo "$REPO" '
+              (.text // "" | split("\n") | map(gsub("^[[:space:]⚡❗]+"; "") | select(test("[^[:space:]]")))) as $lines
+              | ($lines[0] // "Новость 87") as $title
+              | ($lines[1:] | join("\n")) as $body
+              | (if .page then "https://macannews.ru/" + .page else "https://macannews.ru/#news/" + .id end) as $url
+              | { username: "87 · Macan News",
+                  allowed_mentions: { parse: [] },
+                  embeds: [ {
+                    title: ($title | .[0:250]),
+                    url: $url,
+                    description: ((if ($body | length) > 600 then $body[0:600] + "…" else $body end) + "\n\n[Читать на сайте](" + $url + ")"),
+                    color: 16622786,
+                    timestamp: .date,
+                    footer: { text: "87 · Macan News · macannews.ru" }
+                  } + (if .image then { image: { url: ("https://raw.githubusercontent.com/" + $repo + "/main/" + .image) } } else {} end) ] }' > msg.json
+            code=$(curl -sS -o res.txt -w '%{http_code}' -X POST -H 'Content-Type: application/json' --data-binary @msg.json "$HOOK?wait=true" || echo 000)
+            echo "Discord: $code"
+            sleep 2
+          done < new.jsonl
