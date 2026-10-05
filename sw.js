@@ -5,7 +5,7 @@
    - ассеты (шрифты/картинки/аудио/видео) — cache-first: мгновенные
      повторные визиты, файлы контент-хэшированы именами и не меняются.
    При изменении списка ниже поднимай VERSION — старый кэш удалится сам. */
-var VERSION = '87-v34';
+var VERSION = '87-v40';
 var ASSET_RE = /\/assets\//;
 
 self.addEventListener('install', function (e) {
@@ -42,6 +42,9 @@ self.addEventListener('fetch', function (e) {
   /* видео не трогаем: браузер тянет его кусками (Range → ответ 206), такие
      ответы нельзя положить в Cache API, а кэшировать целиком тяжело */
   if (/\.(mp4|webm|mov|m4v)$/i.test(url.pathname) || req.headers.has('range')) return;
+
+  /* сборка модов 87CRAFT (zip/mrpack, ~16 МБ) — обычное скачивание, мимо кэша */
+  if (/\.(zip|mrpack|jar)$/i.test(url.pathname)) return;
 
   /* медиа постов из Telegram не кэшируем «навсегда»: бот может перезаписать файл
      под тем же именем (правка поста, перезагрузка альбома), и cache-first потом

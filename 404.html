@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>404 — 87 · Macan News</title>
 <meta name="robots" content="noindex"/>
+<script>/* старая ссылка на страницу поста (/n/312/), которого уже нет в ленте, —
+   отправляем в ленту сайта: там пост откроется, если он ещё есть, или сайт
+   честно скажет, что пост ушёл из ленты и где его найти */
+(function(){ var m=/^\/n\/([0-9A-Za-z_-]+)\/?$/.exec(location.pathname); if(m) location.replace('/#news/'+m[1]); })();</script>
 <!-- все пути только от корня (/...): эта страница отдаётся на любом несуществующем адресе, в т.ч. вложенном вроде /a/b/ — относительные ./ и assets/ там ведут в никуда -->
 <link rel="icon" type="image/x-icon" href="/assets/fav87.ico"/><link rel="icon" type="image/png" sizes="32x32" href="/assets/fav87-32.png"/><link rel="apple-touch-icon" sizes="180x180" href="/assets/fav87-apple.png"/>
 <style>
