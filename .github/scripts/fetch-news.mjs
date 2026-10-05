@@ -45,8 +45,14 @@ const TOKEN = process.env.TG_BOT_TOKEN;
 if (!TOKEN) throw new Error('Нет TG_BOT_TOKEN — секрет репозитория не задан или не передан в workflow');
 
 const CHANNEL_FALLBACK = 'macan777macan777macan777';
-const KEEP = 6;
-const BACKFILL_MAX_ATTEMPTS = 25;   // сколько номеров назад пробовать, прежде чем сдаться
+// 60 постов ≈ месяц ленты (стенд 2026-09-30; было 6): Telegram в РФ заблокирован,
+// и сайт стал главным местом, где канал читают без обходов — нужен нормальный архив
+const KEEP = 60;
+// удаление проверяем только у свежих постов: старые почти никогда не удаляют,
+// а каждая проверка — сообщение в личку владельцу (лимит Telegram ~1 в секунду на чат)
+const CHECK_RECENT = 12;
+const TG_PACE_MS = 1100;   // пауза между сообщениями в личку владельцу
+const BACKFILL_MAX_ATTEMPTS = 40;   // сколько номеров назад пробовать, прежде чем сдаться
 const MAX_VIDEO_BYTES = 20 * 1024 * 1024;   // потолок Bot API на скачивание файлов (getFile)
 const IMG_DIR = 'assets/news';
 const NEWS_FILE = 'news.json';
@@ -212,10 +218,31 @@ function finalizeEntry(entry, items) {
 // пробуем скопировать пост владельцу в личку и сразу стереть копию —
 // успех значит "пост ещё существует", явная ошибка Telegram — "удалён".
 // Сбой сети (не смогли даже спросить) — не удаляем, безопаснее оставить.
+// «Сообщения нет» — только явный ответ Telegram про само сообщение. Раньше
+// удалённым считался ЛЮБОЙ отказ: «слишком много запросов» (429), «чат не
+// найден» (владелец удалил переписку с ботом) — и посты пропадали из ленты,
+// хотя в канале были на месте (в худшем случае лента пустела целиком).
+function isMissingMessage(res) {
+  return !!res && res.ok === false && res.error_code === 400 &&
+    /message to (copy|forward) not found|message not found|MESSAGE_ID_INVALID/i.test(res.description || '');
+}
+// Telegram просит подождать (429) — ждём сколько сказано и повторяем один раз
+async function paced(method, params) {
+  await sleep(TG_PACE_MS);
+  let res = await apiCallLenient(method, params);
+  if (res && res.error_code === 429) {
+    const wait = ((res.parameters && res.parameters.retry_after) || 5) * 1000 + 500;
+    console.warn(`Telegram просит подождать ${Math.round(wait / 1000)} с (${method}).`);
+    await sleep(wait);
+    res = await apiCallLenient(method, params);
+  }
+  return res;
+}
+
 async function checkStillExists(messageId, ownerChatId) {
   let copyRes;
   try {
-    copyRes = await apiCallLenient('copyMessage', {
+    copyRes = await paced('copyMessage', {
       chat_id: String(ownerChatId),
       from_chat_id: '@' + CHANNEL_FALLBACK,
       message_id: String(messageId),
@@ -225,7 +252,11 @@ async function checkStillExists(messageId, ownerChatId) {
     console.warn(`Не удалось проверить пост ${messageId} (сеть) — оставляю как есть:`, e.message);
     return true;
   }
-  if (!copyRes.ok) return false;
+  if (!copyRes.ok) {
+    if (isMissingMessage(copyRes)) return false;
+    console.warn(`Пост ${messageId}: Telegram ответил «${copyRes.description || copyRes.error_code}» — не похоже на удаление, оставляю.`);
+    return true;
+  }
   try {
     await apiCallLenient('deleteMessage', { chat_id: String(ownerChatId), message_id: String(copyRes.result.message_id) });
   } catch (e) { /* не критично, если копию не удалось подчистить */ }
@@ -244,7 +275,7 @@ async function backfillOlder(startId, need, ownerChatId, fs) {
     attempts++;
     let fwdRes;
     try {
-      fwdRes = await apiCallLenient('forwardMessage', {
+      fwdRes = await paced('forwardMessage', {
         chat_id: String(ownerChatId),
         from_chat_id: '@' + CHANNEL_FALLBACK,
         message_id: String(candidate),
@@ -252,6 +283,12 @@ async function backfillOlder(startId, need, ownerChatId, fs) {
       });
     } catch (e) {
       console.warn('Добор остановлен (сбой сети):', e.message);
+      break;
+    }
+    // отказ из-за лимита или чата владельца — не перескакиваем номер, а
+    // останавливаемся: следующий прогон продолжит с этого места
+    if (!fwdRes.ok && (fwdRes.error_code === 429 || /chat|blocked|deactivated|Forbidden/i.test(fwdRes.description || ''))) {
+      console.warn(`Добор остановлен на ${candidate}: ${fwdRes.description || fwdRes.error_code}`);
       break;
     }
     if (fwdRes.ok) {
@@ -498,8 +535,11 @@ async function main() {
   let deletedCount = 0;
   if (ownerChatId) {
     const stillThere = [];
+    let checked = 0;
     for (const post of merged) {
       if (newPosts.some(p => p.id === post.id)) { stillThere.push(post); continue; }
+      if (checked >= CHECK_RECENT) { stillThere.push(post); continue; }   // старые не трогаем
+      checked++;
       const exists = await checkStillExists(post.id, ownerChatId);
       if (exists) stillThere.push(post);
       else { deletedCount++; console.log(`Пост ${post.id} больше не существует в канале — убираю из ленты.`); }
