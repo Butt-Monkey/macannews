@@ -41,6 +41,8 @@
 var m=/^#status[\/=:]([A-Za-z0-9\- ]{8,14})$/.exec(location.hash||'');
 if(m){ window.__craftCode=m[1]; try{ history.replaceState(null,'',location.pathname+location.search+'#status'); }catch(e){} }
 var YM_ID=112939024;
+/* локальный предпросмотр (стенд, localhost) в статистику не пишем */
+if(/^(localhost|127.0.0.1)$/.test(location.hostname)) YM_ID=0;
 window.mnGoal=function(name){ try{ if(YM_ID && window.ym) window.ym(YM_ID,'reachGoal',name); }catch(e){} };
 if(YM_ID){
   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();
@@ -149,9 +151,15 @@ code,kbd{font-family:ui-monospace,Consolas,monospace;font-size:.92em;background:
 /* «87CRAFT» пиксельным шрифтом ≈ 5.3em в ширину: размер считаем от ширины
    колонки (cqw), чтобы слово всегда помещалось в одну строку */
 .hero>div:first-child{container-type:inline-size;min-width:0}
-.hero h1{font-size:clamp(40px,18cqw,150px);line-height:.95;margin-top:14px;white-space:nowrap}
+.hero h1{font-size:clamp(40px,9vw,110px);font-size:clamp(40px,18cqw,150px);line-height:.95;margin-top:14px;white-space:nowrap}
 .hero .lead{font-size:var(--t-lead);max-width:560px;margin-top:var(--sp-s)}
 .hero-art{border:1.5px solid var(--ink);background:var(--pink);aspect-ratio:1}
+/* «87CRAFT» при открытии падает по буквам, как блоки, и мягко «приземляется».
+   Плавно, без steps(): рубленые кадры читались как подтормаживание. Только
+   transform/opacity — дёшево даже для слабых телефонов */
+.hero h1 .bk{display:inline-block;animation:blockDrop .55s cubic-bezier(.3,.7,.3,1) both;animation-delay:calc(var(--i) * 45ms + .05s)}
+@keyframes blockDrop{0%{transform:translate3d(0,-.6em,0);opacity:0}55%{transform:translate3d(0,.05em,0);opacity:1}78%{transform:translate3d(0,-.015em,0)}100%{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.hero h1 .bk{animation:none}}
 .hero-art img{width:100%;height:100%;object-fit:contain}
 .srv{display:inline-flex;align-items:center;gap:10px;margin-top:var(--sp-s);padding:8px 14px;border:1.5px solid var(--ink);font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;background:var(--card)}
 .srv i{width:10px;height:10px;background:var(--ok);display:block}
@@ -184,6 +192,7 @@ code,kbd{font-family:ui-monospace,Consolas,monospace;font-size:.92em;background:
 .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1.5px solid var(--ink)}
 .facts>div{padding:var(--sp-xs) var(--sp-xs) var(--sp-s) 0;border-bottom:1px solid var(--line)}
 .facts>div:nth-child(3n+2),.facts>div:nth-child(3n+3){padding-left:var(--sp-xs);border-left:1px solid var(--line)}
+.facts .pxi{display:block;width:40px;height:40px;margin-bottom:14px;image-rendering:pixelated}
 .facts h4{font-size:var(--t-h4);font-weight:800;line-height:1.2}
 .facts p{font-size:var(--t-small);color:var(--ink-soft);margin-top:6px}
 @media (max-width:900px){.facts{grid-template-columns:1fr 1fr}.facts>div:nth-child(n){padding-left:0;border-left:0}.facts>div:nth-child(2n){padding-left:var(--sp-xs);border-left:1px solid var(--line)}}
@@ -299,19 +308,19 @@ code,kbd{font-family:ui-monospace,Consolas,monospace;font-size:.92em;background:
 .res-meta{margin-top:14px;font-size:var(--t-small);color:var(--ink-soft)}
 
 /* ── Моды ── */
-.mods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1.5px solid var(--ink)}
-.mods>div{padding:var(--sp-s);background:var(--card);border-left:1.5px solid var(--ink);display:flex;flex-direction:column;gap:8px}
-.mods>div:first-child{border-left:0}
-.mods h4{font-size:var(--t-h4);font-weight:800}
-.mods p{font-size:var(--t-small);color:var(--ink-soft);flex:1}
-.mods .btn{align-self:flex-start;min-height:44px;padding:10px 18px;margin-top:6px}
-.mods .tag{font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800;color:var(--pink-deep)}
-.mods.one{grid-template-columns:minmax(0,1fr);max-width:440px}
-@media (max-width:860px){.mods{grid-template-columns:1fr}.mods>div{border-left:0;border-top:1.5px solid var(--ink)}.mods>div:first-child{border-top:0}}
-.big-yes{display:flex;gap:var(--sp-s);align-items:center;flex-wrap:wrap;border:1.5px solid var(--ink);background:var(--pink);padding:var(--sp-s)}
-.big-yes b{font-size:var(--t-h3);font-weight:800;text-transform:uppercase;line-height:1.05;letter-spacing:-.02em}
-.big-yes p{max-width:520px}
 .no li::marker{content:"✕  ";color:var(--bad);font-weight:800}
+/* сборка модов: слева розовая плашка со скачиванием, справа — что внутри */
+.pack{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);border:1.5px solid var(--ink)}
+.pack-main{background:var(--pink);padding:var(--sp-s);display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.pack-main>b{font-size:var(--t-h3);font-weight:800;text-transform:uppercase;line-height:1.05;letter-spacing:-.02em}
+.pack-main>p{max-width:460px}
+.pack-alt{font-size:var(--t-small)}
+.pack-alt a{font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.pack-list{list-style:none;margin:0;padding:0;background:var(--card);border-left:1.5px solid var(--ink)}
+.pack-list li{padding:14px var(--sp-s);border-top:1px solid var(--line);font-size:var(--t-small);color:var(--ink-soft)}
+.pack-list li:first-child{border-top:0}
+.pack-list b{display:block;color:var(--ink);font-size:var(--t-body);font-weight:800}
+@media (max-width:860px){.pack{grid-template-columns:1fr}.pack-list{border-left:0;border-top:1.5px solid var(--ink)}}
 
 /* ── Правила ── */
 .short{list-style:none;counter-reset:r;border-top:1.5px solid var(--ink)}
@@ -379,7 +388,7 @@ dl.gloss dd{color:var(--ink-soft)}
   <div class="hero">
     <div>
       <div class="eyebrow">Minecraft-сервер от Macan News</div>
-      <h1 class="px">87CRAFT</h1>
+      <h1 class="px" aria-label="87CRAFT">87CRAFT</h1>
       <p class="lead">Ванильное выживание с валютой, аукционом и голосовым чатом. Строим города, делим землю через суд и устраиваем ивенты — без читов и грифа.</p>
       <p class="srv" id="srvStatus" hidden><i></i><span id="srvText">Сервер онлайн</span></p>
       <div class="ip">
@@ -413,12 +422,12 @@ dl.gloss dd{color:var(--ink-soft)}
   <div class="block">
     <h3>Что внутри</h3>
     <div class="facts">
-      <div><h4>Ванилла + валюта</h4><p>Обычный Minecraft без лишних механик, но со своей экономикой: штрафы, например, платятся в казну сервера.</p></div>
-      <div><h4>Аукцион</h4><p>Продавай и покупай у других игроков.</p></div>
-      <div><h4>Голосовой чат</h4><p>Plasmo Voice — говоришь с теми, кто рядом. По желанию: без мода тоже можно играть. <a href="#mods">Как поставить →</a></p></div>
-      <div><h4>Приват до 500×500</h4><p>Отмечаешь территорию табличкой со своим ником. Споры о земле решает суд.</p></div>
-      <div><h4>Города, РП и суды</h4><p>Ролевые ивенты согласуются с игроками, судью выбирают голосованием.</p></div>
-      <div><h4>Без читов и грифа</h4><p>Читы — бан сразу. Гриф и воровство — штраф и возврат вещей. <a href="#rules">Правила →</a></p></div>
+      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M4 1h4v1h-4zM2 2h8v1h-8zM2 3h8v1h-8zM1 4h4v1h-4zM7 4h4v1h-4zM1 5h3v1h-3zM8 5h3v1h-3zM1 6h3v1h-3zM8 6h3v1h-3zM1 7h4v1h-4zM7 7h4v1h-4zM2 8h8v1h-8zM2 9h8v1h-8zM4 10h4v1h-4z"/><path fill="#050505" d="M4 0h4v1h-4zM2 1h2v1h-2zM8 1h2v1h-2zM1 2h1v1h-1zM10 2h1v1h-1zM1 3h1v1h-1zM10 3h1v1h-1zM0 4h1v1h-1zM5 4h2v1h-2zM11 4h1v1h-1zM0 5h1v1h-1zM4 5h4v1h-4zM11 5h1v1h-1zM0 6h1v1h-1zM4 6h4v1h-4zM11 6h1v1h-1zM0 7h1v1h-1zM5 7h2v1h-2zM11 7h1v1h-1zM1 8h1v1h-1zM10 8h1v1h-1zM1 9h1v1h-1zM10 9h1v1h-1zM2 10h2v1h-2zM8 10h2v1h-2zM4 11h4v1h-4z"/></svg><h4>Ванилла + валюта</h4><p>Обычный Minecraft без лишних механик, но со своей экономикой: штрафы, например, платятся в казну сервера.</p></div>
+      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M2 2h8v1h-8zM2 3h8v1h-8zM2 5h3v1h-3zM7 5h3v1h-3zM2 6h3v1h-3zM7 6h3v1h-3zM2 7h8v1h-8zM2 8h8v1h-8z"/><path fill="#050505" d="M1 1h10v1h-10zM1 2h1v1h-1zM10 2h1v1h-1zM1 3h1v1h-1zM10 3h1v1h-1zM0 4h12v1h-12zM1 5h1v1h-1zM5 5h2v1h-2zM10 5h1v1h-1zM1 6h1v1h-1zM5 6h2v1h-2zM10 6h1v1h-1zM1 7h1v1h-1zM10 7h1v1h-1zM1 8h1v1h-1zM10 8h1v1h-1zM1 9h10v1h-10z"/></svg><h4>Аукцион</h4><p>Продавай и покупай у других игроков.</p></div>
+      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M1 1h10v1h-10zM1 2h10v1h-10zM1 3h1v1h-1zM4 3h1v1h-1zM7 3h1v1h-1zM10 3h1v1h-1zM1 4h10v1h-10zM1 5h10v1h-10zM5 6h1v1h-1zM5 7h1v1h-1z"/><path fill="#050505" d="M1 0h10v1h-10zM0 1h1v1h-1zM11 1h1v1h-1zM0 2h1v1h-1zM11 2h1v1h-1zM0 3h1v1h-1zM2 3h2v1h-2zM5 3h2v1h-2zM8 3h2v1h-2zM11 3h1v1h-1zM0 4h1v1h-1zM11 4h1v1h-1zM0 5h1v1h-1zM11 5h1v1h-1zM1 6h4v1h-4zM6 6h5v1h-5zM4 7h1v1h-1zM6 7h1v1h-1zM4 8h2v1h-2z"/></svg><h4>Голосовой чат</h4><p>Plasmo Voice — говоришь с теми, кто рядом. По желанию: без мода тоже можно играть. <a href="#mods">Как поставить →</a></p></div>
+      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M1 1h10v1h-10zM1 2h1v1h-1zM9 2h2v1h-2zM1 3h10v1h-10zM1 4h1v1h-1zM7 4h4v1h-4zM1 5h10v1h-10z"/><path fill="#050505" d="M0 0h12v1h-12zM0 1h1v1h-1zM11 1h1v1h-1zM0 2h1v1h-1zM2 2h7v1h-7zM11 2h1v1h-1zM0 3h1v1h-1zM11 3h1v1h-1zM0 4h1v1h-1zM2 4h5v1h-5zM11 4h1v1h-1zM0 5h1v1h-1zM11 5h1v1h-1zM0 6h12v1h-12zM5 7h2v1h-2zM5 8h2v1h-2zM5 9h2v1h-2zM5 10h2v1h-2zM4 11h4v1h-4z"/></svg><h4>Приват до 500×500</h4><p>Отмечаешь территорию табличкой со своим ником. Споры о земле решает суд.</p></div>
+      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M5 1h2v1h-2zM4 2h4v1h-4zM3 3h6v1h-6zM2 4h8v1h-8zM2 6h8v1h-8zM2 7h1v1h-1zM5 7h2v1h-2zM9 7h1v1h-1zM2 8h1v1h-1zM5 8h2v1h-2zM9 8h1v1h-1zM2 9h4v1h-4zM8 9h2v1h-2zM2 10h4v1h-4zM8 10h2v1h-2z"/><path fill="#050505" d="M5 0h2v1h-2zM4 1h1v1h-1zM7 1h1v1h-1zM3 2h1v1h-1zM8 2h1v1h-1zM2 3h1v1h-1zM9 3h1v1h-1zM1 4h1v1h-1zM10 4h1v1h-1zM0 5h12v1h-12zM1 6h1v1h-1zM10 6h1v1h-1zM1 7h1v1h-1zM3 7h2v1h-2zM7 7h2v1h-2zM10 7h1v1h-1zM1 8h1v1h-1zM3 8h2v1h-2zM7 8h2v1h-2zM10 8h1v1h-1zM1 9h1v1h-1zM6 9h2v1h-2zM10 9h1v1h-1zM1 10h1v1h-1zM6 10h2v1h-2zM10 10h1v1h-1zM1 11h10v1h-10z"/></svg><h4>Города, РП и суды</h4><p>Ролевые ивенты согласуются с игроками, судью выбирают голосованием.</p></div>
+      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M1 1h4v1h-4zM7 1h4v1h-4zM1 2h4v1h-4zM7 2h4v1h-4zM1 3h1v1h-1zM10 3h1v1h-1zM1 4h4v1h-4zM7 4h4v1h-4zM2 5h3v1h-3zM7 5h3v1h-3zM2 6h3v1h-3zM7 6h3v1h-3zM3 7h2v1h-2zM7 7h2v1h-2zM3 8h2v1h-2zM7 8h2v1h-2zM4 9h1v1h-1zM7 9h1v1h-1z"/><path fill="#050505" d="M0 0h12v1h-12zM0 1h1v1h-1zM5 1h2v1h-2zM11 1h1v1h-1zM0 2h1v1h-1zM5 2h2v1h-2zM11 2h1v1h-1zM0 3h1v1h-1zM2 3h8v1h-8zM11 3h1v1h-1zM0 4h1v1h-1zM5 4h2v1h-2zM11 4h1v1h-1zM1 5h1v1h-1zM5 5h2v1h-2zM10 5h1v1h-1zM1 6h1v1h-1zM5 6h2v1h-2zM10 6h1v1h-1zM2 7h1v1h-1zM5 7h2v1h-2zM9 7h1v1h-1zM2 8h1v1h-1zM5 8h2v1h-2zM9 8h1v1h-1zM3 9h1v1h-1zM5 9h2v1h-2zM8 9h1v1h-1zM4 10h4v1h-4zM5 11h2v1h-2z"/></svg><h4>Без читов и грифа</h4><p>Читы — бан сразу. Гриф и воровство — штраф и возврат вещей. <a href="#rules">Правила →</a></p></div>
     </div>
   </div>
 
@@ -428,7 +437,7 @@ dl.gloss dd{color:var(--ink-soft)}
       <details><summary>Нужна лицензия?</summary><div class="body"><p>Нет. Подойдёт любой лаунчер — официальный или пиратский. Главное — версия <b>Java Edition 1.21.11</b>.</p></div></details>
       <details><summary>Пишет «You do not have permissions» или не пускает в основной мир</summary><div class="body"><p>Значит, заявку ещё смотрят. Спавн при этом работает — играй, прогресс не пропадёт. Проверить статус можно во вкладке <a href="#status">«Статус заявки»</a>.</p></div></details>
       <details><summary>Что за /register и /login?</summary><div class="body"><p>Это пароль от твоего ника на сервере. При первом входе напиши <code>/register пароль пароль</code>, дальше при каждом входе — <code>/login пароль</code>. Не бери пароль от почты или других игр.</p></div></details>
-      <details><summary>Обязателен ли Discord?</summary><div class="body"><p>Нет. Заявка, статус, правила и гайды — всё здесь, на сайте. В Discord новости, ивенты и помощь от модеров. Он открывается только с VPN.</p></div></details>
+      <details><summary>Обязателен ли Discord?</summary><div class="body"><p>Нет. Заявка, статус, правила и гайды — всё здесь, на сайте. В Discord новости, ивенты и помощь от модеров. В России он работает с перебоями — поэтому всё нужное для игры есть здесь.</p></div></details>
       <details><summary>Не могу подключиться</summary><div class="body"><p>Проверь версию — нужна ровно <b>1.21.11</b>. Адрес — <code>87craft.ru</code>, без порта. Не помогло — загляни в <a href="#guides">гайды</a> или напиши в Discord в канал «помощь»: ник, лаунчер и скриншот ошибки.</p></div></details>
       <details data-tgbot hidden><summary>Как узнать, что заявку одобрили?</summary><div class="body"><p>После отправки заявки жми «Уведомить в Telegram» — бот напишет тебе лично, как только модеры решат. А ещё статус всегда виден вверху этой страницы (плашка «Твоя заявка») и во вкладке <a href="#status">«Статус заявки»</a>. Чужие решения никто не видит — только своё.</p></div></details>
       <details><summary>С заявкой что-то не так</summary><div class="body"><p>Напиши нам в <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Telegram</a> — это сообщения каналу 87. Или в Discord: канал «помощь» либо просто в «общение».</p></div></details>
@@ -490,12 +499,12 @@ dl.gloss dd{color:var(--ink-soft)}
       <div class="btns" style="margin-top:14px"><a class="btn btn-pink" href="#apply">Подать заявку</a></div>
     </div></li>
     <li><div>
-      <h4>Голосовой чат <span class="opt">по желанию</span></h4>
-      <p>Хочешь слышать других — поставь Fabric и мод Plasmo Voice. Это пять минут, инструкция во вкладке <a href="#mods">«Моды»</a>.</p>
+      <h4>Сборка модов <span class="opt">советуем</span></h4>
+      <p>Голосовой чат, больше FPS и удобный инвентарь — одним архивом с установщиком. Пара минут, вкладка <a href="#mods">«Моды»</a>.</p>
     </div></li>
     <li><div>
       <h4>Discord <span class="opt">по желанию</span></h4>
-      <p>Новости, ивенты, помощь модеров. Ник в Discord лучше поставить как в Minecraft: название сервера слева сверху → «Редактировать личный профиль сервера» → «Никнейм». Discord открывается только с VPN.</p>
+      <p>Новости, ивенты, помощь модеров. Ник в Discord лучше поставить как в Minecraft: название сервера слева сверху → «Редактировать личный профиль сервера» → «Никнейм». В России Discord работает с перебоями — если не открывается, всё нужное для игры есть на этой странице.</p>
       <div class="btns" style="margin-top:14px"><a class="btn js-discord" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">Открыть Discord</a></div>
     </div></li>
   </ol>
@@ -541,6 +550,7 @@ dl.gloss dd{color:var(--ink-soft)}
         <button type="submit" class="btn btn-pink" id="craftSubmit">Отправить заявку</button>
         <p class="msg" id="craftMsg" aria-live="polite"></p>
       </form>
+
 
       <div class="done" id="craftDone" hidden>
         <h3>Заявка отправлена</h3>
@@ -640,44 +650,42 @@ dl.gloss dd{color:var(--ink-soft)}
 </section>
 
 <!-- ═══════════════ МОДЫ ═══════════════ -->
-<section class="view" id="view-mods" data-title="Моды для 87CRAFT — голосовой чат Plasmo Voice">
+<section class="view" id="view-mods" data-title="Сборка модов 87CRAFT — голосовой чат и больше FPS">
   <div class="head">
     <div class="eyebrow">Fabric 1.21.11</div>
     <h2>Моды</h2>
-    <p>Что поставить, чтобы играть было удобнее, и чего ставить нельзя.</p>
+    <p>Одна сборка: голосовой чат, больше FPS и удобный инвентарь. Скачал, запустил установщик — играешь.</p>
   </div>
 
-  <div class="big-yes">
-    <b>Обязательных модов нет</b>
-    <p>Сервер — ванилла. Заходи с чистой 1.21.11 из любого лаунчера. Моды ниже — по желанию.</p>
-  </div>
-
-  <div class="block">
-    <h3>Голосовой чат</h3>
-    <div class="mods">
-      <div><span class="tag">Шаг 1 · загрузчик</span><h4>Fabric Loader</h4><p>Основа для модов. Выбери версию игры 1.21.11 и нажми Install. В TLauncher и похожих лаунчерах установщик обычно не нужен — просто выбери в списке версию «Fabric 1.21.11».</p><a class="btn" href="https://fabricmc.net/use/installer/" target="_blank" rel="noopener">fabricmc.net</a></div>
-      <div><span class="tag">Шаг 2 · мод</span><h4>Fabric API</h4><p>Библиотека, без которой не запустится большинство модов, включая голосовой чат. Бери файл для 1.21.11.</p><a class="btn" href="https://modrinth.com/mod/fabric-api" target="_blank" rel="noopener">Modrinth</a></div>
-      <div><span class="tag">Шаг 3 · мод</span><h4>Plasmo Voice</h4><p>Сам голосовой чат: слышишь тех, кто рядом в игре. Бери версию для Fabric 1.21.11.</p><a class="btn" href="https://modrinth.com/plugin/plasmo-voice" target="_blank" rel="noopener">Modrinth</a></div>
+  <!-- Сборка лежит рядом: mods/87CRAFT-mods-1.21.11.zip (моды + УСТАНОВИТЬ.bat) и
+       mods/87CRAFT-1.21.11.mrpack (Modrinth App / Prism). Исходники и проверка —
+       папка «моды-сборка» в стенде. Меняешь состав — обнови и список ниже, и размер. -->
+  <div class="pack">
+    <div class="pack-main">
+      <b>Сборка 87CRAFT</b>
+      <p>8 проверенных модов под Fabric 1.21.11 и установщик, который сам положит их в папку игры и уберёт старые версии.</p>
+      <a class="btn btn-ink" href="mods/87CRAFT-mods-1.21.11.zip" download>Скачать сборку · 16 МБ</a>
+      <p class="pack-alt">Играешь через Modrinth App или Prism Launcher? <a href="mods/87CRAFT-1.21.11.mrpack" download>Скачай .mrpack</a> — импорт в один клик, 87CRAFT уже в списке серверов.</p>
     </div>
+    <ul class="pack-list">
+      <li><b>Plasmo Voice</b>голосовой чат — слышишь тех, кто рядом</li>
+      <li><b>Sodium · ImmediatelyFast · FerriteCore</b>больше FPS и меньше лагов, даже на слабом ноутбуке</li>
+      <li><b>AppleSkin</b>сытость видна прямо на шкале еды</li>
+      <li><b>Mouse Tweaks</b>предметы раскладываются колёсиком и протяжкой мыши</li>
+      <li><b>Mod Menu · Fabric API</b>список модов в меню и основа для остальных</li>
+    </ul>
   </div>
+  <div class="note" style="margin-top:var(--sp-s)">Зайти можно и с чистой 1.21.11, но без сборки ты не услышишь голосовой чат, а FPS будет ниже. Очень советуем поставить.</div>
 
   <div class="block">
     <h3>Как поставить</h3>
     <ol class="steps">
-      <li><div><h4>Поставь Fabric для 1.21.11</h4><p>Через установщик с fabricmc.net или выбери «Fabric 1.21.11» в своём лаунчере.</p></div></li>
-      <li><div><h4>Скачай Fabric API и Plasmo Voice</h4><p>Оба файла — <b>.jar</b>, оба для <b>Fabric 1.21.11</b>. Не распаковывай их.</p></div></li>
-      <li><div><h4>Положи их в папку mods</h4><p>Windows: нажми <kbd>Win</kbd>+<kbd>R</kbd>, вставь <code>%appdata%\.minecraft\mods</code> и Enter. Нет папки mods — создай. Если лаунчер хранит игру в другом месте, у него в настройках есть кнопка «Открыть папку игры».</p></div></li>
-      <li><div><h4>Запусти версию Fabric 1.21.11</h4><p>Именно её, а не обычную 1.21.11 — иначе моды не загрузятся.</p></div></li>
-      <li><div><h4>Настрой микрофон</h4><p>В игре нажми <kbd>V</kbd> — откроется меню голосового чата: там выбор микрофона, громкость и режим активации.</p></div></li>
+      <li><div><h4>Скачай и распакуй</h4><p>Правой кнопкой по архиву → «Извлечь всё…» → «Извлечь».</p></div></li>
+      <li><div><h4>Запусти УСТАНОВИТЬ.bat</h4><p>Он сам положит моды в папку игры <code>%appdata%\.minecraft\mods</code>. Если Windows переспросит — «Подробнее» → «Выполнить в любом случае».</p></div></li>
+      <li><div><h4>Выбери в лаунчере Fabric 1.21.11</h4><p>TLauncher и Legacy Launcher — просто выбери в списке версию «Fabric 1.21.11». Официальный лаунчер — сначала поставь Fabric через <a href="https://fabricmc.net/use/installer/" target="_blank" rel="noopener">установщик</a> (версия 1.21.11 → Install).</p></div></li>
+      <li><div><h4>Нажми <kbd>V</kbd> в игре</h4><p>Откроется меню голосового чата: микрофон, громкость и режим.</p></div></li>
     </ol>
-    <div class="note" style="margin-top:var(--sp-s)">Modrinth не открывается? Ссылки на те же моды есть в Discord, в канале «сервер».</div>
-  </div>
-
-  <div class="block">
-    <h3>По желанию</h3>
-    <div class="mods one">
-      <div><span class="tag">FPS</span><h4>Sodium</h4><p>Заметно поднимает FPS на слабых ноутбуках. Ставится так же: Fabric + файл в папку mods.</p><a class="btn" href="https://modrinth.com/mod/sodium" target="_blank" rel="noopener">Modrinth</a></div>
-    </div>
+    <div class="note" style="margin-top:var(--sp-s)">Mac, Linux или свой лаунчер — скопируй файлы из папки <code>mods</code> архива в папку <code>mods</code> игры. Сборку можно взять и у бота <a href="https://t.me/craft87_bot?start=mods" target="_blank" rel="noopener">@craft87_bot</a> (команда /mods), и в Discord, в канале «сервер».</div>
   </div>
 
   <div class="block">
@@ -726,7 +734,7 @@ dl.gloss dd{color:var(--ink-soft)}
       </ul>
     </div></details>
     <details><summary>Голосовой чат</summary><div class="body">
-      <p>Fabric 1.21.11 + моды Fabric API и Plasmo Voice в папке mods. Пошагово — во вкладке <a href="#mods">«Моды»</a>. В игре меню голоса открывается на <kbd>V</kbd>.</p>
+      <p>Скачай сборку 87CRAFT во вкладке <a href="#mods">«Моды»</a> — в ней Plasmo Voice и установщик, и выбери в лаунчере Fabric 1.21.11. В игре меню голоса открывается на <kbd>V</kbd>.</p>
       <p>Правила общения в голосовом те же, что и в чате.</p>
     </div></details>
     <details><summary>Нашёл баг или дюп</summary><div class="body">
@@ -856,7 +864,7 @@ dl.gloss dd{color:var(--ink-soft)}
   /* ── НАСТРОЙКИ ──────────────────────────────────────────────────────────
      RELAY_URLS — Yandex Cloud Function (код в relay/yandex-function). Она
      принимает заявку (POST), отдаёт статус заявки по коду (GET ?check=)
-     и онлайн сервера (GET ?status). Discord из РФ без VPN не открывается,
+     и онлайн сервера (GET ?status). Discord из РФ работает с перебоями,
      поэтому всё, что игроку нужно, идёт через неё, а не через discord.com. */
   var RELAY_URLS = ['https://functions.yandexcloud.net/d4e06f6ljufv9mbn9qth'];
   var DISCORD_INVITE_URL = 'https://discord.gg/dhGdzAnNj5';
@@ -877,6 +885,9 @@ dl.gloss dd{color:var(--ink-soft)}
   function goal(n){ if(window.mnGoal) window.mnGoal(n); }
   function $(id){ return document.getElementById(id); }
   function store(key, val){ try{ if(val===undefined) return JSON.parse(localStorage.getItem(key)||'null'); localStorage.setItem(key, JSON.stringify(val)); }catch(e){ return null; } }
+
+  /* заголовок героя — по буквам для анимации «падающих блоков» */
+  (function(){ var h=document.querySelector('.hero h1'); if(!h) return; var t=h.textContent, box=document.createElement('span'); box.setAttribute('aria-hidden','true'); for(var i=0;i<t.length;i++){ var s=document.createElement('span'); s.className='bk'; s.style.setProperty('--i',i); s.textContent=t.charAt(i); box.appendChild(s); } h.textContent=''; h.appendChild(box); })();
 
   /* ── вкладки ── */
   var VIEWS=['about','join','apply','status','mods','guides','rules'];
