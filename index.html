@@ -329,7 +329,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
    листается пальцем (.news-rail), полная лента — столбиком. */
 .news-feed{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-m) var(--sp-s);align-items:start}
 .news-card{display:flex;flex-direction:column;min-width:0;text-align:left;color:inherit;cursor:pointer}
-.news-card-media{position:relative;display:block;width:100%;aspect-ratio:4/3;overflow:hidden;border:1.5px solid var(--ink);background:var(--card-2)}
+.news-card-media{position:relative;display:block;width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--card-2)}
+/* рамка — отдельным слоем ПОВЕРХ фото: при дробном масштабе (Windows 125%, Firefox)
+   обычная border и фото округлялись по-разному, и между ними светилась щель */
+.news-card-media::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;z-index:2;border:1.5px solid var(--ink);pointer-events:none}
 .news-card-media img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.25);transform:translateZ(0);transition:transform .7s var(--ease-out),filter .5s var(--ease),opacity .4s var(--ease)}
 .news-card-media img.ld{opacity:0}
 .news-card:hover .news-card-media img{transform:scale(1.045);filter:none}
@@ -456,9 +459,14 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .np-share:hover{background:var(--ink);color:var(--pink)}
 .np-share svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 @media (max-width:420px){.np-share span,.np-close span{display:none}.np-share,.np-close{padding:9px 12px}}
-/* «Следующая новость» — крупная строка во всю ширину, листает ленту без возврата к списку */
-.np-next{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:18px;margin-top:var(--sp-m);padding:var(--sp-s);
+/* «Предыдущая / Следующая новость» — листают ленту в обе стороны без возврата к
+   списку. Видна одна (первый или последний пост) — растягивается на всю ширину */
+.np-pager{display:flex;gap:12px;margin-top:var(--sp-m)}
+.np-pager>.np-next{flex:1 1 0;min-width:0}
+@media (max-width:640px){.np-pager{flex-direction:column}}
+.np-next{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:18px;padding:var(--sp-s);
  border:1.5px solid var(--ink);background:var(--card);text-align:left;width:100%;transition:background .25s,color .25s}
+.np-next.np-prev{grid-template-columns:auto minmax(0,1fr)}
 .np-next:hover{background:var(--ink);color:var(--bg)}
 .np-next small{display:block;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;color:var(--pink-deep)}
 .np-next:hover small{color:var(--pink)}
@@ -623,6 +631,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .plate .pname{font-family:'Schibsted Grotesk',sans-serif;font-weight:800;text-transform:uppercase;font-size:var(--t-h3);line-height:var(--lh-tight);margin:0;
  transition:color .25s var(--ease),transform .25s var(--ease)}
 .plate:hover .pname{transform:translateX(8px)}
+.plate .pn-short{display:none}   /* короткая надпись плитки — только на телефоне (ниже) */
 
 .plate-big{grid-column:1/-1;min-height:clamp(240px,26vw,340px);
  align-items:center;justify-content:center;text-align:center;gap:var(--sp-xs)}
@@ -640,9 +649,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   .plates{grid-template-columns:repeat(2,1fr);gap:12px}
   .plate{min-height:clamp(128px,42vw,168px);padding:16px;justify-content:flex-end}
   .plate .pname{font-size:clamp(20px,5.6vw,27px);line-height:1.05;text-wrap:balance}
-  /* «РАБОТНИКИ» — самое длинное слово: в проде на телефоне вылезало за рамку плитки.
-     Уменьшаем только эту плитку, остальные — как были */
-  .plate[href="#workers"] .pname{font-size:clamp(15px,4.4vw,27px)}
+  /* на телефоне все четыре малые плитки одного кегля; «РАБОТНИКИ МЕСЯЦА» в него не
+     влезало (вылезало за рамку) — на плитке короткое «WORKERS», раздел зовётся как был */
+  .plate .pn-full{display:none}
+  .plate .pn-short{display:inline}
   .plate-big{min-height:clamp(180px,52vw,240px);padding:var(--sp-s);justify-content:center}
   .plate-big .pname{font-size:clamp(38px,12vw,60px)}
 }
@@ -1135,8 +1145,8 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
     </a><a class="plate plate-big reveal" href="#news" data-view="news">
       <span class="pname">NEWS</span>
       <span class="pgo">Читать всё →</span>
-    </a><a class="plate reveal" href="#workers" data-view="workers">
-      <span class="pname">Работники месяца</span>
+    </a><a class="plate reveal" href="#workers" data-view="workers" aria-label="Работники месяца">
+      <span class="pname"><span class="pn-full">Работники месяца</span><span class="pn-short">Workers</span></span>
     </a><a class="plate reveal" href="#merch" data-view="merch">
       <span class="pname">Merch</span>
     </a><a class="plate reveal" href="#top100" data-view="top100">
@@ -1499,7 +1509,10 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
         <span>Открыть пост в Telegram</span>
       </a>
     </div>
-    <button type="button" class="np-next" id="newsPostNextPost" hidden><span><small>Следующая новость</small><strong id="newsPostNextTitle"></strong></span><i aria-hidden="true">→</i></button>
+    <div class="np-pager">
+      <button type="button" class="np-next np-prev" id="newsPostPrevPost" hidden><i aria-hidden="true">←</i><span><small>Предыдущая новость</small><strong id="newsPostPrevTitle"></strong></span></button>
+      <button type="button" class="np-next" id="newsPostNextPost" hidden><span><small>Следующая новость</small><strong id="newsPostNextTitle"></strong></span><i aria-hidden="true">→</i></button>
+    </div>
   </article>
 </div>
 <div class="mn-toast" id="mnToast" role="status" aria-live="polite"></div>
@@ -2297,7 +2310,8 @@ window.__arcadeWinFX = function(host){
       npImg=document.getElementById('newsPostImg'), npText=document.getElementById('newsPostText'),
       npLink=document.getElementById('newsPostLink'), npClose=document.getElementById('newsPostClose'),
       npShare=document.getElementById('newsPostShare'), npNextPost=document.getElementById('newsPostNextPost'),
-      npNextTitle=document.getElementById('newsPostNextTitle'), toastEl=document.getElementById('mnToast');
+      npNextTitle=document.getElementById('newsPostNextTitle'), toastEl=document.getElementById('mnToast'),
+      npPrevPost=document.getElementById('newsPostPrevPost'), npPrevPostTitle=document.getElementById('newsPostPrevTitle');
   function lock(on){
     var m=on?'add':'remove';
     document.documentElement.classList[m]('sn-fs-lock');
@@ -2607,10 +2621,11 @@ window.__arcadeWinFX = function(host){
       npGal.hidden=false;
       galShow(0, 0);
     }
-    /* следующая (более старая) новость — листать, не возвращаясь к списку */
-    var l=postList(), k=indexOfPost(p), nx=(k>=0 && k+1<l.length) ? l[k+1] : null;
+    /* соседние новости: следующая — более старая, предыдущая — более свежая */
+    var l=postList(), k=indexOfPost(p), nx=(k>=0 && k+1<l.length) ? l[k+1] : null, pv=(k>0) ? l[k-1] : null;
     npNextPost.hidden=!nx; npNextPost._post=nx;
     if(nx) npNextTitle.textContent=parts(nx).title;
+    if(npPrevPost){ npPrevPost.hidden=!pv; npPrevPost._post=pv; if(pv) npPrevPostTitle.textContent=parts(pv).title; }
     if(!wasOpen){ lastFocus=document.activeElement; prevTitle=document.title; }
     document.title=(s.title ? cutText(s.title,70)+' — ' : '')+'87 · Macan News';
     np.hidden=false; np.scrollTop=0; lock(true); setInert(true);
@@ -2642,6 +2657,7 @@ window.__arcadeWinFX = function(host){
   }
   if(npClose) npClose.addEventListener('click', function(){ closePost(false); });
   if(npNextPost) npNextPost.addEventListener('click', function(){ var nx=npNextPost._post; if(nx){ openPost(nx,'replace'); np.scrollTop=0; } });
+  if(npPrevPost) npPrevPost.addEventListener('click', function(){ var pv=npPrevPost._post; if(pv){ openPost(pv,'replace'); np.scrollTop=0; } });
   if(npShare) npShare.addEventListener('click', function(){
     if(!curPost) return;
     var url=shareUrl(curPost), title=parts(curPost).title;

@@ -500,7 +500,7 @@ dl.gloss dd{color:var(--ink-soft)}
     </div></li>
     <li><div>
       <h4>Сборка модов <span class="opt">советуем</span></h4>
-      <p>Голосовой чат, больше FPS и удобный инвентарь — одним архивом с установщиком. Пара минут, вкладка <a href="#mods">«Моды»</a>.</p>
+      <p>Голосовой чат, больше FPS и удобный инвентарь — одним архивом. Пара минут, вкладка <a href="#mods">«Моды»</a>.</p>
     </div></li>
     <li><div>
       <h4>Discord <span class="opt">по желанию</span></h4>
@@ -654,16 +654,16 @@ dl.gloss dd{color:var(--ink-soft)}
   <div class="head">
     <div class="eyebrow">Fabric 1.21.11</div>
     <h2>Моды</h2>
-    <p>Одна сборка: голосовой чат, больше FPS и удобный инвентарь. Скачал, запустил установщик — играешь.</p>
+    <p>Одна сборка: голосовой чат, больше FPS и удобный инвентарь. Скачал, положил папку mods в игру — играешь.</p>
   </div>
 
-  <!-- Сборка лежит рядом: mods/87CRAFT-mods-1.21.11.zip (моды + УСТАНОВИТЬ.bat) и
+  <!-- Сборка лежит рядом: mods/87CRAFT-mods-1.21.11.zip (папка mods + «КАК УСТАНОВИТЬ.txt») и
        mods/87CRAFT-1.21.11.mrpack (Modrinth App / Prism). Исходники и проверка —
        папка «моды-сборка» в стенде. Меняешь состав — обнови и список ниже, и размер. -->
   <div class="pack">
     <div class="pack-main">
       <b>Сборка 87CRAFT</b>
-      <p>8 проверенных модов под Fabric 1.21.11 и установщик, который сам положит их в папку игры и уберёт старые версии.</p>
+      <p>8 проверенных модов под Fabric 1.21.11 одной папкой и короткая инструкция внутри архива.</p>
       <a class="btn btn-ink" href="mods/87CRAFT-mods-1.21.11.zip" download>Скачать сборку · 16 МБ</a>
       <p class="pack-alt">Играешь через Modrinth App или Prism Launcher? <a href="mods/87CRAFT-1.21.11.mrpack" download>Скачай .mrpack</a> — импорт в один клик, 87CRAFT уже в списке серверов.</p>
     </div>
@@ -680,12 +680,12 @@ dl.gloss dd{color:var(--ink-soft)}
   <div class="block">
     <h3>Как поставить</h3>
     <ol class="steps">
-      <li><div><h4>Скачай и распакуй</h4><p>Правой кнопкой по архиву → «Извлечь всё…» → «Извлечь».</p></div></li>
-      <li><div><h4>Запусти УСТАНОВИТЬ.bat</h4><p>Он сам положит моды в папку игры <code>%appdata%\.minecraft\mods</code>. Если Windows переспросит — «Подробнее» → «Выполнить в любом случае».</p></div></li>
-      <li><div><h4>Выбери в лаунчере Fabric 1.21.11</h4><p>TLauncher и Legacy Launcher — просто выбери в списке версию «Fabric 1.21.11». Официальный лаунчер — сначала поставь Fabric через <a href="https://fabricmc.net/use/installer/" target="_blank" rel="noopener">установщик</a> (версия 1.21.11 → Install).</p></div></li>
-      <li><div><h4>Нажми <kbd>V</kbd> в игре</h4><p>Откроется меню голосового чата: микрофон, громкость и режим.</p></div></li>
+      <li><div><h4>Запусти Fabric 1.21.11 один раз</h4><p>В списке версий лаунчера выбери «Fabric 1.21.11» и нажми «Играть». В официальном лаунчере её нет — сначала поставь <a href="https://fabricmc.net/use/installer/" target="_blank" rel="noopener">Fabric</a>: версия 1.21.11 → Install.</p></div></li>
+      <li><div><h4>Открой папку этой версии прямо из игры</h4><p>В главном меню: «Настройки» → «Пакеты ресурсов» → «Открыть папку пакетов». Откроется папка <code>resourcepacks</code> — поднимись на одну папку вверх (<kbd>Alt</kbd>+<kbd>↑</kbd>). Это папка твоей игры, в любом лаунчере.</p></div></li>
+      <li><div><h4>Положи туда папку mods из архива</h4><p>Если там уже есть <code>mods</code> с файлами — сначала убери старые, чтобы не смешались моды от разных версий. Файлы <b>.jar</b> распаковывать не нужно.</p></div></li>
+      <li><div><h4>Перезапусти игру</h4><p>Снова запусти «Fabric 1.21.11» — в главном меню появится кнопка «Моды». В игре нажми <kbd>V</kbd> — микрофон и громкость голосового чата.</p></div></li>
     </ol>
-    <div class="note" style="margin-top:var(--sp-s)">Mac, Linux или свой лаунчер — скопируй файлы из папки <code>mods</code> архива в папку <code>mods</code> игры. Сборку можно взять и у бота <a href="https://t.me/craft87_bot?start=mods" target="_blank" rel="noopener">@craft87_bot</a> (команда /mods), и в Discord, в канале «сервер».</div>
+    <div class="note" style="margin-top:var(--sp-s)">Так моды попадают только в ту версию, через которую ты играешь на сервере, — другие версии и сборки они не трогают. Сборку можно взять и у бота <a href="https://t.me/craft87_bot?start=mods" target="_blank" rel="noopener">@craft87_bot</a> (команда /mods), и в Discord, в канале «сервер».</div>
   </div>
 
   <div class="block">
@@ -734,7 +734,7 @@ dl.gloss dd{color:var(--ink-soft)}
       </ul>
     </div></details>
     <details><summary>Голосовой чат</summary><div class="body">
-      <p>Скачай сборку 87CRAFT во вкладке <a href="#mods">«Моды»</a> — в ней Plasmo Voice и установщик, и выбери в лаунчере Fabric 1.21.11. В игре меню голоса открывается на <kbd>V</kbd>.</p>
+      <p>Скачай сборку 87CRAFT во вкладке <a href="#mods">«Моды»</a> — в ней Plasmo Voice и пошаговая инструкция, как положить моды в нужную версию игры. В игре меню голоса открывается на <kbd>V</kbd>.</p>
       <p>Правила общения в голосовом те же, что и в чате.</p>
     </div></details>
     <details><summary>Нашёл баг или дюп</summary><div class="body">
