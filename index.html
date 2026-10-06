@@ -2,6 +2,11 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8"/>
+<!-- открытая новость получает адрес /n/<номер>/ (history.pushState) — чтобы ссылка
+     из адресной строки давала в Telegram/Discord превью этой новости. Чтобы при этом
+     относительные пути (assets/…, news.json) не начали искаться в /n/<номер>/…,
+     база ссылок закреплена за адресом, с которого страница открылась -->
+<script>(function(){try{var b=document.createElement('base');b.href=location.pathname+location.search;document.head.appendChild(b);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>87 · Macan News — Макан Ньюс | Новости 87</title>
 <meta name="description" content="87 · Macan News (Макан Ньюс) — официальный сайт новостного канала 87. Он же Macan 87, News 87, Новости 87. Мы определяем реальность."/>
@@ -1588,7 +1593,10 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
  var VIEWS=['home','workers','merch','news','87craft','pamyat','top100','games'];
  var TITLES={home:'87 · Macan News — Макан Ньюс | Новости 87',workers:'Работники месяца — 87 · Macan News',merch:'Merch — 87 · Macan News',news:'NEWS — 87 · Macan News',pamyat:'Светлая память — 87 · Macan News',top100:'ТОП 100 — 87 · Macan News',games:'Игры — 87 · Macan News','87craft':'87CRAFT — Minecraft-сервер · 87 · Macan News'};
  /* терпим к «грязным» ссылкам: #NEWS, #/news, #news?utm_source=… — всё ведёт в раздел */
- function slug(){var s=(location.hash||'').replace(/^#\/?/,'').split(/[?&\/#]/)[0].toLowerCase();try{s=decodeURIComponent(s);}catch(e){}return VIEWS.indexOf(s)>=0?s:'home';}
+ function slug(){
+   /* открытая новость живёт по адресу /n/<номер>/ (без #) — под ней раздел NEWS */
+   if(!location.hash && /^\/n\/[0-9A-Za-z_-]+\/?$/.test(location.pathname)) return 'news';
+   var s=(location.hash||'').replace(/^#\/?/,'').split(/[?&\/#]/)[0].toLowerCase();try{s=decodeURIComponent(s);}catch(e){}return VIEWS.indexOf(s)>=0?s:'home';}
  var _prevView='home';
  function showView(s, reveal){
    if(s==='87craft'){ location.replace('87craft/'+location.search); return; }
@@ -2185,12 +2193,24 @@ window.__arcadeWinFX = function(host){
   /* для открытого поста: «25 сентября 2026, 17:07» */
   function fullDate(iso){ var d=toDate(iso); return d ? d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear()+', '+hm(d) : ''; }
 
-  /* ---------- адрес поста ---------- */
-  function hashPostId(){ var m=/^#\/?news\/([0-9A-Za-z_-]+)/.exec(location.hash||''); return m ? m[1] : ''; }
+  /* ---------- адрес поста ----------
+     Открытый пост живёт по адресу /n/<номер>/ — это статическая страница поста от
+     робота ленты (поле page) с превью для Telegram, Discord, ВК. Поэтому ссылка,
+     скопированная прямо из адресной строки или отправленная «Поделиться» браузера,
+     показывает фото и заголовок именно этой новости. Старые ссылки #news/<номер>
+     открывают пост как раньше и сразу меняют адрес на /n/<номер>/. Перезагрузка
+     на /n/<номер>/ открывает статическую страницу поста. Нет page — #news/<номер>. */
+  var HOME=location.pathname+location.search;   /* адрес, с которого открылась страница */
+  function hashPostId(){
+    var m=/^#\/?news\/([0-9A-Za-z_-]+)/.exec(location.hash||'') || /^\/n\/([0-9A-Za-z_-]+)\/?$/.exec(location.pathname||'');
+    return m ? m[1] : '';
+  }
   function postHash(p){ return '#news/'+encodeURIComponent(p.id); }
+  function postAddr(p){ return p.page ? '/'+String(p.page).replace(/^\/+/,'') : postHash(p); }
+  function atAddr(a){ return a.charAt(0)==='#' ? location.hash===a : (location.pathname===a && !location.hash); }
   function shareUrl(p){
-    if(p.page){ try{ return new URL(p.page, location.href).href; }catch(e){} }
-    return location.protocol+'//'+location.host+location.pathname+postHash(p);
+    var a=postAddr(p);
+    return location.protocol+'//'+location.host+(a.charAt(0)==='#' ? HOME+a : a);
   }
 
   /* ---------- карточка ---------- */
@@ -2562,10 +2582,10 @@ window.__arcadeWinFX = function(host){
   function openPost(p, mode){
     if(!np){ window.open(p.url,'_blank','noopener'); return; }
     mode=mode||'push';
-    var target=postHash(p);
+    var target=postAddr(p);
     try{
-      if(mode==='push' && location.hash!==target){ history.pushState({mnPost:String(p.id)}, '', target); postPushed=true; }
-      else if(mode==='replace' && location.hash!==target){ history.replaceState(history.state, '', target); }
+      if(mode==='push' && !atAddr(target)){ history.pushState({mnPost:String(p.id)}, '', target); postPushed=true; }
+      else if(mode!=='push' && !atAddr(target)){ history.replaceState(history.state, '', target); }   /* replace и landing */
     }catch(e){}
     var wasOpen=!np.hidden, s=parts(p);
     curPost=p; curUrl=p.url;
@@ -2614,7 +2634,7 @@ window.__arcadeWinFX = function(host){
     if(prevTitle) document.title=prevTitle;
     if(!fromHistory){
       if(postPushed){ postPushed=false; try{ history.back(); }catch(e){} }
-      else if(hashPostId()){ try{ history.replaceState(null,'',location.pathname+location.search+'#news'); }catch(e){} }
+      else if(hashPostId()){ try{ history.replaceState(null,'',HOME+'#news'); }catch(e){} }
     }
     postPushed=false;
     if(lastFocus && lastFocus.focus && document.contains(lastFocus)){ try{ lastFocus.focus({preventScroll:true}); }catch(e){} }
@@ -2652,7 +2672,7 @@ window.__arcadeWinFX = function(host){
   /* пост по ссылке уже ушёл из ленты сайта (в ней последние посты) */
   var missingId='';
   function notFound(id){
-    try{ if(hashPostId()) history.replaceState(null,'',location.pathname+location.search+'#news'); }catch(e){}
+    try{ if(hashPostId()) history.replaceState(null,'',HOME+'#news'); }catch(e){}
     missingId=String(id); showMissing();
   }
   /* подсказка переживает перерисовку ленты (renderInto её восстанавливает) */
