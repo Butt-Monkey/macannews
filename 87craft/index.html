@@ -11,21 +11,21 @@
      скопированы сюда, чтобы страница не тянула 260 КБ главной.
      Заявка и статус идут через ту же Yandex-функцию, что и раньше (relay/). -->
 <title>87CRAFT — Minecraft-сервер · IP 87craft.ru</title>
-<meta name="description" content="87CRAFT — Minecraft-сервер от Macan News. Java 1.21.11, лицензия и пиратка. IP 87craft.ru: спавн открыт всем, основной мир — по заявке. Моды, гайды и правила."/>
+<meta name="description" content="87CRAFT — Minecraft-сервер от Macan News. Старт — пятница, 13 ноября, 18:07 МСК. IP 87craft.ru, Java 1.21.11, лицензия и пиратка. Заявки открыты уже сейчас."/>
 <link rel="canonical" href="https://macannews.ru/87craft/"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="87 · Macan News"/>
 <meta property="og:title" content="87CRAFT — Minecraft-сервер"/>
-<meta property="og:description" content="IP 87craft.ru · Java 1.21.11 · лицензия и пиратка. Спавн открыт всем, основной мир — по заявке."/>
+<meta property="og:description" content="Старт — 13 ноября в 18:07 МСК. IP 87craft.ru · Java 1.21.11 · лицензия и пиратка. Заявки открыты уже сейчас."/>
 <meta property="og:url" content="https://macannews.ru/87craft/"/>
 <meta property="og:locale" content="ru_RU"/>
-<meta property="og:image" content="https://macannews.ru/assets/og-87craft-2.png"/>
+<meta property="og:image" content="https://macannews.ru/assets/og-87craft-3.png"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
 <meta property="og:image:type" content="image/png"/>
 <meta property="og:image:alt" content="87CRAFT — Minecraft-сервер, IP 87craft.ru"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://macannews.ru/assets/og-87craft-2.png"/>
+<meta name="twitter:image" content="https://macannews.ru/assets/og-87craft-3.png"/>
 <meta name="theme-color" content="#050505"/>
 <meta name="color-scheme" content="only light"/>
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/craft87-32.png"/>
@@ -40,6 +40,12 @@
    запуска Метрики и убираем из адреса — в статистику он не попадает */
 var m=/^#status[\/=:]([A-Za-z0-9\- ]{8,14})$/.exec(location.hash||'');
 if(m){ window.__craftCode=m[1]; try{ history.replaceState(null,'',location.pathname+location.search+'#status'); }catch(e){} }
+/* Старт сервера — пт 13.11.2026, 18:07 МСК (= 15:07 UTC). До него на странице
+   видны блоки [data-pre] (отсчёт, «откроется 13 ноября»), после — [data-post].
+   Переключается само, в том числе у открытой вкладки ровно в 18:07 — в день
+   старта ничего перезаливать не нужно. Перенос старта — поменять только эту дату. */
+window.__craftLaunch=Date.UTC(2026,10,13,15,7);
+if(Date.now()>=window.__craftLaunch) document.documentElement.className+=' launched';
 var YM_ID=112939024;
 /* локальный предпросмотр (стенд, localhost) в статистику не пишем */
 if(/^(localhost|127.0.0.1)$/.test(location.hostname)) YM_ID=0;
@@ -179,6 +185,20 @@ code,kbd{font-family:ui-monospace,Consolas,monospace;font-size:.92em;background:
 }
 .ip-meta{margin-top:10px;font-size:var(--t-small);color:var(--ink-soft)}
 .hero .btns{margin-top:var(--sp-s)}
+
+/* до старта / после старта — класс launched ставит скрипт в <head> */
+html.launched [data-pre],html:not(.launched) [data-post]{display:none!important}
+/* отсчёт до старта — главный элемент героя до 13.11; IP пристыкован снизу */
+.launch{margin-top:var(--sp-s);max-width:560px;background:var(--ink);color:var(--bg);border:1.5px solid var(--ink)}
+.launch+.ip{margin-top:-1.5px}
+.launch-when{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;padding:14px 18px 0;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800}
+.launch-when b{color:var(--pink)}
+.launch-clock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:12px 0 16px}
+.launch-clock>div{padding:0 18px;border-left:1px solid rgba(247,244,238,.2)}
+.launch-clock>div:first-child{border-left:0}
+.launch-clock .n{display:block;font-family:'Minecraft87','Schibsted Grotesk',sans-serif;color:var(--pink);font-size:clamp(34px,5.2vw,58px);line-height:1}
+.launch-clock .l{display:block;margin-top:8px;font-size:11px;letter-spacing:var(--ls-caps);text-transform:uppercase;color:rgba(247,244,238,.6);font-weight:700}
+@media (max-width:460px){.launch-when{padding:12px 14px 0}.launch-clock>div{padding:0 10px 0 14px}}
 
 /* три шага «спавн → заявка → основной мир» */
 .flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1.5px solid var(--ink)}
@@ -391,6 +411,15 @@ dl.gloss dd{color:var(--ink-soft)}
       <h1 class="px" aria-label="87CRAFT">87CRAFT</h1>
       <p class="lead">Ванильное выживание с валютой, аукционом и голосовым чатом. Строим города, делим землю через суд и устраиваем ивенты — без читов и грифа.</p>
       <p class="srv" id="srvStatus" hidden><i></i><span id="srvText">Сервер онлайн</span></p>
+      <div class="launch" data-pre role="timer" aria-label="Старт сервера — пятница, 13 ноября, 18:07 по Москве">
+        <div class="launch-when"><span>Старт сервера</span><b>Пятница · 13.11 · 18:07 МСК</b></div>
+        <div class="launch-clock" id="launchLeft" aria-hidden="true">
+          <div><span class="n">00</span><span class="l">дней</span></div>
+          <div><span class="n">00</span><span class="l">часов</span></div>
+          <div><span class="n">00</span><span class="l">минут</span></div>
+          <div><span class="n">00</span><span class="l">секунд</span></div>
+        </div>
+      </div>
       <div class="ip">
         <span class="ip-label">IP</span>
         <span class="ip-value px">87craft.ru</span>
@@ -412,7 +441,12 @@ dl.gloss dd{color:var(--ink-soft)}
 
   <div class="block">
     <h3>Как устроен вход</h3>
-    <div class="flow">
+    <div class="flow" data-pre>
+      <div><b class="px">1</b><h4>Заявка — сейчас</h4><p>Минута: ник, имя, возраст. Модеры разберут её до старта, а по личному коду увидишь решение.</p></div>
+      <div><b class="px">2</b><h4>Старт — 13 ноября</h4><p>Пятница, 18:07 по Москве. Сервер открывается для всех разом.</p></div>
+      <div><b class="px">3</b><h4>Сразу в игру</h4><p>Одобренные заходят в основной мир без ожидания. Первые 87 — с титулом «Основатель».</p></div>
+    </div>
+    <div class="flow" data-post>
       <div><b class="px">1</b><h4>Спавн — сразу</h4><p>Заходи по IP хоть сейчас: спавн открыт всем. Осмотрись, познакомься, позови друзей.</p></div>
       <div><b class="px">2</b><h4>Заявка — минута</h4><p>Ник, как к тебе обращаться, возраст. После отправки получишь личный код заявки.</p></div>
       <div><b class="px">3</b><h4>Основной мир</h4><p>Модеры одобряют заявку — и основной мир открыт. Статус смотри по коду во вкладке «Статус заявки».</p></div>
@@ -434,6 +468,7 @@ dl.gloss dd{color:var(--ink-soft)}
   <div class="block">
     <h3>Частые вопросы</h3>
     <div class="acc">
+      <details data-pre><summary>Почему сейчас не пускает на сервер?</summary><div class="body"><p>Сервер откроется в <b>пятницу, 13 ноября, в 18:07 МСК</b> — до этого он закрыт. Заявку, сервер в списке и моды можно подготовить уже сейчас.</p></div></details>
       <details><summary>Нужна лицензия?</summary><div class="body"><p>Нет. Подойдёт любой лаунчер — официальный или пиратский. Главное — версия <b>Java Edition 1.21.11</b>.</p></div></details>
       <details><summary>Пишет «You do not have permissions» или не пускает в основной мир</summary><div class="body"><p>Значит, заявку ещё смотрят. Спавн при этом работает — играй, прогресс не пропадёт. Проверить статус можно во вкладке <a href="#status">«Статус заявки»</a>.</p></div></details>
       <details><summary>Что за /register и /login?</summary><div class="body"><p>Это пароль от твоего ника на сервере. При первом входе напиши <code>/register пароль пароль</code>, дальше при каждом входе — <code>/login пароль</code>. Не бери пароль от почты или других игр.</p></div></details>
@@ -447,7 +482,8 @@ dl.gloss dd{color:var(--ink-soft)}
   <div class="band">
     <div>
       <h3>Готов?</h3>
-      <p>Подай заявку — и пока её смотрят, заходи на спавн: <b>87craft.ru</b></p>
+      <p data-pre>Пятница, 13 ноября, 18:07. Подай заявку заранее — и в основной мир с первой минуты.</p>
+      <p data-post>Подай заявку — и пока её смотрят, заходи на спавн: <b>87craft.ru</b></p>
     </div>
     <div class="btns">
       <a class="btn btn-ink" href="#apply">Подать заявку</a>
@@ -461,7 +497,8 @@ dl.gloss dd{color:var(--ink-soft)}
   <div class="head">
     <div class="eyebrow">Пошагово · 5 минут</div>
     <h2>Как зайти</h2>
-    <p>От запуска игры до основного мира. Моды не нужны — сервер работает на чистой версии.</p>
+    <p data-post>От запуска игры до основного мира. Моды не нужны — сервер работает на чистой версии.</p>
+    <p data-pre>Сервер откроется 13 ноября в 18:07 МСК. Всё, что ниже, можно сделать заранее — чтобы на старте просто нажать «Подключиться».</p>
   </div>
 
   <div class="reqs">
@@ -491,7 +528,8 @@ dl.gloss dd{color:var(--ink-soft)}
     </div></li>
     <li><div>
       <h4>Осваивайся на спавне</h4>
-      <p>Спавн открыт всем сразу — бегай, знакомься, зови друзей. Прогресс никуда не денется.</p>
+      <p data-post>Спавн открыт всем сразу — бегай, знакомься, зови друзей. Прогресс никуда не денется.</p>
+      <p data-pre>С 18:07 13 ноября спавн открыт всем — бегай, знакомься, зови друзей.</p>
     </div></li>
     <li><div>
       <h4>Подай заявку</h4>
@@ -515,7 +553,8 @@ dl.gloss dd{color:var(--ink-soft)}
   <div class="head">
     <div class="eyebrow">Вайтлист · основной мир</div>
     <h2>Заявка</h2>
-    <p>Минута и четыре поля. После отправки получишь личный код — по нему проверишь, одобрили ли заявку.</p>
+    <p data-pre>Займи ник до старта. Заявки разберём заранее: одобренные заходят в основной мир с первой минуты, первые 87 — с титулом «Основатель».</p>
+    <p data-post>Минута и четыре поля. После отправки получишь личный код — по нему проверишь, одобрили ли заявку.</p>
   </div>
   <div class="split">
     <div>
@@ -575,7 +614,8 @@ dl.gloss dd{color:var(--ink-soft)}
           </div>
         </div>
         <ol class="mini">
-          <li>Заходи на спавн: <b>87craft.ru</b>, Java 1.21.11.</li>
+          <li data-pre>13 ноября в 18:07 заходи: <b>87craft.ru</b>, Java 1.21.11.</li>
+          <li data-post>Заходи на спавн: <b>87craft.ru</b>, Java 1.21.11.</li>
           <li>При первом входе — <code>/register пароль пароль</code>.</li>
           <li>Проверяй статус во вкладке <a href="#status">«Статус заявки»</a>.</li>
         </ol>
@@ -590,7 +630,8 @@ dl.gloss dd{color:var(--ink-soft)}
       <h4>Что дальше</h4>
       <ol class="mini">
         <li>Заявка попадает к модерам — они смотрят её вручную.</li>
-        <li>Пока ждёшь, играй на спавне: <b>87craft.ru</b> открыт всем.</li>
+        <li data-pre>Сервер откроется в пятницу, 13 ноября, в 18:07 МСК: <b>87craft.ru</b>.</li>
+        <li data-post>Пока ждёшь, играй на спавне: <b>87craft.ru</b> открыт всем.</li>
         <li>Решение и комментарий модера — во вкладке <a href="#status">«Статус заявки»</a> по твоему коду.</li>
         <li>Одобрили — основной мир открыт. Перезайди на сервер, если был онлайн.</li>
       </ol>
@@ -884,6 +925,36 @@ dl.gloss dd{color:var(--ink-soft)}
 
   function goal(n){ if(window.mnGoal) window.mnGoal(n); }
   function $(id){ return document.getElementById(id); }
+
+  /* ── старт 13.11 18:07 МСК: отсчёт в карточке «Старт», в момент старта
+     страница сама переходит на обычные тексты (класс launched, см. <head>) ── */
+  var LAUNCH=window.__craftLaunch||0;
+  function launched(){ return Date.now()>=LAUNCH; }
+  (function(){
+    var el=$('launchLeft'); if(!el || launched()) return;
+    function p2(n){ return (n<10?'0':'')+n; }
+    function pl(n, a, b, c){ var m=n%10, h=n%100; return (m===1&&h!==11)?a:(m>=2&&m<=4&&(h<12||h>14))?b:c; }
+    var cells=el.querySelectorAll('div'), FORMS=[['день','дня','дней'],['час','часа','часов'],['минута','минуты','минут'],['секунда','секунды','секунд']];
+    var timer=null;
+    function tick(){
+      var s=Math.floor((LAUNCH-Date.now())/1000);
+      if(s<=0){
+        clearInterval(timer);
+        document.documentElement.className+=' launched';
+        TEXTS=buildTexts(); refreshMine(true);
+        return;
+      }
+      var d=Math.floor(s/86400), h=Math.floor(s%86400/3600), m=Math.floor(s%3600/60);
+      [d, h, m, s%60].forEach(function(v, i){
+        cells[i].firstChild.textContent=p2(v);
+        cells[i].lastChild.textContent=pl(v, FORMS[i][0], FORMS[i][1], FORMS[i][2]);
+      });
+    }
+    /* секунды тикают, только пока вкладку видно; вернулся — сразу пересчёт */
+    function run(){ clearInterval(timer); if(document.hidden || /\blaunched\b/.test(document.documentElement.className)) return; tick(); if(!launched()) timer=setInterval(tick, 1000); }
+    document.addEventListener('visibilitychange', run);
+    run();
+  })();
   function store(key, val){ try{ if(val===undefined) return JSON.parse(localStorage.getItem(key)||'null'); localStorage.setItem(key, JSON.stringify(val)); }catch(e){ return null; } }
 
   /* заголовок героя — по буквам для анимации «падающих блоков» */
@@ -1043,9 +1114,12 @@ dl.gloss dd{color:var(--ink-soft)}
     done.querySelector('.keep .ip-meta').textContent = TG_BOT
       ? 'Или просто сделай скриншот этого экрана.'
       : '«Сохранить в Telegram» — выбери чат «Избранное». Или просто сделай скриншот этого экрана.';
-    $('craftDoneSub').textContent = code
-      ? 'Модеры посмотрят её и откроют тебе основной мир. Сохрани код ниже.'
-      : 'Модеры посмотрят её и откроют тебе основной мир. Если что-то непонятно — напиши нам в Telegram или Discord.';
+    var subHead = launched()
+      ? 'Модеры посмотрят её и откроют тебе основной мир.'
+      : 'Модеры посмотрят её до старта — 13 ноября в 18:07 основной мир откроется тебе сразу.';
+    $('craftDoneSub').textContent = subHead + (code
+      ? ' Сохрани код ниже.'
+      : ' Если что-то непонятно — напиши нам в Telegram или Discord.');
     if(code){
       $('craftCode').textContent=code; $('craftCodeCopy').setAttribute('data-copy', code); $('checkCode').value=code;
       var link=statusLink(code);
@@ -1111,11 +1185,17 @@ dl.gloss dd{color:var(--ink-soft)}
 
   /* ── статус заявки ── */
   var checkForm=$('checkForm'), checkCode=$('checkCode'), checkBtn=$('checkBtn'), checkMsg=$('checkMsg'), res=$('checkRes'), savedBox=$('savedCodes');
-  var TEXTS={
-    pending:{badge:'На рассмотрении', cls:'', title:'Заявку ещё смотрят', text:'Модеры пока не приняли решение. Пока ждёшь — играй на спавне 87craft.ru, прогресс не пропадёт.'},
-    approved:{badge:'Одобрена', cls:'ok', title:'Основной мир открыт', text:'Заходи на 87craft.ru. Если был онлайн, пока модеры решали, — перезайди на сервер.'},
+  /* тексты статуса до старта другие: заходить пока некуда */
+  function buildTexts(){ var PRE=!launched(); return {
+    pending:{badge:'На рассмотрении', cls:'', title:'Заявку ещё смотрят', text: PRE
+      ? 'Модеры пока не приняли решение — до старта успеют. Сервер откроется в пятницу, 13 ноября, в 18:07 МСК.'
+      : 'Модеры пока не приняли решение. Пока ждёшь — играй на спавне 87craft.ru, прогресс не пропадёт.'},
+    approved:{badge:'Одобрена', cls:'ok', title: PRE ? 'Ты в списке' : 'Основной мир открыт', text: PRE
+      ? 'Основной мир откроется тебе сразу на старте — в пятницу, 13 ноября, в 18:07 МСК. IP: 87craft.ru.'
+      : 'Заходи на 87craft.ru. Если был онлайн, пока модеры решали, — перезайди на сервер.'},
     rejected:{badge:'Отклонена', cls:'bad', title:'Заявку отклонили', text:'Причину модер обычно пишет в комментарии. Исправь, что не так, и подай заявку заново.'}
-  };
+  }; }
+  var TEXTS=buildTexts();
   function fmtDate(iso){
     if(!iso) return '';
     var d=new Date(iso); if(isNaN(d)) return '';
