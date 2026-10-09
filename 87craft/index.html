@@ -950,8 +950,9 @@ dl.gloss dd{color:var(--ink-soft)}
         cells[i].lastChild.textContent=pl(v, FORMS[i][0], FORMS[i][1], FORMS[i][2]);
       });
     }
-    /* секунды тикают, только пока вкладку видно; вернулся — сразу пересчёт */
-    function run(){ clearInterval(timer); if(document.hidden || /\blaunched\b/.test(document.documentElement.className)) return; tick(); if(!launched()) timer=setInterval(tick, 1000); }
+    /* цифры рисуем сразу (даже в фоновой вкладке — иначе видны нули), а секунды
+       тикают, только пока вкладку видно; вернулся — сразу пересчёт */
+    function run(){ clearInterval(timer); if(/\blaunched\b/.test(document.documentElement.className)) return; tick(); if(!document.hidden && !launched()) timer=setInterval(tick, 1000); }
     document.addEventListener('visibilitychange', run);
     run();
   })();
