@@ -188,17 +188,18 @@ code,kbd{font-family:ui-monospace,Consolas,monospace;font-size:.92em;background:
 
 /* до старта / после старта — класс launched ставит скрипт в <head> */
 html.launched [data-pre],html:not(.launched) [data-post]{display:none!important}
-/* отсчёт до старта — главный элемент героя до 13.11; IP пристыкован снизу */
-.launch{margin-top:var(--sp-s);max-width:560px;background:var(--ink);color:var(--bg);border:1.5px solid var(--ink)}
-.launch+.ip{margin-top:-1.5px}
-.launch-when{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;padding:14px 18px 0;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800}
-.launch-when b{color:var(--pink)}
-.launch-clock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:12px 0 16px}
-.launch-clock>div{padding:0 18px;border-left:1px solid rgba(247,244,238,.2)}
-.launch-clock>div:first-child{border-left:0}
-.launch-clock .n{display:block;font-family:'Minecraft87','Schibsted Grotesk',sans-serif;color:var(--pink);font-size:clamp(34px,5.2vw,58px);line-height:1}
-.launch-clock .l{display:block;margin-top:8px;font-size:11px;letter-spacing:var(--ls-caps);text-transform:uppercase;color:rgba(247,244,238,.6);font-weight:700}
-@media (max-width:460px){.launch-when{padding:12px 14px 0}.launch-clock>div{padding:0 10px 0 14px}}
+/* отсчёт до старта (вариант «строкой», выбор пользователя 2026-10-09): без заливки,
+   тонкие линии сверху и снизу, чёрные пиксельные цифры; IP — отдельной карточкой ниже */
+.launch{margin-top:var(--sp-s);max-width:560px;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);padding:14px 0 16px}
+.launch+.ip{margin-top:var(--sp-s)}
+.launch-when{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;font-size:var(--t-caption);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:800}
+.launch-when b{color:var(--pink-deep)}
+.launch-clock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding-top:12px}
+.launch-clock>div{padding:0 18px;border-left:1px solid var(--line)}
+.launch-clock>div:first-child{padding-left:0;border-left:0}
+.launch-clock .n{display:block;font-family:'Minecraft87','Schibsted Grotesk',sans-serif;color:var(--ink);font-size:clamp(28px,4vw,44px);line-height:1}
+.launch-clock .l{display:block;margin-top:8px;font-size:11px;letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+@media (max-width:460px){.launch-clock>div{padding:0 8px 0 12px}.launch-clock>div:first-child{padding-left:0}}
 
 /* три шага «спавн → заявка → основной мир» */
 .flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1.5px solid var(--ink)}
