@@ -1140,7 +1140,7 @@ html.sn-fs-lock,body.sn-fs-lock{ overflow:hidden!important; overscroll-behavior:
 </header><div class="ticker inline" aria-hidden="true"><div class="ticker-track"><span class="">Macan News</span><span class="st">✦</span><span class="">87</span><span class="st">✦</span><span class="">Breaking</span><span class="st">✦</span><span class="">Eight-Seven</span><span class="st">✦</span><span class="">Exclusive</span><span class="st">✦</span><span class="">Macan News</span><span class="st">✦</span><span class="">87</span><span class="st">✦</span><span class="">Breaking</span><span class="st">✦</span><span class="">Eight-Seven</span><span class="st">✦</span><span class="">Exclusive</span><span class="st">✦</span></div></div><section class="plates-sec"><div class="wrap">
   <div class="plates"><a class="plate plate-big plate-craft reveal" href="87craft/">
       <span class="ptag" id="craftPlateTag">IP 87craft.ru · Java 1.21.11</span>
-      <script>/* до старта 87CRAFT (пт 13.11.2026 18:07 МСК) вместо IP на плитке — дата старта */if(Date.now()<Date.UTC(2026,10,13,15,7))document.getElementById('craftPlateTag').textContent='Старт 13.11 · 18:07';</script>
+      <script>/* до старта 87CRAFT (пт 23.10.2026 18:07 МСК) вместо IP на плитке — дата старта */if(Date.now()<Date.UTC(2026,9,23,15,7))document.getElementById('craftPlateTag').textContent='Старт 23.10 · 18:07';</script>
       <span class="pname">87CRAFT</span>
       <span class="pgo">Подать заявку →</span>
     </a><a class="plate plate-big reveal" href="#news" data-view="news">
@@ -2833,9 +2833,9 @@ window.__arcadeWinFX = function(host){
       fab=document.getElementById('yeFab'), fabDot=document.getElementById('yeFabDot'),
       chat=document.getElementById('yeChat'), chatBody=document.getElementById('yeChatBody'),
       chatFoot=document.getElementById('yeChatFoot'), chatClose=document.getElementById('yeChatClose');
-  /* до старта 87CRAFT (пт 13.11.2026 18:07 МСК = 15:07 UTC) Ye зовёт занять ник,
+  /* до старта 87CRAFT (пт 23.10.2026 18:07 МСК = 15:07 UTC) Ye зовёт занять ник,
      после — играть; переключается само по времени посетителя */
-  var PRE=Date.now()<Date.UTC(2026,10,13,15,7);
+  var PRE=Date.now()<Date.UTC(2026,9,23,15,7);
   var DELAY=3000, TOAST_TYPING=1300;
   /* сценарий: q — кнопка пользователя, a — реплики Ye по очереди, final — завершает диалог.
      До старта — свой сценарий целиком (сервер закрыт, Ye ждёт пятницу 13-го). */
@@ -2845,9 +2845,9 @@ window.__arcadeWinFX = function(host){
     SCRIPT=[
       {q:'А что там делать?', a:['Строить, фармить, устраивать ивенты. Без броуков и сничей — только свои.',
                                 'Я уже присмотрел место под особняк из обсидиана. Скромно, по-моему.']},
-      {q:'Как попасть?', a:['Пятница, 13 ноября, 18:07. IP 87craft.ru, Java 1.21.11 — хоть с пиратки.',
+      {q:'Как попасть?', a:['Пятница, 23 октября, 18:07. IP 87craft.ru, Java 1.21.11 — хоть с пиратки.',
                            'Заявку кидай уже сейчас: одобрят заранее — и на старте сразу в основной мир. Первые 87 станут Основателями.']},
-      {q:'Пятница, 13-е? Серьёзно?', a:['Суеверные пусть сидят дома. Нам больше земли.']},
+      {q:'Почему 23-е, а не ноябрь?', a:['Потому что ждать до ноября — слишком долго. Мир готов, заходи.']},
       {q:'Погнали', final:true, a:['Вот это разговор. 13-го в 18:07 — не опаздывай 🤝'], link:true}
     ];
   } else {
@@ -2885,7 +2885,7 @@ window.__arcadeWinFX = function(host){
     var a=document.createElement('a');
     a.className='ye-link'; a.href='87craft/';
     a.innerHTML='<div class="ye-link-top"><div class="ye-link-name">87CRAFT</div>'+
-      '<div class="ye-link-sub">'+(PRE ? 'Старт 13.11 · 18:07 МСК' : 'IP 87craft.ru · Java 1.21.11')+'</div></div>'+
+      '<div class="ye-link-sub">'+(PRE ? 'Старт 23.10 · 18:07 МСК' : 'IP 87craft.ru · Java 1.21.11')+'</div></div>'+
       '<span class="ye-link-go">Открыть →</span>';
     a.addEventListener('click', function(){ closeChat(); });
     chatBody.appendChild(a); scrollDown();
