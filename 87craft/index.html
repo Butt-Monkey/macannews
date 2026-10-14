@@ -286,6 +286,26 @@ html.launched [data-pre],html:not(.launched) [data-post]{display:none!important}
 .notify p{font-size:var(--t-small);margin-bottom:12px}
 .res-tg{margin-top:14px;font-size:var(--t-small);font-weight:700}
 .res-tg .btn{min-height:44px;padding:10px 18px}
+/* плашка Discord: после отправки заявки и под статусом — чёрная шапка с логотипом,
+   жёсткая тень как у кнопок-наклеек, крупная розовая кнопка на всю ширину */
+.dc{margin-top:var(--sp-xs);max-width:560px;border:1.5px solid var(--ink);background:var(--card);box-shadow:6px 6px 0 var(--ink)}
+.dc-top{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--ink);color:var(--bg)}
+.dc-logo{width:24px;height:24px;flex-shrink:0;fill:currentColor}
+.dc-top .px{font-size:15px;letter-spacing:.06em;white-space:nowrap}
+.dc-live{margin-left:auto;display:inline-flex;align-items:center;gap:7px;font-size:var(--t-caption);letter-spacing:.08em;text-transform:uppercase;font-weight:700;white-space:nowrap}
+.dc-live i{width:8px;height:8px;border-radius:50%;background:#3BA55D;box-shadow:0 0 0 3px rgba(59,165,93,.28)}
+.dc-body{padding:18px}
+.dc-h{font-size:var(--t-h4);font-weight:800;line-height:1.2}
+.dc-list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px;font-size:var(--t-small)}
+.dc-list li{position:relative;padding-left:22px}
+.dc-list li::before{content:"";position:absolute;left:2px;top:.42em;width:9px;height:9px;background:var(--pink);border:1.5px solid var(--ink)}
+.dc-btn{margin-top:16px;width:100%;min-height:56px;font-size:15px}
+.dc-btn span{transition:transform .25s var(--ease)}
+.dc-btn:hover span{transform:translateX(5px)}
+.dc-meta{margin-top:10px;font-size:var(--t-caption);color:var(--ink-soft);line-height:1.5}
+.dc.is-joined .dc-btn{background:transparent;border-color:var(--ink)}
+.dc.is-joined .dc-btn:hover{background:var(--ink);color:var(--bg)}
+@media (max-width:460px){.dc{box-shadow:5px 5px 0 var(--ink);margin-right:5px}.dc-top{padding:10px 14px}.dc-top .px{font-size:13px}.dc-body{padding:16px}.dc-live b+span{display:none}}
 .help{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px var(--sp-s);align-items:center;border:1.5px solid var(--ink);background:var(--card);padding:var(--sp-s)}
 .help h3{font-size:var(--t-h4);font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
 .help p{margin-top:6px;font-size:var(--t-small);color:var(--ink-soft)}
@@ -367,6 +387,7 @@ dl.gloss dd{color:var(--ink-soft)}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="dcGlyph" viewBox="0 0 24 24"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></symbol></svg>
 <a class="sr-only" href="#main">К содержимому</a>
 
 <header class="top">
@@ -473,7 +494,7 @@ dl.gloss dd{color:var(--ink-soft)}
       <details><summary>Нужна лицензия?</summary><div class="body"><p>Нет. Подойдёт любой лаунчер — официальный или пиратский. Главное — версия <b>Java Edition 1.21.11</b>.</p></div></details>
       <details><summary>Пишет «You do not have permissions» или не пускает в основной мир</summary><div class="body"><p>Значит, заявку ещё смотрят. Спавн при этом работает — играй, прогресс не пропадёт. Проверить статус можно во вкладке <a href="#status">«Статус заявки»</a>.</p></div></details>
       <details><summary>Что за /register и /login?</summary><div class="body"><p>Это пароль от твоего ника на сервере. При первом входе напиши <code>/register пароль пароль</code>, дальше при каждом входе — <code>/login пароль</code>. Не бери пароль от почты или других игр.</p></div></details>
-      <details><summary>Обязателен ли Discord?</summary><div class="body"><p>Нет. Заявка, статус, правила и гайды — всё здесь, на сайте. В Discord новости, ивенты и помощь от модеров. В России он работает с перебоями — поэтому всё нужное для игры есть здесь.</p></div></details>
+      <details><summary>Нужен ли Discord?</summary><div class="body"><p>Очень советуем зайти. Там анонсы и ивенты раньше всех, помощь модеров и игроки, с кем можно строить город. Играть можно и без него — заявка, статус, правила и гайды есть здесь, на сайте. Если Discord не открывается, попробуй позже или с другого интернета.</p></div></details>
       <details><summary>Не могу подключиться</summary><div class="body"><p>Проверь версию — нужна ровно <b>1.21.11</b>. Адрес — <code>87craft.ru</code>, без порта. Не помогло — загляни в <a href="#guides">гайды</a> или напиши в Discord в канал «помощь»: ник, лаунчер и скриншот ошибки.</p></div></details>
       <details data-tgbot hidden><summary>Как узнать, что заявку одобрили?</summary><div class="body"><p>После отправки заявки жми «Уведомить в Telegram» — бот напишет тебе лично, как только модеры решат. А ещё статус всегда виден вверху этой страницы (плашка «Твоя заявка») и во вкладке <a href="#status">«Статус заявки»</a>. Чужие решения никто не видит — только своё.</p></div></details>
       <details><summary>С заявкой что-то не так</summary><div class="body"><p>Напиши нам в <a href="https://t.me/macan777macan777macan777?direct" target="_blank" rel="noopener">Telegram</a> — это сообщения каналу 87. Или в Discord: канал «помощь» либо просто в «общение».</p></div></details>
@@ -542,9 +563,9 @@ dl.gloss dd{color:var(--ink-soft)}
       <p>Голосовой чат, больше FPS и удобный инвентарь — одним архивом. Пара минут, вкладка <a href="#mods">«Моды»</a>.</p>
     </div></li>
     <li><div>
-      <h4>Discord <span class="opt">по желанию</span></h4>
-      <p>Новости, ивенты, помощь модеров. Ник в Discord лучше поставить как в Minecraft: название сервера слева сверху → «Редактировать личный профиль сервера» → «Никнейм». В России Discord работает с перебоями — если не открывается, всё нужное для игры есть на этой странице.</p>
-      <div class="btns" style="margin-top:14px"><a class="btn js-discord" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">Открыть Discord</a></div>
+      <h4>Discord <span class="opt">важно</span></h4>
+      <p>Здесь живёт сервер: анонсы, ивенты, помощь модеров и игроки, с кем строить город. Ник в Discord поставь как в Minecraft: название сервера слева сверху → «Редактировать личный профиль сервера» → «Никнейм». В России Discord работает с перебоями — если не открывается, всё нужное для игры есть на этой странице.</p>
+      <div class="btns" style="margin-top:14px"><a class="btn btn-ink js-discord" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">Зайти в Discord</a></div>
     </div></li>
   </ol>
 </section>
@@ -601,6 +622,21 @@ dl.gloss dd{color:var(--ink-soft)}
             <span class="code-v px" id="craftCode">87-XXXX-XXXX</span>
             <button class="ip-copy" type="button" id="craftCodeCopy">Скопировать</button>
           </div>
+        </div>
+        <div class="dc" data-dc>
+          <div class="dc-top"><svg class="dc-logo" viewBox="0 0 24 24" aria-hidden="true"><use href="#dcGlyph"/></svg><span class="px">Discord 87CRAFT</span><span class="dc-live" hidden><i></i><b></b><span></span></span></div>
+          <div class="dc-body">
+            <h4 class="dc-h">Теперь — в Discord</h4>
+            <ul class="dc-list">
+              <li>Анонсы и ивенты — там раньше всех</li>
+              <li>Модеры отвечают в «помощи», если не пускает</li>
+              <li>Игроки, с кем строить город и делить землю</li>
+            </ul>
+            <a class="btn btn-pink dc-btn js-discord" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">Зайти в Discord <span aria-hidden="true">→</span></a>
+            <p class="dc-meta">Ник там поставь как в Minecraft — так модеры найдут твою заявку.</p>
+          </div>
+        </div>
+        <div id="craftCodeExtra">
           <div class="notify" data-tgbot hidden>
             <p><b>🔔 Узнай о решении первым.</b> Жми кнопку, в Telegram нажми «Запустить» — бот напишет тебе, как только модеры решат. Лично тебе, никто другой не увидит.</p>
             <a class="btn btn-ink js-tgbot" href="#" target="_blank" rel="noopener">Уведомить в Telegram</a>
@@ -681,6 +717,16 @@ dl.gloss dd{color:var(--ink-soft)}
         <span id="resTgOn" hidden>🔔 Уведомление о решении придёт тебе в Telegram.</span>
         <a class="btn btn-pink js-tgbot" id="resTgBtn" href="#" target="_blank" rel="noopener" hidden>Уведомить в Telegram</a>
       </div>
+    </div>
+  </div>
+
+  <div class="dc" id="resDc" data-dc hidden>
+    <div class="dc-top"><svg class="dc-logo" viewBox="0 0 24 24" aria-hidden="true"><use href="#dcGlyph"/></svg><span class="px">Discord 87CRAFT</span><span class="dc-live" hidden><i></i><b></b><span></span></span></div>
+    <div class="dc-body">
+      <h4 class="dc-h" id="resDcTitle">Заходи в Discord</h4>
+      <ul class="dc-list" id="resDcList"></ul>
+      <a class="btn btn-pink dc-btn js-discord" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">Зайти в Discord <span aria-hidden="true">→</span></a>
+      <p class="dc-meta">Ник там поставь как в Minecraft — так модеры найдут твою заявку.</p>
     </div>
   </div>
 
@@ -1028,7 +1074,28 @@ dl.gloss dd{color:var(--ink-soft)}
     });
     goal('craft_ip_copy');
   });
+  /* плашки Discord: «уже заходил» помним на устройстве (кнопка становится спокойнее),
+     живой счётчик — из открытого API приглашения; из РФ может не ответить — тогда молча без него */
+  var DC_KEY='craft87_dc';
+  function dcMark(){ [].forEach.call(document.querySelectorAll('[data-dc]'), function(c){ c.classList.toggle('is-joined', !!store(DC_KEY)); }); }
+  dcMark();
+  var dcLoaded=false;
+  function dcLive(){
+    if(dcLoaded || !window.fetch) return; dcLoaded=true;
+    var code=(DISCORD_INVITE_URL.match(/discord\.gg\/([\w-]+)/)||[])[1]; if(!code) return;
+    fetch('https://discord.com/api/v10/invites/'+code+'?with_counts=true').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+      if(!d || !d.approximate_member_count) return;
+      var on=d.approximate_presence_count||0, all=d.approximate_member_count;
+      [].forEach.call(document.querySelectorAll('[data-dc] .dc-live'), function(el){
+        el.querySelector('b').textContent=on+' в сети';
+        el.querySelector('span').textContent='· '+all+' '+plural(all,'участник','участника','участников');
+        el.hidden=false;
+      });
+    }).catch(function(){});
+  }
+  function plural(n,a,b,c){ var m=n%10, h=n%100; return m===1&&h!==11 ? a : (m>=2&&m<=4&&(h<12||h>14) ? b : c); }
   [].forEach.call(document.querySelectorAll('.js-discord'), function(a){
+    a.addEventListener('click', function(){ if(a.closest && a.closest('[data-dc]')){ store(DC_KEY, 1); setTimeout(dcMark, 400); } });
     a.href=DISCORD_INVITE_URL;
     a.addEventListener('click', function(){ goal('craft_discord'); });
   });
@@ -1109,7 +1176,7 @@ dl.gloss dd{color:var(--ink-soft)}
 
   function showDone(code){
     form.hidden=true; done.hidden=false;
-    $('craftCodeBox').hidden=!code;
+    $('craftCodeBox').hidden=!code; $('craftCodeExtra').hidden=!code; dcLive();
     done.querySelector('.notify').hidden=!(code && TG_BOT);
     /* с ботом «Сохранить в Telegram» лишняя: бот и так запомнит код */
     $('craftTgSave').hidden=!!TG_BOT;
@@ -1198,6 +1265,28 @@ dl.gloss dd{color:var(--ink-soft)}
     rejected:{badge:'Отклонена', cls:'bad', title:'Заявку отклонили', text:'Причину модер обычно пишет в комментарии. Исправь, что не так, и подай заявку заново.'}
   }; }
   var TEXTS=buildTexts();
+  /* плашка Discord под статусом — свой текст на каждое решение */
+  function showResDc(status){
+    var PRE=!launched(), t={
+      approved:{h: PRE ? 'Ты в списке — теперь в Discord' : 'Мир открыт — заходи и в Discord', li:[
+        PRE ? 'Там объявят старт и всё, что поменяется до него' : 'Анонсы, ивенты и новости сервера — там раньше всех',
+        'Найдёшь, с кем строить город и делить землю',
+        'Не пускает или вопрос — модеры отвечают в «помощи»']},
+      pending:{h:'Пока ждёшь — заходи в Discord', li:[
+        'Анонсы и ивенты — там раньше всех',
+        'Можно заранее найти команду и место под город',
+        'Вопрос по заявке — модеры отвечают в «помощи»']},
+      rejected:{h:'Вопрос по решению — пиши в Discord', li:[
+        'В канале «помощь» модеры объяснят, что поправить',
+        'Исправишь — подавай заявку заново, это быстро',
+        'Анонсы и ивенты увидишь и без вайтлиста']}
+    }[status] || null;
+    var box=$('resDc'); if(!t){ box.hidden=true; return; }
+    $('resDcTitle').textContent=t.h;
+    var ul=$('resDcList'); ul.innerHTML='';
+    t.li.forEach(function(s){ var li=document.createElement('li'); li.textContent=s; ul.appendChild(li); });
+    box.hidden=false; dcMark(); dcLive();
+  }
   function fmtDate(iso){
     if(!iso) return '';
     var d=new Date(iso); if(isNaN(d)) return '';
@@ -1219,7 +1308,7 @@ dl.gloss dd{color:var(--ink-soft)}
   var busy=false;
   function check(raw, saveHere){
     var code=normCode(raw);
-    if(!code){ setCheckMsg('Код выглядит так: 87-XXXX-XXXX — восемь букв и цифр после «87».', true); res.hidden=true; checkCode.focus(); return; }
+    if(!code){ setCheckMsg('Код выглядит так: 87-XXXX-XXXX — восемь букв и цифр после «87».', true); res.hidden=true; $('resDc').hidden=true; checkCode.focus(); return; }
     if(busy) return; busy=true;
     checkCode.value=code; renderSaved(code);
     checkBtn.disabled=true; setCheckMsg('Проверяем…'); goal('craft_status_check');
@@ -1227,17 +1316,17 @@ dl.gloss dd{color:var(--ink-soft)}
       var d=r.data||{};
       /* ответ не JSON — функция ещё старой версии, без проверки статуса */
       if(r.ok && !r.data){
-        res.hidden=true;
+        res.hidden=true; $('resDc').hidden=true;
         setCheckMsg('Проверка статуса временно не отвечает — попробуй через пару минут.', true);
         return;
       }
       if(!r.ok){
-        res.hidden=true;
+        res.hidden=true; $('resDc').hidden=true;
         setCheckMsg(d.error==='code' ? 'Такого кода не бывает — проверь, нет ли опечатки.' : 'Не получилось проверить — попробуй через минуту.', true);
         return;
       }
       if(!d.found){
-        res.hidden=true;
+        res.hidden=true; $('resDc').hidden=true;
         setCheckMsg('Заявку с этим кодом не нашли. Если отправил только что — подожди минуту и проверь ещё раз.', true);
         return;
       }
@@ -1262,8 +1351,9 @@ dl.gloss dd{color:var(--ink-soft)}
       /* открыли по личной ссылке на новом устройстве — запоминаем код и тут */
       if(saveHere && !savedApps().some(function(x){ return x.c===code; })){ saveApp(code, d.nick||''); rememberStatus(code, d.status); renderSaved(code); }
       res.hidden=false; setCheckMsg('');
+      showResDc(d.status);
     }, function(){
-      res.hidden=true;
+      res.hidden=true; $('resDc').hidden=true;
       setCheckMsg('Сеть не пропускает запрос — попробуй ещё раз или с другого интернета.', true);
     }).then(function(){ busy=false; checkBtn.disabled=false; });
   }
@@ -1273,7 +1363,7 @@ dl.gloss dd{color:var(--ink-soft)}
     var apps=savedApps();
     /* пришли по личной ссылке #status/<код> — проверяем именно этот код */
     var fromLink=normCode(window.__craftCode); window.__craftCode=null;
-    if(fromLink){ checkCode.value=fromLink; res.hidden=true; }
+    if(fromLink){ checkCode.value=fromLink; res.hidden=true; $('resDc').hidden=true; }
     renderSaved(normCode(checkCode.value));
     var code=normCode(checkCode.value) || (apps[0] && apps[0].c);
     if(code && res.hidden && !busy){ checkCode.value=code; check(code, !!fromLink); }
