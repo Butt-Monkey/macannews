@@ -720,11 +720,11 @@ dl.gloss dd{color:var(--ink-soft)}
     </div>
   </div>
 
-  <div class="dc" id="resDc" data-dc hidden>
+  <div class="dc" id="resDc" data-dc>
     <div class="dc-top"><svg class="dc-logo" viewBox="0 0 24 24" aria-hidden="true"><use href="#dcGlyph"/></svg><span class="px">Discord 87CRAFT</span><span class="dc-live" hidden><i></i><b></b><span></span></span></div>
     <div class="dc-body">
-      <h4 class="dc-h" id="resDcTitle">Заходи в Discord</h4>
-      <ul class="dc-list" id="resDcList"></ul>
+      <h4 class="dc-h" id="resDcTitle">Заходи в Discord 87CRAFT</h4>
+      <ul class="dc-list" id="resDcList"><li>Анонсы и ивенты — там раньше всех</li><li>Вопрос по заявке или потерял код — модеры отвечают в «помощи»</li><li>Игроки, с кем строить город и делить землю</li></ul>
       <a class="btn btn-pink dc-btn js-discord" href="https://discord.gg/dhGdzAnNj5" target="_blank" rel="noopener">Зайти в Discord <span aria-hidden="true">→</span></a>
       <p class="dc-meta">Ник там поставь как в Minecraft — так модеры найдут твою заявку.</p>
     </div>
@@ -1265,6 +1265,11 @@ dl.gloss dd{color:var(--ink-soft)}
     rejected:{badge:'Отклонена', cls:'bad', title:'Заявку отклонили', text:'Причину модер обычно пишет в комментарии. Исправь, что не так, и подай заявку заново.'}
   }; }
   var TEXTS=buildTexts();
+  /* без проверенной заявки плашка всё равно стоит — с общим текстом */
+  var DC_DEFAULT={h:'Заходи в Discord 87CRAFT', li:[
+    'Анонсы и ивенты — там раньше всех',
+    'Вопрос по заявке или потерял код — модеры отвечают в «помощи»',
+    'Игроки, с кем строить город и делить землю']};
   /* плашка Discord под статусом — свой текст на каждое решение */
   function showResDc(status){
     var PRE=!launched(), t={
@@ -1281,7 +1286,7 @@ dl.gloss dd{color:var(--ink-soft)}
         'Исправишь — подавай заявку заново, это быстро',
         'Анонсы и ивенты увидишь и без вайтлиста']}
     }[status] || null;
-    var box=$('resDc'); if(!t){ box.hidden=true; return; }
+    var box=$('resDc'); if(!t) t=DC_DEFAULT;
     $('resDcTitle').textContent=t.h;
     var ul=$('resDcList'); ul.innerHTML='';
     t.li.forEach(function(s){ var li=document.createElement('li'); li.textContent=s; ul.appendChild(li); });
@@ -1308,7 +1313,7 @@ dl.gloss dd{color:var(--ink-soft)}
   var busy=false;
   function check(raw, saveHere){
     var code=normCode(raw);
-    if(!code){ setCheckMsg('Код выглядит так: 87-XXXX-XXXX — восемь букв и цифр после «87».', true); res.hidden=true; $('resDc').hidden=true; checkCode.focus(); return; }
+    if(!code){ setCheckMsg('Код выглядит так: 87-XXXX-XXXX — восемь букв и цифр после «87».', true); res.hidden=true; showResDc(); checkCode.focus(); return; }
     if(busy) return; busy=true;
     checkCode.value=code; renderSaved(code);
     checkBtn.disabled=true; setCheckMsg('Проверяем…'); goal('craft_status_check');
@@ -1316,17 +1321,17 @@ dl.gloss dd{color:var(--ink-soft)}
       var d=r.data||{};
       /* ответ не JSON — функция ещё старой версии, без проверки статуса */
       if(r.ok && !r.data){
-        res.hidden=true; $('resDc').hidden=true;
+        res.hidden=true; showResDc();
         setCheckMsg('Проверка статуса временно не отвечает — попробуй через пару минут.', true);
         return;
       }
       if(!r.ok){
-        res.hidden=true; $('resDc').hidden=true;
+        res.hidden=true; showResDc();
         setCheckMsg(d.error==='code' ? 'Такого кода не бывает — проверь, нет ли опечатки.' : 'Не получилось проверить — попробуй через минуту.', true);
         return;
       }
       if(!d.found){
-        res.hidden=true; $('resDc').hidden=true;
+        res.hidden=true; showResDc();
         setCheckMsg('Заявку с этим кодом не нашли. Если отправил только что — подожди минуту и проверь ещё раз.', true);
         return;
       }
@@ -1353,17 +1358,18 @@ dl.gloss dd{color:var(--ink-soft)}
       res.hidden=false; setCheckMsg('');
       showResDc(d.status);
     }, function(){
-      res.hidden=true; $('resDc').hidden=true;
+      res.hidden=true; showResDc();
       setCheckMsg('Сеть не пропускает запрос — попробуй ещё раз или с другого интернета.', true);
     }).then(function(){ busy=false; checkBtn.disabled=false; });
   }
   checkForm.addEventListener('submit', function(e){ e.preventDefault(); check(checkCode.value); });
   /* при открытии вкладки — сразу проверяем последнюю заявку с этого устройства */
   function onStatusOpen(){
+    dcLive();
     var apps=savedApps();
     /* пришли по личной ссылке #status/<код> — проверяем именно этот код */
     var fromLink=normCode(window.__craftCode); window.__craftCode=null;
-    if(fromLink){ checkCode.value=fromLink; res.hidden=true; $('resDc').hidden=true; }
+    if(fromLink){ checkCode.value=fromLink; res.hidden=true; showResDc(); }
     renderSaved(normCode(checkCode.value));
     var code=normCode(checkCode.value) || (apps[0] && apps[0].c);
     if(code && res.hidden && !busy){ checkCode.value=code; check(code, !!fromLink); }
