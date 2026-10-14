@@ -3030,8 +3030,14 @@ window.__arcadeWinFX = function(host){
 <script>
 /* Service Worker: офлайн + мгновенные повторные визиты (только https/localhost) */
 if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
+  /* вышла новая версия сайта (новый sw.js взял страницу) — один раз перезагружаемся,
+     чтобы не досматривать старую копию из кэша браузера */
+  var hadSw=!!navigator.serviceWorker.controller, swReloaded=false;
+  navigator.serviceWorker.addEventListener('controllerchange', function(){
+    if(!hadSw || swReloaded) return; swReloaded=true; location.reload();
+  });
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('sw.js').catch(function(){});
+    navigator.serviceWorker.register('sw.js', {updateViaCache:'none'}).then(function(r){ if(r && r.update) r.update(); }).catch(function(){});
   });
 }
 </script>

@@ -5,7 +5,7 @@
    - ассеты (шрифты/картинки/аудио/видео) — cache-first: мгновенные
      повторные визиты, файлы контент-хэшированы именами и не меняются.
    При изменении списка ниже поднимай VERSION — старый кэш удалится сам. */
-var VERSION='87-v45';
+var VERSION='87-v47';
 var ASSET_RE = /\/assets\//;
 
 self.addEventListener('install', function (e) {
@@ -51,10 +51,22 @@ self.addEventListener('fetch', function (e) {
      показывал бы старую картинку. Обычный HTTP-кэш браузера справится сам. */
   if (url.pathname.indexOf('/assets/news/') !== -1) return;
 
-  /* навигация / HTML — сеть в приоритете, кэш как офлайн-фолбэк */
+  /* лента — всегда свежая с сервера, мимо HTTP-кэша браузера (GitHub даёт max-age=600) */
+  if (/\/news\.json$/.test(url.pathname)) {
+    e.respondWith(fetch(url.href, { cache: 'no-store' }).catch(function () { return fetch(req); }));
+    return;
+  }
+
+  /* навигация / HTML — сеть в приоритете, кэш как офлайн-фолбэк. Запрос идёт
+     с cache:'no-cache' — сервер подтверждает свежесть, иначе телефон до 10 минут
+     (а Safari и дольше) показывал бы старую страницу после заливки */
   if (req.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname === '/') {
     e.respondWith(
-      fetch(req).then(function (res) {
+      fetch(url.href, { cache: 'no-cache', credentials: 'same-origin' }).then(function (res) {
+        /* /87craft → /87craft/: ответ с редиректом навигации отдавать нельзя (Safari) */
+        if (res.redirected) return Response.redirect(res.url, 302);
+        return res;
+      }).catch(function () { return fetch(req); }).then(function (res) {
         /* в офлайн-копию кладём только удачные ответы — страница 404/ошибка
            сервера не должна подменить сохранённую главную */
         if (res && res.ok && res.type === 'basic') {
