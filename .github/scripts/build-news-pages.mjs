@@ -47,6 +47,42 @@ export function splitPost(text) {
   return { title, body };
 }
 
+// ── ссылки в тексте: скрытые (post.links от fetch-news.mjs) + адреса, домены и
+// @ники; та же разборка, что linkParts в index.html. 87craft.ru без пути — IP
+// сервера Minecraft, не сайт ──────────────────────────────────────────────────
+const RE_AUTO = '(https?:\\/\\/[^\\s<>«»"]+|(?:[a-z0-9\\u0430-\\u044f\\u0451-]+\\.)+(?:ru|com|net|org|gg|me|io|su|tv|app|dev|\\u0440\\u0444)(?:\\/[^\\s<>«»"]*)?|@[a-z][a-z0-9_]{3,31})';
+function linkUrl(w) {
+  if (w.charAt(0) === '@') return 'https://t.me/' + w.slice(1);
+  const u = /^https?:\/\//i.test(w) ? w : 'https://' + w;
+  return /^https?:\/\/87craft\.ru\/?$/i.test(u) ? null : u;
+}
+function autoParts(s, out) {
+  const re = new RegExp(RE_AUTO, 'gi'); let m, last = 0;
+  while ((m = re.exec(s))) {
+    const st = m.index, prev = st ? s.charAt(st - 1) : ''; let w = m[0];
+    if (prev && /[\w@\/.\-Ѐ-ӿ]/.test(prev)) continue;
+    const tr = /[.,!?;:)»"'…]+$/.exec(w); if (tr) w = w.slice(0, w.length - tr[0].length);
+    const u = w && linkUrl(w); if (!u) { re.lastIndex = st + m[0].length; continue; }
+    if (st > last) out.push({ s: s.slice(last, st) });
+    out.push({ s: w, u }); last = st + w.length; re.lastIndex = last;
+  }
+  if (last < s.length) out.push({ s: s.slice(last) });
+}
+export function linkParts(text, links) {
+  text = String(text || ''); const hid = [], out = []; let pos = 0;
+  for (const L of links || []) {
+    if (!L || !L.t || !/^https?:\/\//i.test(L.u || '')) continue;
+    const k = text.indexOf(L.t, pos); if (k < 0) continue;
+    hid.push([k, k + L.t.length, L.u]); pos = k + L.t.length;
+  }
+  pos = 0;
+  for (let i = 0; i <= hid.length; i++) {
+    autoParts(text.slice(pos, i < hid.length ? hid[i][0] : text.length), out);
+    if (i < hid.length) { out.push({ s: text.slice(hid[i][0], hid[i][1]), u: hid[i][2] }); pos = hid[i][1]; }
+  }
+  return out;
+}
+
 const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const pad2 = n => (n < 10 ? '0' : '') + n;
 function cut(s, n) { s = String(s || '').replace(/\s+/g, ' ').trim(); if (s.length <= n) return s; const c = s.lastIndexOf(' ', n); return s.slice(0, c > n * 0.6 ? c : n).replace(/[,:;\s]+$/, '') + '…'; }
@@ -79,7 +115,13 @@ export function renderPage(post, posts) {
     }
     return `<img src="/${esc(it.src || it.poster)}" alt="${esc(title)}"${wh} loading="lazy" decoding="async">`;
   }).join('\n');
-  const paras = body ? body.split(/\n{2,}/).map(pp => `<p>${esc(pp).replace(/\n/g, '<br>')}</p>`).join('\n') : '';
+  const paras = body ? '<p>' + linkParts(body, post.links).map(pp => {
+    const t = esc(pp.s).split(/\n{2,}/).map(x => x.replace(/\n/g, '<br>')).join('</p>\n<p>');
+    if (!pp.u) return t;
+    const own = /^https?:\/\/(www\.)?macannews\.ru(?=[\/?#]|$)/i.exec(pp.u);
+    if (own) { const path = pp.u.slice(own[0].length); return `<a href="${esc(path.charAt(0) === '/' ? path : '/' + path)}">${t}</a>`; }
+    return `<a href="${esc(pp.u)}" target="_blank" rel="noopener">${t}</a>`;
+  }).join('') + '</p>' : '';
   const others = posts.filter(p => String(p.id) !== id).slice(0, 5).map(p => {
     const t = splitPost(p.text).title;
     return `<li><a href="/n/${encodeURIComponent(String(p.id))}/"><span>${esc(mskDate(p.date).replace(/, \d\d:\d\d$/, ''))}</span>${esc(t)}</a></li>`;
@@ -139,6 +181,8 @@ h1{margin-top:12px;font-weight:800;font-size:clamp(30px,5vw,54px);line-height:1.
 .vid span{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);background:var(--bg);border:1.5px solid var(--ink);padding:10px 16px;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
 .text{margin-top:clamp(20px,3vw,32px);font-size:clamp(17px,2vw,20px);overflow-wrap:anywhere}
 .text p+p{margin-top:1em}
+.text a{font-weight:600;text-decoration:underline;text-decoration-color:var(--pink);text-decoration-thickness:3px;text-underline-offset:4px}
+.text a:hover{background:var(--pink);text-decoration-color:var(--ink)}
 .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(28px,4vw,44px);padding-top:clamp(20px,3vw,32px);border-top:1px solid var(--line)}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 22px;border:1.5px solid var(--ink);background:none;font:700 13px/1 'Schibsted Grotesk',sans-serif;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;color:var(--ink);transition:background .2s,color .2s}
 .btn:hover{background:var(--ink);color:var(--bg)}

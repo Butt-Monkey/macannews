@@ -119,6 +119,33 @@ function truncate(s, max = 4096) {
   return s.length > max ? s.slice(0, max).trim() + '…' : s;
 }
 
+// Текст поста + скрытые ссылки под словами (entity text_link: «на сайте» → URL).
+// Обычные адреса и @ники в тексте и так видны — их сайт находит сам. Ссылку
+// храним как {t: текст под ссылкой, u: адрес}, по порядку в тексте: так она
+// переживает разбивку поста на заголовок и абзацы. Смещения Telegram — в
+// UTF-16, как и строки JS, поэтому slice попадает точно.
+function bodyOf(msg) {
+  const raw = (msg && (msg.text || msg.caption)) || '';
+  const text = truncate(raw);
+  const lead = raw.length - raw.trimStart().length;
+  const links = [];
+  for (const e of (msg && (msg.entities || msg.caption_entities)) || []) {
+    if (e.type !== 'text_link' || !/^https?:\/\//i.test(e.url || '')) continue;
+    const t = raw.slice(e.offset, e.offset + e.length).trim();
+    if (!t || e.offset - lead + e.length > text.length) continue;
+    links.push({ t, u: e.url });
+  }
+  return { text, links };
+}
+// первое сообщение группы, где есть текст (у альбома подпись — у одного файла)
+function bodyOfMany(msgs) {
+  return bodyOf(msgs.find(m => (m.text || m.caption || '').trim()) || null);
+}
+function applyBody(post, body) {
+  post.text = body.text;
+  if (body.links.length) post.links = body.links; else delete post.links;
+}
+
 function bestPhoto(sizes) {
   if (!sizes || !sizes.length) return null;
   return sizes[sizes.length - 1];   // последний размер — самый крупный
@@ -297,17 +324,18 @@ async function backfillOlder(startId, need, ownerChatId, fs) {
         await apiCallLenient('deleteMessage', { chat_id: String(ownerChatId), message_id: String(msg.message_id) });
       } catch (e) { /* не критично */ }
 
-      const text = truncate(msg.text || msg.caption || '');
-      if (text) {
+      const body = bodyOf(msg);
+      if (body.text) {
         const origin = msg.forward_origin;
         const date = origin ? origin.date : (msg.forward_date || msg.date);
         const entry = {
           id: String(candidate),
           url: `https://t.me/${CHANNEL_FALLBACK}/${candidate}`,
           date: new Date(date * 1000).toISOString(),
-          text,
+          text: body.text,
           image: null
         };
+        if (body.links.length) entry.links = body.links;
         finalizeEntry(entry, [await buildMediaItem(msg, candidate, 0, fs)]);
         filled.push(entry);
         console.log(`Добрал более старый пост ${candidate}.`);
@@ -450,7 +478,8 @@ async function main() {
   for (const g of groups) {
     g.msgs.sort((a, b) => a.message_id - b.message_id);
     const first = g.msgs[0];
-    const text = truncate(g.msgs.map(m => m.text || m.caption || '').find(t => t.trim()) || '');
+    const body = bodyOfMany(g.msgs);
+    const text = body.text;
 
     // альбом мог начаться в предыдущий прогон — тогда дописываем в готовую запись
     const owner = g.groupId && existing.find(p => p.group === g.groupId);
@@ -477,6 +506,7 @@ async function main() {
       text,
       image: null
     };
+    if (body.links.length) entry.links = body.links;
     if (g.groupId) entry.group = g.groupId;
 
     const items = [];
@@ -496,8 +526,8 @@ async function main() {
     const post = merged.find(p => p.id === id || (Array.isArray(p.media) && p.media.some(i => String(i.mid) === id)));
     if (!post) continue;
 
-    const text = truncate(msg.text || msg.caption || '');
-    if (text) post.text = text;
+    const body = bodyOf(msg);
+    if (body.text) applyBody(post, body);
 
     const m = mediaOf(msg);
     if (m) {
@@ -519,8 +549,8 @@ async function main() {
   for (const [id, parts] of refetched) {
     const post = merged.find(p => p.id === id || (Array.isArray(p.media) && p.media.some(i => String(i.mid) === id)));
     if (!post) { console.log(`Пост ${id}: его нет в ленте — пропускаю.`); continue; }
-    const text = truncate(parts.map(m => m.text || m.caption || '').find(t => t.trim()) || '');
-    if (text) post.text = text;
+    const body = bodyOfMany(parts);
+    if (body.text) applyBody(post, body);
     const items = [];
     for (const m of parts) {
       const item = await buildMediaItem(m, post.id, items.length, fs);
