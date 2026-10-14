@@ -452,6 +452,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .np-has-full{overflow:hidden}
 .np-title{margin-top:14px;font-weight:800;font-size:clamp(28px,4.6vw,52px);line-height:1.04;letter-spacing:-.025em;text-wrap:balance}.np-text{margin-top:var(--sp-m);font-size:var(--t-lead);line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
 .np-text:empty{display:none}
+.np-link{font-weight:600;text-decoration:underline;text-decoration-color:var(--pink);text-decoration-thickness:3px;text-underline-offset:4px;transition:background-color .2s,text-decoration-color .2s}
+.np-link:hover,.np-link:focus-visible{background:var(--pink);text-decoration-color:var(--ink)}
 .np-foot{margin-top:var(--sp-l);padding-top:var(--sp-m);border-top:1px solid var(--line);display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
 .np-tools{display:flex;align-items:center;gap:10px}
 .np-share{display:inline-flex;align-items:center;gap:8px;font-size:var(--t-small);letter-spacing:var(--ls-caps);text-transform:uppercase;font-weight:700;
@@ -2189,6 +2191,59 @@ window.__arcadeWinFX = function(host){
     return {title:title, body:body};
   }
   function parts(p){ if(!p._s) p._s=splitPost(p.text); return p._s; }
+
+  /* ---------- ссылки в тексте поста ----------
+     Как в канале: скрытые ссылки под словами (робот ленты кладёт их в p.links —
+     [{t:'на сайте', u:'https://…'}], по порядку в тексте) + обычные адреса,
+     домены вида macannews.ru/87craft и @ники. 87craft.ru без пути — это IP
+     сервера Minecraft, а не сайт: его не превращаем в ссылку. Та же разборка —
+     в .github/scripts/build-news-pages.mjs (страницы /n/<id>/) */
+  var RE_AUTO='(https?:\\/\\/[^\\s<>«»"]+|(?:[a-z0-9\\u0430-\\u044f\\u0451-]+\\.)+(?:ru|com|net|org|gg|me|io|su|tv|app|dev|\\u0440\\u0444)(?:\\/[^\\s<>«»"]*)?|@[a-z][a-z0-9_]{3,31})';
+  function linkUrl(w){
+    if(w.charAt(0)==='@') return 'https://t.me/'+w.slice(1);
+    var u=/^https?:\/\//i.test(w) ? w : 'https://'+w;
+    if(/^https?:\/\/87craft\.ru\/?$/i.test(u)) return null;
+    return u;
+  }
+  function autoParts(s, out){
+    var re=new RegExp(RE_AUTO,'gi'), m, last=0;
+    while((m=re.exec(s))){
+      var st=m.index, w=m[0], prev=st ? s.charAt(st-1) : '';
+      if(prev && /[\w@\/.\-Ѐ-ӿ]/.test(prev)) continue;
+      var tr=/[.,!?;:)»"'…]+$/.exec(w); if(tr) w=w.slice(0, w.length-tr[0].length);
+      var u=w && linkUrl(w); if(!u){ re.lastIndex=st+m[0].length; continue; }
+      if(st>last) out.push({s:s.slice(last,st)});
+      out.push({s:w, u:u}); last=st+w.length; re.lastIndex=last;
+    }
+    if(last<s.length) out.push({s:s.slice(last)});
+  }
+  function linkParts(text, links){
+    text=String(text||''); var hid=[], pos=0, out=[], i, k;
+    for(i=0; links && i<links.length; i++){
+      var L=links[i]; if(!L || !L.t || !/^https?:\/\//i.test(L.u||'')) continue;
+      k=text.indexOf(L.t, pos); if(k<0) continue;
+      hid.push([k, k+L.t.length, L.u]); pos=k+L.t.length;
+    }
+    pos=0;
+    for(i=0; i<=hid.length; i++){
+      autoParts(text.slice(pos, i<hid.length ? hid[i][0] : text.length), out);
+      if(i<hid.length){ out.push({s:text.slice(hid[i][0], hid[i][1]), u:hid[i][2]}); pos=hid[i][1]; }
+    }
+    return out;
+  }
+  /* свой сайт — в этой же вкладке и относительным адресом, чужие — в новой */
+  function fillLinked(el, text, links){
+    clear(el);
+    linkParts(text, links).forEach(function(p){
+      if(!p.u){ el.appendChild(document.createTextNode(p.s)); return; }
+      var a=document.createElement('a'), own=/^https?:\/\/(www\.)?macannews\.ru(?=[\/?#]|$)/i.exec(p.u);
+      if(own){ var path=p.u.slice(own[0].length); a.href=path.charAt(0)==='/' ? path : '/'+path; }
+      else { a.href=p.u; a.target='_blank'; a.rel='noopener'; }
+      a.className='np-link'; a.textContent=p.s;
+      a.addEventListener('click', function(){ goal('news_link'); });
+      el.appendChild(a);
+    });
+  }
   function cutText(s, n){ s=String(s||''); if(s.length<=n) return s; var c=s.lastIndexOf(' ',n); return s.slice(0,c>n*0.6?c:n).replace(/[,:;\s]+$/,'')+'…'; }
 
   /* ---------- даты ---------- */
@@ -2606,7 +2661,7 @@ window.__arcadeWinFX = function(host){
     curPost=p; curUrl=p.url;
     npDate.textContent=fullDate(p.date);
     npTitle.textContent=s.title;
-    npText.textContent=s.body;
+    fillLinked(npText, s.body, p.links);
     npLink.href=p.url;
     resetGal();
     var items=mediaItems(p);
