@@ -11,21 +11,21 @@
      скопированы сюда, чтобы страница не тянула 260 КБ главной.
      Заявка и статус идут через ту же Yandex-функцию, что и раньше (relay/). -->
 <title>87CRAFT — Minecraft-сервер · IP 87craft.ru</title>
-<meta name="description" content="87CRAFT — Minecraft-сервер от Macan News. Старт — пятница, 23 октября, 18:07 МСК. IP 87craft.ru, Java 1.21.11, лицензия и пиратка. Заявки открыты уже сейчас."/>
+<meta name="description" content="87CRAFT — Minecraft-сервер от Macan News. IP 87craft.ru, Java 1.21.11, лицензия и пиратка. Свои города и кланы, задания каждый день и карта в меню на G, голосовой чат. Сервер открыт — заходи."/>
 <link rel="canonical" href="https://macannews.ru/87craft/"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="87 · Macan News"/>
 <meta property="og:title" content="87CRAFT — Minecraft-сервер"/>
-<meta property="og:description" content="Старт — 23 октября в 18:07 МСК. IP 87craft.ru · Java 1.21.11 · лицензия и пиратка. Заявки открыты уже сейчас."/>
+<meta property="og:description" content="Сервер открыт. IP 87craft.ru · Java 1.21.11 · лицензия и пиратка. Города, кланы, задания и карта — в меню на G."/>
 <meta property="og:url" content="https://macannews.ru/87craft/"/>
 <meta property="og:locale" content="ru_RU"/>
-<meta property="og:image" content="https://macannews.ru/assets/og-87craft-4.png"/>
+<meta property="og:image" content="https://macannews.ru/assets/og-87craft-2.png"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
 <meta property="og:image:type" content="image/png"/>
 <meta property="og:image:alt" content="87CRAFT — Minecraft-сервер, IP 87craft.ru"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://macannews.ru/assets/og-87craft-4.png"/>
+<meta name="twitter:image" content="https://macannews.ru/assets/og-87craft-2.png"/>
 <meta name="theme-color" content="#050505"/>
 <meta name="color-scheme" content="only light"/>
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/craft87-32.png"/>
@@ -235,6 +235,24 @@ html.launched [data-pre],html:not(.launched) [data-post]{display:none!important}
 .band{margin-top:var(--sp-l);background:var(--pink);border:1.5px solid var(--ink);padding:var(--sp-m) var(--sp-s);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--sp-s)}
 .band h3{font-size:var(--t-h2);font-weight:800;line-height:1;letter-spacing:var(--ls-tight);text-transform:uppercase}
 .band p{margin-top:8px;max-width:520px}
+/* меню 87CRAFT — тёмная карточка, как само меню в игре */
+.m87{border:1.5px solid var(--ink);background:var(--ink);color:var(--bg)}
+.m87-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;padding:20px var(--sp-s);border-bottom:1px solid rgba(247,244,238,.18)}
+.m87-top .px{font-size:clamp(28px,3.6vw,44px);line-height:1;color:var(--pink)}
+.m87-keys{font-size:var(--t-small);color:rgba(247,244,238,.72)}
+.m87 kbd{background:transparent;border-color:rgba(247,244,238,.35);color:var(--bg)}
+.m87-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.m87-grid>div{padding:var(--sp-s);border-top:1px solid rgba(247,244,238,.14);border-left:1px solid rgba(247,244,238,.14)}
+.m87-grid>div:nth-child(3n+1){border-left:0}
+.m87-grid>div:nth-child(-n+3){border-top:0}
+.m87-grid b{font-size:15px;color:var(--pink)}
+.m87-grid h4{font-size:var(--t-h4);font-weight:800;line-height:1.2;margin-top:8px}
+.m87-grid p{font-size:var(--t-small);color:rgba(247,244,238,.72);margin-top:6px}
+.m87-note{padding:14px var(--sp-s) 16px;border-top:1px solid rgba(247,244,238,.18);font-size:var(--t-small);color:rgba(247,244,238,.72)}
+@media (max-width:900px){.m87-grid{grid-template-columns:1fr 1fr}.m87-grid>div:nth-child(n){border-left:0;border-top:1px solid rgba(247,244,238,.14)}.m87-grid>div:nth-child(2n){border-left:1px solid rgba(247,244,238,.14)}.m87-grid>div:nth-child(-n+2){border-top:0}}
+@media (max-width:560px){.m87-grid{grid-template-columns:1fr}.m87-grid>div:nth-child(n){border-left:0;border-top:1px solid rgba(247,244,238,.14)}.m87-grid>div:first-child{border-top:0}}
+.band-mods .eyebrow{color:var(--ink)}
+.band-mods h3{margin-top:8px}
 
 /* ── Как зайти: пошагово ── */
 .steps{list-style:none;counter-reset:st;border-top:1.5px solid var(--ink)}
@@ -431,7 +449,7 @@ dl.gloss dd{color:var(--ink-soft)}
     <div>
       <div class="eyebrow">Minecraft-сервер от Macan News</div>
       <h1 class="px" aria-label="87CRAFT">87CRAFT</h1>
-      <p class="lead">Ванильное выживание с валютой, аукционом и голосовым чатом. Строим города, делим землю через суд и устраиваем ивенты — без читов и грифа.</p>
+      <p class="lead">Ванильное выживание с валютой, аукционом и голосовым чатом. Свои города и кланы, задания каждый день и карта сервера — в меню прямо в игре. Без читов и грифа.</p>
       <p class="srv" id="srvStatus" hidden><i></i><span id="srvText">Сервер онлайн</span></p>
       <div class="launch" data-pre role="timer" aria-label="Старт сервера — пятница, 23 октября, 18:07 по Москве">
         <div class="launch-when"><span>Старт сервера</span><b>Пятница · 23.10 · 18:07 МСК</b></div>
@@ -476,13 +494,39 @@ dl.gloss dd{color:var(--ink-soft)}
   </div>
 
   <div class="block">
+    <h3>Меню 87CRAFT</h3>
+    <div class="m87">
+      <div class="m87-top"><span class="px">Нажми G</span><span class="m87-keys">или <kbd>Shift+F</kbd>, предмет «87» в инвентаре, <kbd>/menu</kbd></span></div>
+      <div class="m87-grid">
+        <div><b class="px">01</b><h4>Задания</h4><p>Каждый день три своих: два лёгких и одно посложнее. Сделал все — сундук с наградой.</p></div>
+        <div><b class="px">02</b><h4>Огонёк</h4><p>Серия дней подряд: хватит одного задания в день. Пропустил — спасёт заморозка.</p></div>
+        <div><b class="px">03</b><h4>Неделя и лига</h4><p>Общее задание недели, парное с другом и лига по опыту — лучшие поднимаются выше.</p></div>
+        <div><b class="px">04</b><h4>Город</h4><p>Бесплатно 100×100 вокруг тебя, растёт до 500×500. Жители, роли, герб и цвет.</p></div>
+        <div><b class="px">05</b><h4>Клан</h4><p>Тег перед ником, свой чат <kbd>/c</kbd>, задание клана на неделю и рейтинг кланов.</p></div>
+        <div><b class="px">06</b><h4>Карта</h4><p>Весь сервер прямо в меню: города, игроки, приближение по клику. Себя можно скрыть.</p></div>
+      </div>
+      <p class="m87-note">Меню рисует набор ресурсов сервера: при входе жми «Принять». Вместо меню квадратики — напиши <kbd>/pack</kbd>.</p>
+    </div>
+  </div>
+
+  <div class="band band-mods">
+    <div>
+      <div class="eyebrow">Сборка 87CRAFT · Fabric 1.21.11</div>
+      <h3>Поставь моды — услышишь войс</h3>
+      <p>Голосовой чат Plasmo Voice, больше FPS и удобный инвентарь — 8 модов одной папкой, ставится за пару минут. Без сборки голоса других игроков не слышно.</p>
+    </div>
+    <div class="btns">
+      <a class="btn btn-ink" href="#mods">Скачать сборку</a>
+    </div>
+  </div>
+  <div class="block">
     <h3>Что внутри</h3>
     <div class="facts">
       <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M4 1h4v1h-4zM2 2h8v1h-8zM2 3h8v1h-8zM1 4h4v1h-4zM7 4h4v1h-4zM1 5h3v1h-3zM8 5h3v1h-3zM1 6h3v1h-3zM8 6h3v1h-3zM1 7h4v1h-4zM7 7h4v1h-4zM2 8h8v1h-8zM2 9h8v1h-8zM4 10h4v1h-4z"/><path fill="#050505" d="M4 0h4v1h-4zM2 1h2v1h-2zM8 1h2v1h-2zM1 2h1v1h-1zM10 2h1v1h-1zM1 3h1v1h-1zM10 3h1v1h-1zM0 4h1v1h-1zM5 4h2v1h-2zM11 4h1v1h-1zM0 5h1v1h-1zM4 5h4v1h-4zM11 5h1v1h-1zM0 6h1v1h-1zM4 6h4v1h-4zM11 6h1v1h-1zM0 7h1v1h-1zM5 7h2v1h-2zM11 7h1v1h-1zM1 8h1v1h-1zM10 8h1v1h-1zM1 9h1v1h-1zM10 9h1v1h-1zM2 10h2v1h-2zM8 10h2v1h-2zM4 11h4v1h-4z"/></svg><h4>Ванилла + валюта</h4><p>Обычный Minecraft без лишних механик, но со своей экономикой: штрафы, например, платятся в казну сервера.</p></div>
       <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M2 2h8v1h-8zM2 3h8v1h-8zM2 5h3v1h-3zM7 5h3v1h-3zM2 6h3v1h-3zM7 6h3v1h-3zM2 7h8v1h-8zM2 8h8v1h-8z"/><path fill="#050505" d="M1 1h10v1h-10zM1 2h1v1h-1zM10 2h1v1h-1zM1 3h1v1h-1zM10 3h1v1h-1zM0 4h12v1h-12zM1 5h1v1h-1zM5 5h2v1h-2zM10 5h1v1h-1zM1 6h1v1h-1zM5 6h2v1h-2zM10 6h1v1h-1zM1 7h1v1h-1zM10 7h1v1h-1zM1 8h1v1h-1zM10 8h1v1h-1zM1 9h10v1h-10z"/></svg><h4>Аукцион</h4><p>Продавай и покупай у других игроков.</p></div>
-      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M1 1h10v1h-10zM1 2h10v1h-10zM1 3h1v1h-1zM4 3h1v1h-1zM7 3h1v1h-1zM10 3h1v1h-1zM1 4h10v1h-10zM1 5h10v1h-10zM5 6h1v1h-1zM5 7h1v1h-1z"/><path fill="#050505" d="M1 0h10v1h-10zM0 1h1v1h-1zM11 1h1v1h-1zM0 2h1v1h-1zM11 2h1v1h-1zM0 3h1v1h-1zM2 3h2v1h-2zM5 3h2v1h-2zM8 3h2v1h-2zM11 3h1v1h-1zM0 4h1v1h-1zM11 4h1v1h-1zM0 5h1v1h-1zM11 5h1v1h-1zM1 6h4v1h-4zM6 6h5v1h-5zM4 7h1v1h-1zM6 7h1v1h-1zM4 8h2v1h-2z"/></svg><h4>Голосовой чат</h4><p>Plasmo Voice — говоришь с теми, кто рядом. По желанию: без мода тоже можно играть. <a href="#mods">Как поставить →</a></p></div>
-      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M1 1h10v1h-10zM1 2h1v1h-1zM9 2h2v1h-2zM1 3h10v1h-10zM1 4h1v1h-1zM7 4h4v1h-4zM1 5h10v1h-10z"/><path fill="#050505" d="M0 0h12v1h-12zM0 1h1v1h-1zM11 1h1v1h-1zM0 2h1v1h-1zM2 2h7v1h-7zM11 2h1v1h-1zM0 3h1v1h-1zM11 3h1v1h-1zM0 4h1v1h-1zM2 4h5v1h-5zM11 4h1v1h-1zM0 5h1v1h-1zM11 5h1v1h-1zM0 6h12v1h-12zM5 7h2v1h-2zM5 8h2v1h-2zM5 9h2v1h-2zM5 10h2v1h-2zM4 11h4v1h-4z"/></svg><h4>Приват до 500×500</h4><p>Отмечаешь территорию табличкой со своим ником. Споры о земле решает суд.</p></div>
-      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M5 1h2v1h-2zM4 2h4v1h-4zM3 3h6v1h-6zM2 4h8v1h-8zM2 6h8v1h-8zM2 7h1v1h-1zM5 7h2v1h-2zM9 7h1v1h-1zM2 8h1v1h-1zM5 8h2v1h-2zM9 8h1v1h-1zM2 9h4v1h-4zM8 9h2v1h-2zM2 10h4v1h-4zM8 10h2v1h-2z"/><path fill="#050505" d="M5 0h2v1h-2zM4 1h1v1h-1zM7 1h1v1h-1zM3 2h1v1h-1zM8 2h1v1h-1zM2 3h1v1h-1zM9 3h1v1h-1zM1 4h1v1h-1zM10 4h1v1h-1zM0 5h12v1h-12zM1 6h1v1h-1zM10 6h1v1h-1zM1 7h1v1h-1zM3 7h2v1h-2zM7 7h2v1h-2zM10 7h1v1h-1zM1 8h1v1h-1zM3 8h2v1h-2zM7 8h2v1h-2zM10 8h1v1h-1zM1 9h1v1h-1zM6 9h2v1h-2zM10 9h1v1h-1zM1 10h1v1h-1zM6 10h2v1h-2zM10 10h1v1h-1zM1 11h10v1h-10z"/></svg><h4>Города, РП и суды</h4><p>Ролевые ивенты согласуются с игроками, судью выбирают голосованием.</p></div>
+      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M1 1h10v1h-10zM1 2h10v1h-10zM1 3h1v1h-1zM4 3h1v1h-1zM7 3h1v1h-1zM10 3h1v1h-1zM1 4h10v1h-10zM1 5h10v1h-10zM5 6h1v1h-1zM5 7h1v1h-1z"/><path fill="#050505" d="M1 0h10v1h-10zM0 1h1v1h-1zM11 1h1v1h-1zM0 2h1v1h-1zM11 2h1v1h-1zM0 3h1v1h-1zM2 3h2v1h-2zM5 3h2v1h-2zM8 3h2v1h-2zM11 3h1v1h-1zM0 4h1v1h-1zM11 4h1v1h-1zM0 5h1v1h-1zM11 5h1v1h-1zM1 6h4v1h-4zM6 6h5v1h-5zM4 7h1v1h-1zM6 7h1v1h-1zM4 8h2v1h-2z"/></svg><h4>Голосовой чат</h4><p>Plasmo Voice — говоришь с теми, кто рядом. Нужна сборка модов 87CRAFT, ставится за пару минут. <a href="#mods">Скачать →</a></p></div>
+      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M5 1h2v1h-2zM4 2h4v1h-4zM3 3h6v1h-6zM2 4h8v1h-8zM2 6h8v1h-8zM2 7h1v1h-1zM5 7h2v1h-2zM9 7h1v1h-1zM2 8h1v1h-1zM5 8h2v1h-2zM9 8h1v1h-1zM2 9h4v1h-4zM8 9h2v1h-2zM2 10h4v1h-4zM8 10h2v1h-2z"/><path fill="#050505" d="M5 0h2v1h-2zM4 1h1v1h-1zM7 1h1v1h-1zM3 2h1v1h-1zM8 2h1v1h-1zM2 3h1v1h-1zM9 3h1v1h-1zM1 4h1v1h-1zM10 4h1v1h-1zM0 5h12v1h-12zM1 6h1v1h-1zM10 6h1v1h-1zM1 7h1v1h-1zM3 7h2v1h-2zM7 7h2v1h-2zM10 7h1v1h-1zM1 8h1v1h-1zM3 8h2v1h-2zM7 8h2v1h-2zM10 8h1v1h-1zM1 9h1v1h-1zM6 9h2v1h-2zM10 9h1v1h-1zM1 10h1v1h-1zM6 10h2v1h-2zM10 10h1v1h-1zM1 11h10v1h-10z"/></svg><h4>Свой город</h4><p>Основываешь в меню: бесплатно 100×100, дальше растёт до 500×500. Границы видны всем, споры о земле решает суд.</p></div>
+      <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M1 1h10v1h-10zM1 2h1v1h-1zM9 2h2v1h-2zM1 3h10v1h-10zM1 4h1v1h-1zM7 4h4v1h-4zM1 5h10v1h-10z"/><path fill="#050505" d="M0 0h12v1h-12zM0 1h1v1h-1zM11 1h1v1h-1zM0 2h1v1h-1zM2 2h7v1h-7zM11 2h1v1h-1zM0 3h1v1h-1zM11 3h1v1h-1zM0 4h1v1h-1zM2 4h5v1h-5zM11 4h1v1h-1zM0 5h1v1h-1zM11 5h1v1h-1zM0 6h12v1h-12zM5 7h2v1h-2zM5 8h2v1h-2zM5 9h2v1h-2zM5 10h2v1h-2zM4 11h4v1h-4z"/></svg><h4>Меню на G</h4><p>Задания каждый день, огонёк за серию, лиги, кланы и карта всего сервера — прямо в игре.</p></div>
       <div><svg class="pxi" viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="#FDA4C2" d="M1 1h4v1h-4zM7 1h4v1h-4zM1 2h4v1h-4zM7 2h4v1h-4zM1 3h1v1h-1zM10 3h1v1h-1zM1 4h4v1h-4zM7 4h4v1h-4zM2 5h3v1h-3zM7 5h3v1h-3zM2 6h3v1h-3zM7 6h3v1h-3zM3 7h2v1h-2zM7 7h2v1h-2zM3 8h2v1h-2zM7 8h2v1h-2zM4 9h1v1h-1zM7 9h1v1h-1z"/><path fill="#050505" d="M0 0h12v1h-12zM0 1h1v1h-1zM5 1h2v1h-2zM11 1h1v1h-1zM0 2h1v1h-1zM5 2h2v1h-2zM11 2h1v1h-1zM0 3h1v1h-1zM2 3h8v1h-8zM11 3h1v1h-1zM0 4h1v1h-1zM5 4h2v1h-2zM11 4h1v1h-1zM1 5h1v1h-1zM5 5h2v1h-2zM10 5h1v1h-1zM1 6h1v1h-1zM5 6h2v1h-2zM10 6h1v1h-1zM2 7h1v1h-1zM5 7h2v1h-2zM9 7h1v1h-1zM2 8h1v1h-1zM5 8h2v1h-2zM9 8h1v1h-1zM3 9h1v1h-1zM5 9h2v1h-2zM8 9h1v1h-1zM4 10h4v1h-4zM5 11h2v1h-2z"/></svg><h4>Без читов и грифа</h4><p>Читы — бан сразу. Гриф и воровство — штраф и возврат вещей. <a href="#rules">Правила →</a></p></div>
     </div>
   </div>
@@ -492,8 +536,11 @@ dl.gloss dd{color:var(--ink-soft)}
     <div class="acc">
       <details data-pre><summary>Почему сейчас не пускает на сервер?</summary><div class="body"><p>Сервер откроется в <b>пятницу, 23 октября, в 18:07 МСК</b> — до этого он закрыт. Заявку, сервер в списке и моды можно подготовить уже сейчас.</p></div></details>
       <details><summary>Нужна лицензия?</summary><div class="body"><p>Нет. Подойдёт любой лаунчер — официальный или пиратский. Главное — версия <b>Java Edition 1.21.11</b>.</p></div></details>
+      <details><summary>Как включить голосовой чат?</summary><div class="body"><p>Поставь сборку модов 87CRAFT — в ней Plasmo Voice. Скачать и пошаговая инструкция — во вкладке <a href="#mods">«Моды»</a>. В игре нажми <b>V</b> — микрофон и громкость. Без сборки играть можно, но голоса других не услышишь.</p></div></details>
       <details><summary>Пишет «You do not have permissions» или не пускает в основной мир</summary><div class="body"><p>Значит, заявку ещё смотрят. Спавн при этом работает — играй, прогресс не пропадёт. Проверить статус можно во вкладке <a href="#status">«Статус заявки»</a>.</p></div></details>
       <details><summary>Что за /register и /login?</summary><div class="body"><p>Это пароль от твоего ника на сервере. При первом входе напиши <code>/register пароль пароль</code>, дальше при каждом входе — <code>/login пароль</code>. Не бери пароль от почты или других игр.</p></div></details>
+      <details><summary>Просит набор ресурсов</summary><div class="body"><p>Жми «Принять» — это графика меню 87CRAFT, около 0,5 МБ, скачается один раз. Меню открывается на <b>G</b>, <b>Shift+F</b>, предметом «87» в инвентаре или командой <code>/menu</code>.</p></div></details>
+      <details><summary>Меню из квадратиков</summary><div class="body"><p>Набор ресурсов не загрузился. Напиши в чат <code>/pack</code> — сервер пришлёт его заново. Проверь, что включено: «Сетевая игра» → сервер → «Настроить» → «Наборы ресурсов: Включены». Не помогло — в чате будет кнопка «скачать пак» для установки вручную.</p></div></details>
       <details><summary>Нужен ли Discord?</summary><div class="body"><p>Очень советуем зайти. Там анонсы и ивенты раньше всех, помощь модеров и игроки, с кем можно строить город. Играть можно и без него — заявка, статус, правила и гайды есть здесь, на сайте. Если Discord не открывается, попробуй позже или с другого интернета.</p></div></details>
       <details><summary>Не могу подключиться</summary><div class="body"><p>Проверь версию — нужна ровно <b>1.21.11</b>. Адрес — <code>87craft.ru</code>, без порта. Не помогло — загляни в <a href="#guides">гайды</a> или напиши в Discord в канал «помощь»: ник, лаунчер и скриншот ошибки.</p></div></details>
       <details data-tgbot hidden><summary>Как узнать, что заявку одобрили?</summary><div class="body"><p>После отправки заявки жми «Уведомить в Telegram» — бот напишет тебе лично, как только модеры решат. А ещё статус всегда виден вверху этой страницы (плашка «Твоя заявка») и во вкладке <a href="#status">«Статус заявки»</a>. Чужие решения никто не видит — только своё.</p></div></details>
@@ -519,7 +566,7 @@ dl.gloss dd{color:var(--ink-soft)}
   <div class="head">
     <div class="eyebrow">Пошагово · 5 минут</div>
     <h2>Как зайти</h2>
-    <p data-post>От запуска игры до основного мира. Моды не нужны — сервер работает на чистой версии.</p>
+    <p data-post>От запуска игры до основного мира. Зайти можно и с чистой 1.21.11, но со сборкой модов будет голосовой чат и больше FPS.</p>
     <p data-pre>Сервер откроется 23 октября в 18:07 МСК. Всё, что ниже, можно сделать заранее — чтобы на старте просто нажать «Подключиться».</p>
   </div>
 
@@ -533,7 +580,7 @@ dl.gloss dd{color:var(--ink-soft)}
   <ol class="steps block">
     <li><div>
       <h4>Запусти Minecraft Java 1.21.11</h4>
-      <p>В лаунчере выбери версию <b>1.21.11</b>. Ник, под которым играешь, запомни — он нужен в заявке.</p>
+      <p>В лаунчере выбери версию <b>1.21.11</b> — а лучше <b>Fabric 1.21.11</b> со <a href="#mods">сборкой модов 87CRAFT</a>: с ней работает голосовой чат. Ник, под которым играешь, запомни — он нужен в заявке.</p>
     </div></li>
     <li><div>
       <h4>Добавь сервер</h4>
@@ -549,6 +596,10 @@ dl.gloss dd{color:var(--ink-soft)}
       <p>При первом входе напиши в чат <code>/register пароль пароль</code> (два раза одно и то же). Дальше при каждом входе — <code>/login пароль</code>. Пароль защищает твой ник — не бери пароль от почты или других игр.</p>
     </div></li>
     <li><div>
+      <h4>Прими набор ресурсов</h4>
+      <p>Игра спросит про набор ресурсов сервера — жми «Принять». Это графика меню 87CRAFT: задания, город, клан, карта. Меню открывается на <b>G</b> (или <b>Shift+F</b>, <code>/menu</code>). Меню из квадратиков — напиши <code>/pack</code>.</p>
+    </div></li>
+    <li><div>
       <h4>Осваивайся на спавне</h4>
       <p data-post>Спавн открыт всем сразу — бегай, знакомься, зови друзей. Прогресс никуда не денется.</p>
       <p data-pre>С 18:07 23 октября спавн открыт всем — бегай, знакомься, зови друзей.</p>
@@ -559,8 +610,9 @@ dl.gloss dd{color:var(--ink-soft)}
       <div class="btns" style="margin-top:14px"><a class="btn btn-pink" href="#apply">Подать заявку</a></div>
     </div></li>
     <li><div>
-      <h4>Сборка модов <span class="opt">советуем</span></h4>
-      <p>Голосовой чат, больше FPS и удобный инвентарь — одним архивом. Пара минут, вкладка <a href="#mods">«Моды»</a>.</p>
+      <h4>Сборка модов <span class="opt">очень советуем</span></h4>
+      <p>Без неё не услышишь голосовой чат. Plasmo Voice, больше FPS и удобный инвентарь — одним архивом, пара минут.</p>
+      <div class="btns" style="margin-top:14px"><a class="btn btn-pink" href="#mods">Скачать сборку</a></div>
     </div></li>
     <li><div>
       <h4>Discord <span class="opt">важно</span></h4>
@@ -781,14 +833,14 @@ dl.gloss dd{color:var(--ink-soft)}
     <ul class="list no">
       <li><b>X-ray</b> — и моды, и ресурспаки, которые показывают руды сквозь блоки.</li>
       <li><b>Чит-клиенты</b> и любые моды на преимущество: киллаура, флай, автокликер и подобное.</li>
-      <li>Всё, что помогает дюпать или ломать чужие приваты.</li>
+      <li>Всё, что помогает дюпать или ломать чужие постройки и города.</li>
     </ul>
     <p class="muted" style="margin-top:14px">За это — бан сразу. Сомневаешься в моде — спроси у модеров в Discord, пока не поставил.</p>
   </div>
 </section>
 
 <!-- ═══════════════ ГАЙДЫ ═══════════════ -->
-<section class="view" id="view-guides" data-title="Гайды 87CRAFT — приват, суды, пароль, подключение">
+<section class="view" id="view-guides" data-title="Гайды 87CRAFT — меню, город, пароль, подключение">
   <div class="head">
     <div class="eyebrow">Как тут всё устроено</div>
     <h2>Гайды</h2>
@@ -802,11 +854,21 @@ dl.gloss dd{color:var(--ink-soft)}
     <details><summary>Забыл пароль от /login</summary><div class="body">
       <p>Сам сбросить его не получится — напиши модерам в Discord: канал «помощь», метка «Вопрос». Укажи ник в Minecraft.</p>
     </div></details>
-    <details><summary>Как заприватить территорию</summary><div class="body">
+    <details><summary>Меню 87CRAFT</summary><div class="body">
       <ul>
-        <li>Максимум — <b>500×500 блоков</b>.</li>
-        <li>Территорию обозначает <b>табличка с ником владельца</b>. Поставь её так, чтобы было видно.</li>
-        <li>Ломать, открывать сундуки и пользоваться механизмами на чужом привате без разрешения нельзя — это гриф.</li>
+        <li>Открыть: клавиша <b>G</b>, <b>Shift+F</b>, предмет «87» в инвентаре (ПКМ) или <code>/menu</code>.</li>
+        <li><b>Задания:</b> каждый день 3 своих задания. Сделал хоть одно — растёт огонёк, сделал все — сундук с наградой.</li>
+        <li><b>Огонёк</b> — серия дней подряд. Пропустил день — спасёт заморозка.</li>
+        <li><b>Лига</b> — соревнование по опыту за неделю, <b>неделя</b> — общее задание для всех.</li>
+        <li><b>Город, клан, карта</b> — свой город, клан с тегом перед ником и карта всего сервера.</li>
+      </ul>
+    </div></details>
+    <details><summary>Как основать город</summary><div class="body">
+      <ul>
+        <li>Меню (<b>G</b>) → Город → «Основать здесь» — <b>бесплатно 100×100 блоков</b> вокруг тебя.</li>
+        <li>Город растёт уровнями до <b>500×500</b> за алмазы и монеты. Место под рост уже оставлено — соседи не помешают.</li>
+        <li>Жители, роли, герб, цвет и описание — в настройках города. Город можно отдать клану.</li>
+        <li>Ломать, открывать сундуки и пользоваться механизмами на чужой территории без разрешения нельзя — это гриф.</li>
         <li>Любые споры о земле решает суд.</li>
       </ul>
     </div></details>
@@ -855,7 +917,7 @@ dl.gloss dd{color:var(--ink-soft)}
     <li><span>Читы, X-ray, автокликер и моды на преимущество <span class="pen ban">бан сразу</span></span></li>
     <li><span>Травля, оскорбления, слив чужих личных данных <span class="pen ban">бан</span></span></li>
     <li><span>Гриф, воровство, убийство вне согласованного РП <span class="pen">штраф + возврат</span></span></li>
-    <li><span>Приват — до 500×500 блоков, табличкой со своим ником. Споры — в суде.</span></li>
+    <li><span>Территория — свой город через меню (G → Город): бесплатно 100×100, до 500×500, границы видны всем. Споры — в суде.</span></li>
     <li><span>Нашёл баг или дюп — скажи модерам. Молча пользуешься <span class="pen ban">бан</span></span></li>
     <li><span>Без спама, рекламы, политики и 18+.</span></li>
   </ol>
@@ -885,8 +947,8 @@ dl.gloss dd{color:var(--ink-soft)}
       </div></details>
       <details><summary>4 · Территории</summary><div class="body">
         <ul>
-          <li>Заприватить можно до 500×500 блоков.</li>
-          <li>Территория обозначается табличкой с ником владельца.</li>
+          <li>Своя территория — это город: меню (G) → Город → «Основать здесь». Бесплатно 100×100 блоков, расширение до 500×500.</li>
+          <li>Территория регистрируется в меню, границы видны всем. Табличка с ником — по желанию, главное — регистрация.</li>
           <li>Любые территориальные вопросы решаются в суде.</li>
         </ul>
       </div></details>
@@ -920,7 +982,7 @@ dl.gloss dd{color:var(--ink-soft)}
           <dt>Вайп</dt><dd>Полная очистка карты и прогресса всех игроков — ради обновления мира и экономики.</dd>
           <dt>Гриф</dt><dd>Намеренное разрушение чужих построек, убийство мирных животных, вред чужому имуществу.</dd>
           <dt>Дюп</dt><dd>Клонирование предметов через баги сервера или стороннее ПО. Строго запрещено.</dd>
-          <dt>Приват</dt><dd>Защищённая территория игрока: без разрешения нельзя ломать блоки, открывать сундуки и трогать механизмы.</dd>
+          <dt>Город</dt><dd>Территория, зарегистрированная в меню: без разрешения жителей нельзя ломать блоки, открывать сундуки и трогать механизмы.</dd>
           <dt>Спавн</dt><dd>Место появления новых игроков. Безопасная общая зона.</dd>
           <dt>Кик</dt><dd>Принудительное отключение от сервера.</dd>
           <dt>Мут</dt><dd>Запрет писать в чат на время.</dd>
