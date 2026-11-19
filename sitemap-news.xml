@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://macannews.ru/n/328/</loc>
+    <lastmod>2026-11-19</lastmod>
+  </url>
+  <url>
     <loc>https://macannews.ru/n/327/</loc>
     <lastmod>2026-11-17</lastmod>
   </url>
@@ -235,9 +239,5 @@
   <url>
     <loc>https://macannews.ru/n/261/</loc>
     <lastmod>2026-06-23</lastmod>
-  </url>
-  <url>
-    <loc>https://macannews.ru/n/260/</loc>
-    <lastmod>2026-06-22</lastmod>
   </url>
 </urlset>
